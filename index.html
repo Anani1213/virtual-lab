@@ -9,27 +9,23 @@
 <script>
 tailwind.config = {
   theme: {
-    extend: {
-      fontFamily: { mono: ['ui-monospace','SFMono-Regular','Menlo','Consolas','monospace'] }
-    }
+    extend: { fontFamily: { mono: ['ui-monospace','SFMono-Regular','Menlo','Consolas','monospace'] } }
   }
 }
 </script>
 <style>
   html,body{height:100%;}
-  body{ background:#05080f; overflow:hidden; }
+  body{ background:#05080f; }
   ::-webkit-scrollbar{width:8px;height:8px;}
   ::-webkit-scrollbar-track{background:#0b1220;}
   ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px;}
   ::-webkit-scrollbar-thumb:hover{background:#334155;}
 
-  /* Slim custom scrollbar */
   .custom-scrollbar::-webkit-scrollbar{width:6px;height:6px;}
   .custom-scrollbar::-webkit-scrollbar-track{background:transparent;}
   .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
   .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
 
-  /* Compact horizontal reagent row */
   .reagent-row{
     display:flex; align-items:center; gap:6px;
     padding:4px 7px;
@@ -37,11 +33,9 @@ tailwind.config = {
   }
   .reagent-row:hover{ background:#121b2b; border-color:#2b3d55; }
 
-  /* Hide numeric spinners for clean compact layout */
   .reagent-row input[type=number]::-webkit-outer-spin-button,
   .reagent-row input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
   .reagent-row input[type=number]{ -moz-appearance:textfield; appearance:textfield; }
-  .reagent-row input[type=number]:focus{ box-shadow:0 0 0 1px rgba(34,211,238,.4); }
 
   input[type=range]{
     -webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
@@ -84,6 +78,8 @@ tailwind.config = {
   .dock-btn:hover{color:#67e8f9;border-color:#164e63;background:#16202f;}
   .dock-btn.warn:hover{color:#fca5a5;border-color:#7f1d1d;}
   .dock-btn.go:hover{color:#6ee7b7;border-color:#065f46;}
+  .dock-btn.danger{ border-color:#7f1d1d; color:#fca5a5; }
+  .dock-btn.danger:hover{ background:#7f1d1d; color:#fee2e2; border-color:#991b1b; }
 
   .log-line{ font-size:9.5px; line-height:1.45; padding:1.5px 0; border-bottom:1px dashed #16202f; }
   .glass-panel{
@@ -94,212 +90,230 @@ tailwind.config = {
   .hazard-blink{animation:pulseWarn 1s infinite;}
   .fade-in{animation:fi .35s ease-out;}
   @keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Hide watermark */
+  canvas{ display:block; }
 </style>
 </head>
 <body class="text-slate-200 font-sans">
 
-<div class="flex h-screen w-screen items-start justify-start gap-3 p-3 overflow-hidden">
+<!-- ═══════════ 2-COLUMN RESPONSIVE DASHBOARD ═══════════ -->
+<div class="min-h-screen lg:h-screen lg:overflow-hidden p-3">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:h-full">
 
-  <!-- ══════════════════ LEFT PANEL : REAGENT SHELF (480px capped) ══════════════════ -->
-  <aside class="w-[300px] shrink-0 h-[480px] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-    <div class="px-3 py-2 border-b border-slate-800/80 shrink-0">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
-          <i class="fa-solid fa-flask text-[11px] text-white"></i>
-        </div>
-        <div>
-          <div class="text-[12px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT SHELF</div>
-          <div class="text-[8.5px] text-slate-500 font-mono tracking-wider leading-tight">VIRTUALAB · v2.4</div>
-        </div>
-      </div>
-    </div>
+    <!-- ═══════════════ LEFT COLUMN (5/12) ═══════════════ -->
+    <div class="lg:col-span-5 flex flex-col gap-3 lg:min-h-0">
 
-    <div id="catTabs" class="px-2 py-1.5 flex flex-wrap gap-1 border-b border-slate-800/80 shrink-0"></div>
-
-    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1.5 pr-1 space-y-1"></div>
-
-    <div class="px-3 py-1.5 border-t border-slate-800/80 shrink-0 text-[8.5px] text-slate-600 font-mono leading-tight">
-      <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i>
-      Alkali metals &amp; conc. acids: extreme hazard.
-    </div>
-  </aside>
-
-  <!-- ══════════════════ CENTER : WORKSPACE (top-aligned tight stack) ══════════════════ -->
-  <main class="flex-1 min-w-0 h-[calc(100vh-24px)] flex flex-col items-stretch justify-start gap-2">
-
-    <!-- [1] TOP HUD -->
-    <div class="shrink-0 glass-panel rounded-xl h-[46px] flex items-center px-4 gap-3">
-      <div class="flex items-baseline gap-2">
-        <i class="fa-solid fa-temperature-half text-orange-400 text-[14px]"></i>
-        <span id="tempC" class="text-[24px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
-        <span class="text-[11px] text-slate-500">°C</span>
-      </div>
-      <div class="w-px h-7 bg-slate-800"></div>
-      <div class="flex items-baseline gap-1.5">
-        <span id="tempK" class="text-[14px] font-mono text-slate-400 tabular-nums">298.15</span>
-        <span class="text-[10px] text-slate-600">K</span>
-      </div>
-      <div class="w-px h-7 bg-slate-800"></div>
-      <div id="thermalState" class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
-        AMBIENT
-      </div>
-      <div class="flex-1"></div>
-      <div class="flex items-center gap-3 text-[9.5px] font-mono text-slate-500">
-        <div><i class="fa-solid fa-fire-flame-simple text-orange-500 mr-1"></i><span id="hudFlame">0%</span></div>
-        <div><i class="fa-solid fa-arrows-spin text-violet-400 mr-1"></i><span id="hudStir">0 rpm</span></div>
-        <div><i class="fa-solid fa-droplet text-emerald-400 mr-1"></i><span id="hudDrip">0.0 d/s</span></div>
-      </div>
-    </div>
-
-    <!-- [2] CANVAS STAGE — beaker + burner + burette -->
-    <div class="relative glass-panel rounded-xl overflow-hidden shrink-0 h-[440px]">
-      <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
-
-      <!-- HAZARD OVERLAY -->
-      <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
-        <i class="fa-solid fa-triangle-exclamation text-5xl text-red-400 hazard-blink"></i>
-        <div class="text-center">
-          <div class="text-xl font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
-          <div id="hazardMsg" class="text-[11px] text-red-300/90 mt-1 font-mono"></div>
-        </div>
-        <button onclick="emergencyFlush()" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[11px] tracking-wider shadow-lg shadow-red-900/50 transition">
-          <i class="fa-solid fa-broom mr-2"></i>EMERGENCY FLUSH &amp; RESET
-        </button>
-      </div>
-    </div>
-
-    <!-- [3] pH SPECTRUM — 8px below burner -->
-    <div class="shrink-0 glass-panel rounded-xl px-4 py-1.5">
-      <div class="flex items-center gap-3">
-        <div class="flex items-baseline gap-1.5 w-[110px]">
-          <span class="text-[9.5px] font-bold tracking-widest text-slate-500">pH</span>
-          <span id="phValue" class="text-[22px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
-        </div>
-        <div class="flex-1 relative">
-          <div class="h-[12px] rounded-full border border-slate-700 overflow-hidden"
-               style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
+      <!-- ─── REAGENT LIBRARY (max 380px) ─── -->
+      <aside class="h-[380px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
+        <div class="px-3 py-2 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
+          <div class="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
+            <i class="fa-solid fa-flask text-[11px] text-white"></i>
           </div>
-          <div id="phMarker" class="absolute top-[-4px] w-[3px] h-[20px] bg-white rounded-full shadow-[0_0_10px_#fff] transition-all duration-150" style="left:50%"></div>
-          <div class="flex justify-between text-[8px] font-mono text-slate-600 mt-0.5 px-0.5">
-            <span>0</span><span>2</span><span>4</span><span>6</span><span>7</span><span>8</span><span>10</span><span>12</span><span>14</span>
+          <div class="flex-1">
+            <div class="text-[12px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT LIBRARY</div>
+            <div class="text-[8.5px] text-slate-500 font-mono tracking-wider leading-tight">VIRTUALAB · STOCKROOM v3.0</div>
+          </div>
+          <div class="text-[8.5px] font-mono text-slate-500" id="reagentCount">0 items</div>
+        </div>
+
+        <div id="catTabs" class="px-2 py-1.5 flex flex-wrap gap-1 border-b border-slate-800/80 shrink-0"></div>
+
+        <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1.5 pr-1 space-y-1"></div>
+
+        <div class="px-3 py-1.5 border-t border-slate-800/80 shrink-0 text-[8.5px] text-slate-600 font-mono leading-tight">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i>
+          Alkali metals &amp; conc. acids: extreme hazard.
+        </div>
+      </aside>
+
+      <!-- ─── TELEMETRY + LOG (fills remaining left column) ─── -->
+      <aside class="h-[520px] lg:h-auto lg:flex-1 lg:min-h-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden p-2.5 gap-2">
+
+        <div class="shrink-0 flex items-center gap-2">
+          <i class="fa-solid fa-chart-line text-cyan-400 text-[12px]"></i>
+          <div class="text-[11.5px] font-bold tracking-wide text-slate-100">TELEMETRY &amp; ANALYTICS</div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="shrink-0 grid grid-cols-4 gap-1.5">
+          <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+            <div class="text-[7.5px] font-bold tracking-widest text-slate-500">MASS</div>
+            <div class="text-[13px] font-mono text-cyan-300 tabular-nums leading-tight" id="mMass">250.0</div>
+            <div class="text-[7px] text-slate-600 font-mono">g</div>
+          </div>
+          <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+            <div class="text-[7.5px] font-bold tracking-widest text-slate-500">VOL</div>
+            <div class="text-[13px] font-mono text-blue-300 tabular-nums leading-tight" id="mVol">250.0</div>
+            <div class="text-[7px] text-slate-600 font-mono">mL</div>
+          </div>
+          <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+            <div class="text-[7.5px] font-bold tracking-widest text-slate-500">MOLAR</div>
+            <div class="text-[13px] font-mono text-violet-300 tabular-nums leading-tight" id="mMol">0.000</div>
+            <div class="text-[7px] text-slate-600 font-mono">M</div>
+          </div>
+          <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+            <div class="text-[7.5px] font-bold tracking-widest text-slate-500">ΔH</div>
+            <div class="text-[13px] font-mono text-rose-300 tabular-nums leading-tight" id="mDH">0.00</div>
+            <div class="text-[7px] text-slate-600 font-mono">kJ</div>
           </div>
         </div>
-        <div id="phLabel" class="w-[90px] text-right text-[10px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
-      </div>
-    </div>
 
-    <!-- [4] CONTROL DOCK — right under the pH bar -->
-    <div class="shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-3 py-2">
-      <div class="grid grid-cols-12 gap-2.5 items-end">
-
-        <!-- Flame -->
-        <div class="col-span-3">
-          <div class="flex justify-between items-center mb-1">
-            <label class="text-[8.5px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN</label>
-            <span id="flameLbl" class="text-[8.5px] font-mono text-orange-300">0 °C</span>
+        <!-- Species -->
+        <div class="shrink-0">
+          <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1">ACTIVE SPECIES</div>
+          <div id="speciesList" class="flex flex-wrap gap-1 max-h-[58px] overflow-y-auto custom-scrollbar pr-1">
+            <span class="text-[8.5px] text-slate-600 font-mono italic">no solutes</span>
           </div>
-          <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
         </div>
 
-        <!-- Stirrer -->
-        <div class="col-span-3">
-          <div class="flex justify-between items-center mb-1">
-            <label class="text-[8.5px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
-            <span id="stirLbl" class="text-[8.5px] font-mono text-violet-300">0 rpm</span>
+        <!-- Equations -->
+        <div class="shrink-0 flex flex-col min-h-0 max-h-[120px]">
+          <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1 shrink-0">
+            <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS
           </div>
-          <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
-        </div>
-
-        <!-- Drip -->
-        <div class="col-span-3">
-          <div class="flex justify-between items-center mb-1">
-            <label class="text-[8.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>VALVE</label>
-            <span id="dripLbl" class="text-[8.5px] font-mono text-emerald-300">0.0 d/s</span>
+          <div id="eqList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1">
+            <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
           </div>
-          <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
         </div>
 
-        <!-- Burette reagent -->
-        <div class="col-span-3">
-          <label class="text-[8.5px] font-bold tracking-widest text-cyan-400 block mb-1"><i class="fa-solid fa-vial mr-1"></i>BURETTE</label>
-          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[9.5px] px-1.5 py-[3px] text-slate-200 outline-none focus:border-cyan-600"></select>
+        <!-- Reaction Log -->
+        <div class="flex-1 min-h-0 flex flex-col border-t border-slate-800/60 pt-2">
+          <div class="shrink-0 flex items-center justify-between mb-1">
+            <div class="text-[8.5px] font-bold tracking-widest text-slate-500">
+              <i class="fa-solid fa-terminal mr-1 text-emerald-500"></i>REACTION LOG
+            </div>
+            <button onclick="clearLog()" class="text-[8.5px] text-slate-600 hover:text-slate-300 font-mono">clear</button>
+          </div>
+          <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 font-mono"></div>
         </div>
+      </aside>
+    </div>
 
-        <!-- Buttons row -->
-        <div class="col-span-12 flex flex-wrap gap-1.5 items-center pt-1.5 border-t border-slate-800/60">
-          <button id="btnWater" class="dock-btn go"><i class="fa-solid fa-droplet mr-1"></i>+50 mL H₂O</button>
-          <button id="btnRefill" class="dock-btn go"><i class="fa-solid fa-arrows-rotate mr-1"></i>REFILL BURETTE</button>
-          <button id="btnStirPulse" class="dock-btn"><i class="fa-solid fa-water mr-1"></i>STIR PULSE</button>
-          <button id="btnFlush" class="dock-btn warn"><i class="fa-solid fa-broom mr-1"></i>FLUSH / PURGE</button>
-          <button id="btnSound" class="dock-btn"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">SOUND ON</span></button>
-          <div class="flex-1"></div>
-          <div class="text-[8.5px] font-mono text-slate-600">Δt <span id="fps">60</span> fps · <span id="tickCount">0</span> ticks</div>
+    <!-- ═══════════════ RIGHT COLUMN (7/12) — WORKSPACE ═══════════════ -->
+    <div class="lg:col-span-7 flex flex-col gap-2.5 lg:min-h-0">
+
+      <!-- TOP HUD -->
+      <div class="shrink-0 glass-panel rounded-xl h-[46px] flex items-center px-4 gap-3">
+        <div class="flex items-baseline gap-2">
+          <i class="fa-solid fa-temperature-half text-orange-400 text-[14px]"></i>
+          <span id="tempC" class="text-[24px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
+          <span class="text-[11px] text-slate-500">°C</span>
+        </div>
+        <div class="w-px h-7 bg-slate-800"></div>
+        <div class="flex items-baseline gap-1.5">
+          <span id="tempK" class="text-[14px] font-mono text-slate-400 tabular-nums">298.15</span>
+          <span class="text-[10px] text-slate-600">K</span>
+        </div>
+        <div class="w-px h-7 bg-slate-800"></div>
+        <div id="thermalState" class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
+          AMBIENT
+        </div>
+        <div class="flex-1"></div>
+        <div class="hidden md:flex items-center gap-3 text-[9.5px] font-mono text-slate-500">
+          <div><i class="fa-solid fa-fire-flame-simple text-orange-500 mr-1"></i><span id="hudFlame">0%</span></div>
+          <div><i class="fa-solid fa-arrows-spin text-violet-400 mr-1"></i><span id="hudStir">0 rpm</span></div>
+          <div><i class="fa-solid fa-droplet text-emerald-400 mr-1"></i><span id="hudDrip">0.0 d/s</span></div>
+        </div>
+      </div>
+
+      <!-- CANVAS STAGE (fills middle) -->
+      <div class="h-[460px] lg:h-auto lg:flex-1 lg:min-h-0 relative glass-panel rounded-xl overflow-hidden">
+        <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
+
+        <!-- HAZARD OVERLAY -->
+        <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+          <i class="fa-solid fa-triangle-exclamation text-5xl text-red-400 hazard-blink"></i>
+          <div class="text-center">
+            <div class="text-xl font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
+            <div id="hazardMsg" class="text-[11px] text-red-300/90 mt-1 font-mono"></div>
+          </div>
+          <button onclick="emergencyFlush()" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[11px] tracking-wider shadow-lg shadow-red-900/50 transition">
+            <i class="fa-solid fa-broom mr-2"></i>EMERGENCY FLUSH &amp; RESET
+          </button>
+        </div>
+      </div>
+
+      <!-- pH SPECTRUM -->
+      <div class="shrink-0 glass-panel rounded-xl px-4 py-1.5">
+        <div class="flex items-center gap-3">
+          <div class="flex items-baseline gap-1.5 w-[110px]">
+            <span class="text-[9.5px] font-bold tracking-widest text-slate-500">pH</span>
+            <span id="phValue" class="text-[22px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
+          </div>
+          <div class="flex-1 relative">
+            <div class="h-[12px] rounded-full border border-slate-700 overflow-hidden"
+                 style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
+            </div>
+            <div id="phMarker" class="absolute top-[-4px] w-[3px] h-[20px] bg-white rounded-full shadow-[0_0_10px_#fff] transition-all duration-150" style="left:50%"></div>
+            <div class="flex justify-between text-[8px] font-mono text-slate-600 mt-0.5 px-0.5">
+              <span>0</span><span>2</span><span>4</span><span>6</span><span>7</span><span>8</span><span>10</span><span>12</span><span>14</span>
+            </div>
+          </div>
+          <div id="phLabel" class="w-[90px] text-right text-[10px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
+        </div>
+      </div>
+
+      <!-- CONTROL DOCK -->
+      <div class="shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-3 py-2">
+        <div class="grid grid-cols-12 gap-2.5 items-end">
+
+          <!-- Flame -->
+          <div class="col-span-6 md:col-span-3">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN BURNER</label>
+              <span id="flameLbl" class="text-[8.5px] font-mono text-orange-300">0 °C</span>
+            </div>
+            <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
+          </div>
+
+          <!-- Stirrer -->
+          <div class="col-span-6 md:col-span-3">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
+              <span id="stirLbl" class="text-[8.5px] font-mono text-violet-300">0 rpm</span>
+            </div>
+            <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
+          </div>
+
+          <!-- Drip -->
+          <div class="col-span-6 md:col-span-3">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>TITRATION VALVE</label>
+              <span id="dripLbl" class="text-[8.5px] font-mono text-emerald-300">0.0 d/s</span>
+            </div>
+            <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
+          </div>
+
+          <!-- Burette reagent -->
+          <div class="col-span-6 md:col-span-3">
+            <label class="text-[8.5px] font-bold tracking-widest text-cyan-400 block mb-1"><i class="fa-solid fa-vial mr-1"></i>BURETTE REAGENT</label>
+            <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[9.5px] px-1.5 py-[3px] text-slate-200 outline-none focus:border-cyan-600"></select>
+          </div>
+
+          <!-- Water dilution + buttons row -->
+          <div class="col-span-12 flex flex-wrap gap-1.5 items-center pt-1.5 border-t border-slate-800/60">
+            <!-- Measured water dilution -->
+            <div class="flex items-center gap-1.5 bg-[#0a111e] border border-slate-800 rounded-lg px-2 py-[3px]">
+              <i class="fa-solid fa-droplet text-blue-400 text-[10px]"></i>
+              <input id="water-vol" type="number" min="0.1" max="500" step="1" value="50"
+                     class="w-[52px] bg-transparent border-0 text-[10.5px] font-mono text-blue-300 outline-none text-right">
+              <span class="text-[9px] text-slate-500 font-mono">mL H₂O</span>
+              <button id="btnWater" class="vl-add">+ ADD WATER</button>
+            </div>
+
+            <button id="btnClearVessel" class="dock-btn danger"><i class="fa-solid fa-trash-can mr-1"></i>CLEAR VESSEL</button>
+            <button id="btnRefill" class="dock-btn go"><i class="fa-solid fa-arrows-rotate mr-1"></i>REFILL BURETTE</button>
+            <button id="btnStirPulse" class="dock-btn"><i class="fa-solid fa-water mr-1"></i>STIR PULSE</button>
+            <button id="btnFlush" class="dock-btn warn"><i class="fa-solid fa-broom mr-1"></i>FLUSH</button>
+            <button id="btnSound" class="dock-btn"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">SOUND ON</span></button>
+            <div class="flex-1"></div>
+            <div class="text-[8.5px] font-mono text-slate-600">Δt <span id="fps">60</span> fps · <span id="tickCount">0</span> ticks</div>
+          </div>
         </div>
       </div>
     </div>
-  </main>
-
-  <!-- ══════════════════ RIGHT PANEL : TELEMETRY (500px capped) ══════════════════ -->
-  <aside class="w-[320px] shrink-0 h-[500px] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden p-2.5 gap-2">
-
-    <div class="shrink-0 flex items-center gap-2">
-      <i class="fa-solid fa-chart-line text-cyan-400 text-[12px]"></i>
-      <div class="text-[11.5px] font-bold tracking-wide text-slate-100">TELEMETRY &amp; ANALYTICS</div>
-    </div>
-
-    <!-- Metrics -->
-    <div class="shrink-0 grid grid-cols-2 gap-1.5">
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
-        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">MASS</div>
-        <div class="text-[15px] font-mono text-cyan-300 tabular-nums leading-tight" id="mMass">250.0</div>
-        <div class="text-[7.5px] text-slate-600 font-mono">grams</div>
-      </div>
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
-        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">VOLUME</div>
-        <div class="text-[15px] font-mono text-blue-300 tabular-nums leading-tight" id="mVol">250.0</div>
-        <div class="text-[7.5px] text-slate-600 font-mono">mL</div>
-      </div>
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
-        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">MOLARITY</div>
-        <div class="text-[15px] font-mono text-violet-300 tabular-nums leading-tight" id="mMol">0.000</div>
-        <div class="text-[7.5px] text-slate-600 font-mono">mol·L⁻¹</div>
-      </div>
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
-        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">ENTHALPY ΔH</div>
-        <div class="text-[15px] font-mono text-rose-300 tabular-nums leading-tight" id="mDH">0.00</div>
-        <div class="text-[7.5px] text-slate-600 font-mono">kJ cumulative</div>
-      </div>
-    </div>
-
-    <!-- Species -->
-    <div class="shrink-0">
-      <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1">ACTIVE SPECIES</div>
-      <div id="speciesList" class="flex flex-wrap gap-1 max-h-[58px] overflow-y-auto custom-scrollbar pr-1">
-        <span class="text-[8.5px] text-slate-600 font-mono italic">no solutes</span>
-      </div>
-    </div>
-
-    <!-- Equations -->
-    <div class="shrink-0 flex flex-col min-h-0 max-h-[110px]">
-      <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1 shrink-0">
-        <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS
-      </div>
-      <div id="eqList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1">
-        <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
-      </div>
-    </div>
-
-    <!-- Log — fixed height -->
-    <div class="shrink-0 h-48 flex flex-col border-t border-slate-800/60 pt-1.5">
-      <div class="shrink-0 flex items-center justify-between mb-1">
-        <div class="text-[8.5px] font-bold tracking-widest text-slate-500">
-          <i class="fa-solid fa-terminal mr-1 text-emerald-500"></i>REACTION LOG
-        </div>
-        <button onclick="clearLog()" class="text-[8.5px] text-slate-600 hover:text-slate-300 font-mono">clear</button>
-      </div>
-      <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 font-mono"></div>
-    </div>
-  </aside>
+  </div>
 </div>
 
 <script>
@@ -311,20 +325,18 @@ tailwind.config = {
 const W = 760, H = 680;
 const BX = 255, BY = 162, BW = 250, BH = 350;
 const INX = BX + 9, INY = BY + 8, INW = BW - 18, INH = BH - 16;
-const BOT = INY + INH;              // 504  (inner bottom)
-const CX  = BX + BW / 2;            // 380  (axis of symmetry)
-const MAXVOL = 500;                 // mL full scale
-const MAXLH  = 292;                 // px max liquid column height
+const BOT = INY + INH;
+const CX  = BX + BW / 2;
+const MAXVOL = 500;
+const MAXLH  = 292;
 
-/* Burette tip anchor */
 const BURETTE_TOP = 20;
 const BURETTE_BOT = 126;
-const BURETTE_TIP_Y = BURETTE_BOT + 30;   // 156
+const BURETTE_TIP_Y = BURETTE_BOT + 30;
 
-/* Burner anchor */
 const BURNER_BASE_Y = 594;
 
-/* ───────────────────────── CHEMICAL DATABASE ───────────────────────── */
+/* ───────────────────────── EXPANDED CHEMICAL DATABASE ───────────────────────── */
 const CATS = ['All','Alkali/Earth','Transition','Non-Metals','Acids','Bases','Salts','Organics','Indicators'];
 
 const CHEMS = [
@@ -336,10 +348,11 @@ const CHEMS = [
   {id:'mg',  n:'Magnesium Ribbon',    f:'Mg',       c:'Alkali/Earth', st:'s', mm:24.31, max:10, def:1,   rgb:[200,200,205]},
   {id:'cao', n:'Calcium Oxide (Lime)',f:'CaO',      c:'Alkali/Earth', st:'s', mm:56.08, max:20, def:5,   rgb:[235,235,230]},
 
-  /* ---- TRANSITION ---- */
+  /* ---- TRANSITION (incl. Al) ---- */
   {id:'zn',    n:'Zinc Granules',       f:'Zn',     c:'Transition', st:'s', mm:65.38,  max:20, def:3, rgb:[170,175,185]},
   {id:'fe',    n:'Iron Filings',        f:'Fe',     c:'Transition', st:'s', mm:55.85,  max:20, def:3, rgb:[90,90,95]},
   {id:'cu',    n:'Copper Turnings',     f:'Cu',     c:'Transition', st:'s', mm:63.55,  max:20, def:3, rgb:[190,110,60]},
+  {id:'al',    n:'Aluminium Foil',      f:'Al',     c:'Transition', st:'s', mm:26.98,  max:20, def:2, rgb:[210,210,215]},
   {id:'cuo',   n:'Copper(II) Oxide',    f:'CuO',    c:'Transition', st:'s', mm:79.55,  max:20, def:2, rgb:[25,25,30]},
   {id:'cuso4', n:'Copper(II) Sulfate',  f:'CuSO₄',  c:'Transition', st:'s', mm:159.6,  max:30, def:5, rgb:[40,110,220], soluble:true, ions:{'Cu2+':1,'SO4^2-':1}},
   {id:'agno3', n:'Silver Nitrate',      f:'AgNO₃',  c:'Transition', st:'s', mm:169.87, max:20, def:2, rgb:[240,240,245], soluble:true, ions:{'Ag+':1,'NO3-':1}},
@@ -357,20 +370,25 @@ const CHEMS = [
   {id:'h2so4',  n:'Sulfuric Acid',     f:'H₂SO₄',    c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':2,'SO4^2-':1},   dhSol:-88},
   {id:'hno3',   n:'Nitric Acid',       f:'HNO₃',     c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':1,'NO3-':1},     dhSol:-80},
   {id:'ch3cooh',n:'Acetic Acid',       f:'CH₃COOH',  c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,250], weakAcid:true,              dhSol:-10},
+  {id:'h2co3',  n:'Carbonic Acid',     f:'H₂CO₃',    c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true,              dhSol:-20},
+  {id:'h3po4',  n:'Phosphoric Acid',   f:'H₃PO₄',    c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true,              dhSol:-40},
 
   /* ---- BASES ---- */
-  {id:'naoh', n:'Sodium Hydroxide',  f:'NaOH',   c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'Na+':1,'OH-':1}, dhSol:-44},
-  {id:'koh',  n:'Potassium Hydroxide',f:'KOH',   c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'K+':1,'OH-':1},  dhSol:-57},
-  {id:'nh3',  n:'Ammonia Solution',  f:'NH₃(aq)',c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[235,245,250], weakBase:true,          dhSol:-30},
-  {id:'caoh2',n:'Limewater',         f:'Ca(OH)₂', c:'Bases', st:'l', M:0.02, max:100, def:30, rgb:[240,250,250], ions:{'Ca2+':1,'OH-':2}},
+  {id:'naoh', n:'Sodium Hydroxide',   f:'NaOH',      c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'Na+':1,'OH-':1}, dhSol:-44},
+  {id:'koh',  n:'Potassium Hydroxide',f:'KOH',       c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'K+':1,'OH-':1},  dhSol:-57},
+  {id:'nh3',  n:'Ammonia Solution',   f:'NH₃(aq)',   c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[235,245,250], weakBase:true,          dhSol:-30},
+  {id:'caoh2',n:'Limewater',          f:'Ca(OH)₂',   c:'Bases', st:'l', M:0.02, max:100, def:30, rgb:[240,250,250], ions:{'Ca2+':1,'OH-':2}},
+  {id:'mgoh2',n:'Magnesium Hydroxide',f:'Mg(OH)₂',   c:'Bases', st:'s', mm:58.32, max:20, def:3,  rgb:[245,245,245], ions:{'Mg2+':1,'OH-':2}},
+  {id:'baoh2',n:'Barium Hydroxide',   f:'Ba(OH)₂',   c:'Bases', st:'l', M:0.1,  max:100, def:30, rgb:[240,250,255], ions:{'Ba2+':1,'OH-':2}},
 
-  /* ---- SALTS ---- */
+  /* ---- SALTS & SOLVENTS ---- */
   {id:'nacl',   n:'Sodium Chloride',   f:'NaCl',    c:'Salts', st:'s', mm:58.44,  max:50, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':1,'Cl-':1}},
   {id:'ki',     n:'Potassium Iodide',  f:'KI',      c:'Salts', st:'s', mm:166.0,  max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'K+':1,'I-':1}},
   {id:'bacl2',  n:'Barium Chloride',   f:'BaCl₂',   c:'Salts', st:'s', mm:208.23, max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'Ba2+':1,'Cl-':2}},
   {id:'na2co3', n:'Sodium Carbonate',  f:'Na₂CO₃',  c:'Salts', st:'s', mm:105.99, max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':2,'CO3^2-':1}},
   {id:'caco3',  n:'Calcium Carbonate', f:'CaCO₃',   c:'Salts', st:'s', mm:100.09, max:30, def:5, rgb:[240,240,235]},
   {id:'kno3',   n:'Potassium Nitrate', f:'KNO₃',    c:'Salts', st:'s', mm:101.1,  max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'K+':1,'NO3-':1}},
+  {id:'h2o',    n:'Distilled Water',   f:'H₂O',     c:'Salts', st:'l', M:0.0,    max:500, def:50, rgb:[230,240,250]},
 
   /* ---- ORGANICS / SOLVENTS ---- */
   {id:'etoh',   n:'Ethanol',        f:'C₂H₅OH', c:'Organics', st:'l', mm:46.07, dens:0.789, max:100, def:20, rgb:[245,250,255], fuel:true, ign:300, dhComb:1367, co2:2},
@@ -387,7 +405,6 @@ const CHEMS = [
   {id:'litmus',n:'Litmus Solution',    f:'Lit',  c:'Indicators', st:'l', ind:'lit',  max:10, def:1, rgb:[150,110,190]},
 ];
 
-/* ───────────────────────── ION COLOUR TABLE ───────────────────────── */
 const ION_COLORS = {
   'Cu2+':   [ 34,118,225],
   'Fe2+':   [110,165,120],
@@ -399,7 +416,6 @@ const ION_COLORS = {
   'Co2+':   [220,110,170],
 };
 
-/* ───────────────────────── PRECIPITATION RULES ───────────────────────── */
 const PRECIP_RULES = [
   { a:'Ag+',  b:'Cl-',    ra:1, rb:1, prod:'AgCl',   col:[248,248,250], name:'Silver Chloride' },
   { a:'Pb2+', b:'I-',     ra:1, rb:2, prod:'PbI2',   col:[250,208, 40], name:'Lead(II) Iodide' },
@@ -410,10 +426,11 @@ const PRECIP_RULES = [
   { a:'Ca2+', b:'CO3^2-', ra:1, rb:1, prod:'CaCO3',  col:[245,245,240], name:'Calcium Carbonate' },
   { a:'Pb2+', b:'SO4^2-', ra:1, rb:1, prod:'PbSO4',  col:[250,250,250], name:'Lead(II) Sulfate' },
   { a:'Ag+',  b:'OH-',    ra:1, rb:1, prod:'AgOH',   col:[230,225,215], name:'Silver Hydroxide' },
+  { a:'Mg2+', b:'OH-',    ra:1, rb:2, prod:'Mg(OH)2',col:[248,248,248], name:'Magnesium Hydroxide' },
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
-   AUDIO ENGINE — Web Audio API synthesis
+   AUDIO ENGINE
    ══════════════════════════════════════════════════════════════════════════ */
 const LabAudio = {
   ctx:null, master:null, ready:false, enabled:true,
@@ -601,7 +618,7 @@ function log(msg, type){
   div.className = 'log-line';
   div.innerHTML = `<span class="text-slate-600">[${nowStamp()}]</span> <span style="color:${colors[type]||'#94a3b8'}">${msg}</span>`;
   el.insertBefore(div, el.firstChild);
-  while (el.children.length > 180) el.removeChild(el.lastChild);
+  while (el.children.length > 200) el.removeChild(el.lastChild);
 }
 function clearLog(){ document.getElementById('log').innerHTML = ''; }
 
@@ -618,7 +635,7 @@ function eqAdd(str){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LEFT PANEL BUILD — COMPACT HORIZONTAL ROWS
+   LEFT PANEL — COMPACT HORIZONTAL ROWS
    ══════════════════════════════════════════════════════════════════════════ */
 function buildTabs(){
   const wrap = document.getElementById('catTabs');
@@ -635,7 +652,10 @@ function buildTabs(){
 function buildShelf(){
   const shelf = document.getElementById('shelf');
   shelf.innerHTML = '';
-  CHEMS.filter(c => ACTIVE_CAT === 'All' || c.c === ACTIVE_CAT).forEach(c => {
+  const list = CHEMS.filter(c => ACTIVE_CAT === 'All' || c.c === ACTIVE_CAT);
+  document.getElementById('reagentCount').textContent = list.length + ' items';
+
+  list.forEach(c => {
     if (QTY[c.id] === undefined) QTY[c.id] = c.def;
     const unit = c.st === 's' ? 'g' : 'mL';
     const row = document.createElement('div');
@@ -647,9 +667,9 @@ function buildShelf(){
       </div>
       <input type="number" inputmode="decimal" min="0.1" max="${c.max}" step="0.1"
              value="${QTY[c.id]}" data-qty="${c.id}"
-             class="w-[52px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1.5 py-[2px] text-[10px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
-      <span class="text-[8.5px] text-slate-500 w-[16px] shrink-0 font-mono">${unit}</span>
-      <button class="vl-add shrink-0" data-add="${c.id}">ADD</button>`;
+             class="w-[54px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1.5 py-[2px] text-[10px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
+      <span class="text-[8.5px] text-slate-500 w-[18px] shrink-0 font-mono">${unit}</span>
+      <button class="vl-add shrink-0" data-add="${c.id}">+ ADD</button>`;
     shelf.appendChild(row);
   });
 
@@ -686,9 +706,9 @@ function buildShelf(){
 function buildBuretteSel(){
   const sel = document.getElementById('buretteSel');
   sel.innerHTML = '';
-  CHEMS.filter(c => c.st === 'l' && (c.ions || c.weakAcid || c.weakBase)).forEach(c => {
+  CHEMS.filter(c => c.st === 'l' && (c.ions || c.weakAcid || c.weakBase) && c.id !== 'h2o').forEach(c => {
     const o = document.createElement('option');
-    o.value = c.id; o.textContent = `${c.n} (${c.M ? c.M.toFixed(2) + ' M' : ''})`;
+    o.value = c.id; o.textContent = `${c.n} (${c.M ? c.M.toFixed(2) + ' M' : '—'})`;
     sel.appendChild(o);
   });
   sel.value = 'naoh';
@@ -700,7 +720,7 @@ function buildBuretteSel(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   CHEMICAL INTRODUCTION
+   CHEMICAL INTRODUCTION (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function addChemical(chem, qty){
   if (state.shattered) { log('Vessel compromised — flush before adding reagents.', 'danger'); return; }
@@ -762,7 +782,7 @@ function addChemical(chem, qty){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   THERMODYNAMIC KERNEL
+   THERMODYNAMIC KERNEL (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function updateThermo(dt){
   const s = state;
@@ -801,7 +821,7 @@ function updateThermo(dt){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   REACTION KERNEL
+   REACTION KERNEL (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function react(dt){
   const s = state;
@@ -809,7 +829,7 @@ function react(dt){
   const T = s.temp;
   const V = Math.max(0.0005, s.volume / 1000);
 
-  /* 1. ACID-BASE NEUTRALISATION */
+  /* 1. ACID–BASE NEUTRALISATION */
   {
     const h = getIon('H+'), oh = getIon('OH-');
     const n = Math.min(h, oh);
@@ -871,7 +891,7 @@ function react(dt){
     }
   }
 
-  /* 4. METAL + ACID */
+  /* 4. METAL + ACID (Zn, Fe, Mg) */
   const hMol = getIon('H+');
   const hConc = hMol / V;
   for (const m of ['zn','fe','mg']){
@@ -935,7 +955,7 @@ function react(dt){
     }
   }
 
-  /* 6. METAL OXIDE + ACID */
+  /* 6. METAL OXIDE + ACID + CaO SLaking */
   {
     const cuo = s.solids['cuo'] || 0, h = getIon('H+');
     if (cuo > 1e-9 && h > 1e-9){
@@ -1033,7 +1053,7 @@ function react(dt){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   pH COMPUTATION
+   pH COMPUTATION (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function computePH(){
   const s = state;
@@ -1074,7 +1094,7 @@ function computePH(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FLUID COLOUR SYNTHESIS
+   FLUID COLOUR SYNTHESIS (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function mix(a, b, t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
 
@@ -1148,7 +1168,7 @@ function computeFluidColor(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   PARTICLE SYSTEMS
+   PARTICLE SYSTEMS (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function liquidTop(){
   const lh = Math.min(MAXLH, (state.volume / MAXVOL) * MAXLH);
@@ -1295,7 +1315,7 @@ function spawnRipple(x){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   TITRATION BURETTE
+   TITRATION BURETTE (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 let dropAccumulator = 0;
 function updateBurette(dt){
@@ -1330,7 +1350,7 @@ function updateBurette(dt){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HAZARD EVENTS
+   HAZARD EVENTS (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function triggerShatter(reason){
   if (state.shattered) return;
@@ -1367,7 +1387,7 @@ function emergencyFlush(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FLUSH / RESET
+   FLUSH / RESET (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function flushAll(){
   const s = state;
@@ -1391,7 +1411,27 @@ function flushAll(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   RENDERING — CANVAS
+   CLEAR VESSEL (NEW) — empties the beaker to 0 mL
+   ══════════════════════════════════════════════════════════════════════════ */
+function clearVessel(){
+  const s = state;
+  s.volume = 0;
+  s.mass = 0;
+  s.ions = {}; s.solids = {}; s.fuels = {}; s.precip = {}; s.ind = {};
+  s.dH = 0;
+  s.pH = 7;
+  s.bubbles = []; s.steam = []; s.smoke = [];
+  s.precipParticles = []; s.drops = []; s.ripples = [];
+  s.gasRate = 0; s.steamRate = 0;
+  s.eq.clear();
+  s.fluidColor = [220, 232, 245];
+  document.getElementById('eqList').innerHTML = '<div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>';
+  log('🗑️ VESSEL CLEARED — 0 mL, pH reset to 7.00, ions purged.', 'good');
+  LabAudio.click();
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RENDERING — CANVAS (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 function resizeCanvas(){
   const rect = canvas.getBoundingClientRect();
@@ -1895,7 +1935,7 @@ function render(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HUD UPDATES
+   HUD UPDATES (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 let hudTimer = 0;
 function updateHUD(dt){
@@ -1964,7 +2004,7 @@ function updateHUD(dt){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   MAIN LOOP
+   MAIN LOOP (unchanged)
    ══════════════════════════════════════════════════════════════════════════ */
 let lastT = performance.now();
 
@@ -2020,11 +2060,21 @@ function wireControls(){
     document.getElementById('dripLbl').textContent = state.drip.toFixed(1) + ' d/s';
   });
 
+  /* Measured water dilution */
   document.getElementById('btnWater').onclick = () => {
-    state.volume += 50;
-    state.mass += 50;
-    log('Added 50.0 mL distilled H₂O (dilution)', 'info');
+    const inp = document.getElementById('water-vol');
+    const qty = parseFloat(inp.value);
+    if (!qty || qty <= 0){ log('Enter a valid water volume.', 'warn'); return; }
+    state.volume += qty;
+    state.mass += qty;
+    log(`Added ${qty.toFixed(1)} mL distilled H₂O (dilution)`, 'info');
     LabAudio.click();
+  };
+
+  /* Clear vessel — empty beaker to 0 mL */
+  document.getElementById('btnClearVessel').onclick = () => {
+    clearVessel();
+    document.getElementById('hazard').classList.add('hidden');
   };
 
   document.getElementById('btnRefill').onclick = () => {
@@ -2074,7 +2124,12 @@ function boot(){
   buildBuretteSel();
   wireControls();
   resizeCanvas();
+
+  if (window.ResizeObserver){
+    try { new ResizeObserver(resizeCanvas).observe(canvas.parentElement); } catch(e){}
+  }
   window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 100);
 
   log('VirtuaLab Engine initialised. Simulation kernel online.', 'good');
   log('Charged 250.0 mL distilled H₂O @ 25.0 °C', 'info');
