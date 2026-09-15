@@ -23,11 +23,25 @@ tailwind.config = {
   ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px;}
   ::-webkit-scrollbar-thumb:hover{background:#334155;}
 
-  /* Dedicated slim scrollbar for the reagent shelf */
-  .custom-scrollbar::-webkit-scrollbar{width:6px;}
+  /* Slim custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar{width:6px;height:6px;}
   .custom-scrollbar::-webkit-scrollbar-track{background:transparent;}
   .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
   .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
+
+  /* Compact horizontal reagent row */
+  .reagent-row{
+    display:flex; align-items:center; gap:6px;
+    padding:4px 7px;
+    background:#0f1725; border:1px solid #1b2537; border-radius:6px; transition:.15s;
+  }
+  .reagent-row:hover{ background:#121b2b; border-color:#2b3d55; }
+
+  /* Hide numeric spinners for clean compact layout */
+  .reagent-row input[type=number]::-webkit-outer-spin-button,
+  .reagent-row input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .reagent-row input[type=number]{ -moz-appearance:textfield; appearance:textfield; }
+  .reagent-row input[type=number]:focus{ box-shadow:0 0 0 1px rgba(34,211,238,.4); }
 
   input[type=range]{
     -webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
@@ -49,34 +63,29 @@ tailwind.config = {
   input[type=range].drip::-webkit-slider-thumb{background:#34d399;box-shadow:0 0 8px rgba(52,211,153,.8);}
 
   .vl-add{
-    font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 9px;border-radius:5px;
+    font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 7px;border-radius:4px;
     background:linear-gradient(180deg,#0e7490,#155e75);color:#a5f3fc;border:1px solid #164e63;
-    transition:.15s;cursor:pointer;
+    transition:.15s;cursor:pointer;line-height:1.4;
   }
-  .vl-add:hover{background:linear-gradient(180deg,#0891b2,#0e7490);color:#ecfeff;box-shadow:0 0 10px rgba(34,211,238,.5);}
+  .vl-add:hover{background:linear-gradient(180deg,#0891b2,#0e7490);color:#ecfeff;box-shadow:0 0 8px rgba(34,211,238,.5);}
   .vl-add:active{transform:scale(.94);}
 
   .cat-tab{
-    font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;cursor:pointer;
+    font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:5px;cursor:pointer;
     background:#131c2b;color:#7c8ba1;border:1px solid #1e293b;transition:.15s;white-space:nowrap;
   }
   .cat-tab:hover{color:#a5f3fc;border-color:#164e63;}
-  .cat-tab.active{background:linear-gradient(180deg,#0e7490,#155e75);color:#ecfeff;border-color:#22d3ee;box-shadow:0 0 10px rgba(34,211,238,.35);}
-
-  .reagent-card{
-    background:#0f1725;border:1px solid #1b2537;border-radius:8px;padding:7px 9px;transition:.15s;
-  }
-  .reagent-card:hover{border-color:#2b3d55;background:#121b2b;}
+  .cat-tab.active{background:linear-gradient(180deg,#0e7490,#155e75);color:#ecfeff;border-color:#22d3ee;box-shadow:0 0 8px rgba(34,211,238,.35);}
 
   .dock-btn{
-    font-size:10px;font-weight:700;letter-spacing:.05em;padding:6px 10px;border-radius:7px;
+    font-size:9.5px;font-weight:700;letter-spacing:.04em;padding:5px 9px;border-radius:6px;
     border:1px solid #1e293b;background:#131c2b;color:#94a3b8;cursor:pointer;transition:.15s;
   }
   .dock-btn:hover{color:#67e8f9;border-color:#164e63;background:#16202f;}
   .dock-btn.warn:hover{color:#fca5a5;border-color:#7f1d1d;}
   .dock-btn.go:hover{color:#6ee7b7;border-color:#065f46;}
 
-  .log-line{ font-size:10px; line-height:1.5; padding:2px 0; border-bottom:1px dashed #16202f; }
+  .log-line{ font-size:9.5px; line-height:1.45; padding:1.5px 0; border-bottom:1px dashed #16202f; }
   .glass-panel{
     background:linear-gradient(180deg,rgba(15,23,37,.9),rgba(9,14,24,.9));
     border:1px solid #1b2537;backdrop-filter:blur(6px);
@@ -89,105 +98,105 @@ tailwind.config = {
 </head>
 <body class="text-slate-200 font-sans">
 
-<div class="flex h-screen w-screen items-center gap-3 px-3 py-3 overflow-hidden">
+<div class="flex h-screen w-screen items-start justify-start gap-3 p-3 overflow-hidden">
 
-  <!-- ══════════════════ LEFT PANEL : REAGENT SHELF ══════════════════ -->
-  <aside class="w-[300px] shrink-0 h-[calc(100vh-60px)] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-    <div class="px-3 py-3 border-b border-slate-800/80 shrink-0">
+  <!-- ══════════════════ LEFT PANEL : REAGENT SHELF (480px capped) ══════════════════ -->
+  <aside class="w-[300px] shrink-0 h-[480px] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
+    <div class="px-3 py-2 border-b border-slate-800/80 shrink-0">
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-lg shadow-cyan-900/50">
-          <i class="fa-solid fa-flask text-[12px] text-white"></i>
+        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
+          <i class="fa-solid fa-flask text-[11px] text-white"></i>
         </div>
         <div>
-          <div class="text-[13px] font-bold tracking-wide text-slate-100">REAGENT SHELF</div>
-          <div class="text-[9px] text-slate-500 font-mono tracking-wider">VIRTUALAB · STOCKROOM v2.4</div>
+          <div class="text-[12px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT SHELF</div>
+          <div class="text-[8.5px] text-slate-500 font-mono tracking-wider leading-tight">VIRTUALAB · v2.4</div>
         </div>
       </div>
     </div>
 
-    <div id="catTabs" class="px-2 py-2 flex flex-wrap gap-1 border-b border-slate-800/80 shrink-0"></div>
+    <div id="catTabs" class="px-2 py-1.5 flex flex-wrap gap-1 border-b border-slate-800/80 shrink-0"></div>
 
-    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-2 pr-1 space-y-2"></div>
+    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1.5 pr-1 space-y-1"></div>
 
-    <div class="px-3 py-2 border-t border-slate-800/80 text-[9px] text-slate-600 font-mono leading-relaxed shrink-0">
+    <div class="px-3 py-1.5 border-t border-slate-800/80 shrink-0 text-[8.5px] text-slate-600 font-mono leading-tight">
       <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i>
-      Handle alkali metals &amp; concentrated acids with care.
+      Alkali metals &amp; conc. acids: extreme hazard.
     </div>
   </aside>
 
-  <!-- ══════════════════ CENTER : WORKSPACE ══════════════════ -->
-  <main class="flex-1 min-w-0 h-[calc(100vh-60px)] flex flex-col items-center justify-start gap-3 py-2 overflow-hidden">
+  <!-- ══════════════════ CENTER : WORKSPACE (top-aligned tight stack) ══════════════════ -->
+  <main class="flex-1 min-w-0 h-[calc(100vh-24px)] flex flex-col items-stretch justify-start gap-2">
 
-    <!-- TOP HUD -->
-    <div class="w-full shrink-0 glass-panel rounded-xl h-[56px] flex items-center px-4 gap-4">
+    <!-- [1] TOP HUD -->
+    <div class="shrink-0 glass-panel rounded-xl h-[46px] flex items-center px-4 gap-3">
       <div class="flex items-baseline gap-2">
-        <i class="fa-solid fa-temperature-half text-orange-400 text-[15px]"></i>
-        <span id="tempC" class="text-[26px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
-        <span class="text-[12px] text-slate-500">°C</span>
+        <i class="fa-solid fa-temperature-half text-orange-400 text-[14px]"></i>
+        <span id="tempC" class="text-[24px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
+        <span class="text-[11px] text-slate-500">°C</span>
       </div>
-      <div class="w-px h-8 bg-slate-800"></div>
+      <div class="w-px h-7 bg-slate-800"></div>
       <div class="flex items-baseline gap-1.5">
-        <span id="tempK" class="text-[15px] font-mono text-slate-400 tabular-nums">298.15</span>
-        <span class="text-[11px] text-slate-600">K</span>
+        <span id="tempK" class="text-[14px] font-mono text-slate-400 tabular-nums">298.15</span>
+        <span class="text-[10px] text-slate-600">K</span>
       </div>
-      <div class="w-px h-8 bg-slate-800"></div>
-      <div id="thermalState" class="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
+      <div class="w-px h-7 bg-slate-800"></div>
+      <div id="thermalState" class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
         AMBIENT
       </div>
       <div class="flex-1"></div>
-      <div class="flex items-center gap-3 text-[10px] font-mono text-slate-500">
+      <div class="flex items-center gap-3 text-[9.5px] font-mono text-slate-500">
         <div><i class="fa-solid fa-fire-flame-simple text-orange-500 mr-1"></i><span id="hudFlame">0%</span></div>
         <div><i class="fa-solid fa-arrows-spin text-violet-400 mr-1"></i><span id="hudStir">0 rpm</span></div>
         <div><i class="fa-solid fa-droplet text-emerald-400 mr-1"></i><span id="hudDrip">0.0 d/s</span></div>
       </div>
     </div>
 
-    <!-- CANVAS STAGE (apparatus: burette + beaker + burner) -->
-    <div class="w-full flex-1 min-h-0 relative glass-panel rounded-xl overflow-hidden">
+    <!-- [2] CANVAS STAGE — beaker + burner + burette -->
+    <div class="relative glass-panel rounded-xl overflow-hidden shrink-0 h-[440px]">
       <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
 
       <!-- HAZARD OVERLAY -->
-      <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
-        <i class="fa-solid fa-triangle-exclamation text-6xl text-red-400 hazard-blink"></i>
+      <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+        <i class="fa-solid fa-triangle-exclamation text-5xl text-red-400 hazard-blink"></i>
         <div class="text-center">
-          <div class="text-2xl font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
-          <div id="hazardMsg" class="text-[12px] text-red-300/90 mt-1 font-mono"></div>
+          <div class="text-xl font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
+          <div id="hazardMsg" class="text-[11px] text-red-300/90 mt-1 font-mono"></div>
         </div>
-        <button onclick="emergencyFlush()" class="px-6 py-2.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[12px] tracking-wider shadow-lg shadow-red-900/50 transition">
+        <button onclick="emergencyFlush()" class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[11px] tracking-wider shadow-lg shadow-red-900/50 transition">
           <i class="fa-solid fa-broom mr-2"></i>EMERGENCY FLUSH &amp; RESET
         </button>
       </div>
     </div>
 
-    <!-- BOTTOM pH HUD — pinned immediately under the burner -->
-    <div class="w-full shrink-0 glass-panel rounded-xl px-4 py-2">
-      <div class="flex items-center gap-4">
-        <div class="flex items-baseline gap-1.5 w-[130px]">
-          <span class="text-[10px] font-bold tracking-widest text-slate-500">pH</span>
-          <span id="phValue" class="text-[24px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
+    <!-- [3] pH SPECTRUM — 8px below burner -->
+    <div class="shrink-0 glass-panel rounded-xl px-4 py-1.5">
+      <div class="flex items-center gap-3">
+        <div class="flex items-baseline gap-1.5 w-[110px]">
+          <span class="text-[9.5px] font-bold tracking-widest text-slate-500">pH</span>
+          <span id="phValue" class="text-[22px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
         </div>
         <div class="flex-1 relative">
-          <div class="h-[14px] rounded-full border border-slate-700 overflow-hidden"
+          <div class="h-[12px] rounded-full border border-slate-700 overflow-hidden"
                style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
           </div>
-          <div id="phMarker" class="absolute top-[-4px] w-[3px] h-[22px] bg-white rounded-full shadow-[0_0_10px_#fff] transition-all duration-150" style="left:50%"></div>
+          <div id="phMarker" class="absolute top-[-4px] w-[3px] h-[20px] bg-white rounded-full shadow-[0_0_10px_#fff] transition-all duration-150" style="left:50%"></div>
           <div class="flex justify-between text-[8px] font-mono text-slate-600 mt-0.5 px-0.5">
             <span>0</span><span>2</span><span>4</span><span>6</span><span>7</span><span>8</span><span>10</span><span>12</span><span>14</span>
           </div>
         </div>
-        <div id="phLabel" class="w-[92px] text-right text-[10px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
+        <div id="phLabel" class="w-[90px] text-right text-[10px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
       </div>
     </div>
 
-    <!-- CONTROL DOCK — attached directly under the pH bar -->
-    <div class="w-full shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-4 py-3">
-      <div class="grid grid-cols-12 gap-3 items-end">
+    <!-- [4] CONTROL DOCK — right under the pH bar -->
+    <div class="shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-3 py-2">
+      <div class="grid grid-cols-12 gap-2.5 items-end">
 
         <!-- Flame -->
         <div class="col-span-3">
           <div class="flex justify-between items-center mb-1">
-            <label class="text-[9px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN BURNER</label>
-            <span id="flameLbl" class="text-[9px] font-mono text-orange-300">0 °C</span>
+            <label class="text-[8.5px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN</label>
+            <span id="flameLbl" class="text-[8.5px] font-mono text-orange-300">0 °C</span>
           </div>
           <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
         </div>
@@ -195,98 +204,98 @@ tailwind.config = {
         <!-- Stirrer -->
         <div class="col-span-3">
           <div class="flex justify-between items-center mb-1">
-            <label class="text-[9px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>MAGNETIC STIRRER</label>
-            <span id="stirLbl" class="text-[9px] font-mono text-violet-300">0 rpm</span>
+            <label class="text-[8.5px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
+            <span id="stirLbl" class="text-[8.5px] font-mono text-violet-300">0 rpm</span>
           </div>
           <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
         </div>
 
-        <!-- Burette -->
+        <!-- Drip -->
         <div class="col-span-3">
           <div class="flex justify-between items-center mb-1">
-            <label class="text-[9px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>TITRATION VALVE</label>
-            <span id="dripLbl" class="text-[9px] font-mono text-emerald-300">0.0 d/s</span>
+            <label class="text-[8.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>VALVE</label>
+            <span id="dripLbl" class="text-[8.5px] font-mono text-emerald-300">0.0 d/s</span>
           </div>
           <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
         </div>
 
         <!-- Burette reagent -->
         <div class="col-span-3">
-          <label class="text-[9px] font-bold tracking-widest text-cyan-400 block mb-1"><i class="fa-solid fa-vial mr-1"></i>BURETTE REAGENT</label>
-          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[10px] px-2 py-[5px] text-slate-200 outline-none focus:border-cyan-600"></select>
+          <label class="text-[8.5px] font-bold tracking-widest text-cyan-400 block mb-1"><i class="fa-solid fa-vial mr-1"></i>BURETTE</label>
+          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[9.5px] px-1.5 py-[3px] text-slate-200 outline-none focus:border-cyan-600"></select>
         </div>
 
         <!-- Buttons row -->
-        <div class="col-span-12 flex flex-wrap gap-2 items-center pt-1 border-t border-slate-800/60">
-          <button id="btnWater" class="dock-btn go"><i class="fa-solid fa-droplet mr-1"></i>ADD 50 mL H₂O</button>
+        <div class="col-span-12 flex flex-wrap gap-1.5 items-center pt-1.5 border-t border-slate-800/60">
+          <button id="btnWater" class="dock-btn go"><i class="fa-solid fa-droplet mr-1"></i>+50 mL H₂O</button>
           <button id="btnRefill" class="dock-btn go"><i class="fa-solid fa-arrows-rotate mr-1"></i>REFILL BURETTE</button>
           <button id="btnStirPulse" class="dock-btn"><i class="fa-solid fa-water mr-1"></i>STIR PULSE</button>
           <button id="btnFlush" class="dock-btn warn"><i class="fa-solid fa-broom mr-1"></i>FLUSH / PURGE</button>
           <button id="btnSound" class="dock-btn"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">SOUND ON</span></button>
           <div class="flex-1"></div>
-          <div class="text-[9px] font-mono text-slate-600">Δt <span id="fps">60</span> fps · <span id="tickCount">0</span> ticks</div>
+          <div class="text-[8.5px] font-mono text-slate-600">Δt <span id="fps">60</span> fps · <span id="tickCount">0</span> ticks</div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- ══════════════════ RIGHT PANEL : TELEMETRY ══════════════════ -->
-  <aside class="w-[320px] shrink-0 h-[calc(100vh-60px)] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col justify-start gap-3 p-3 overflow-hidden">
+  <!-- ══════════════════ RIGHT PANEL : TELEMETRY (500px capped) ══════════════════ -->
+  <aside class="w-[320px] shrink-0 h-[500px] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden p-2.5 gap-2">
 
     <div class="shrink-0 flex items-center gap-2">
-      <i class="fa-solid fa-chart-line text-cyan-400 text-[13px]"></i>
-      <div class="text-[12px] font-bold tracking-wide text-slate-100">TELEMETRY &amp; ANALYTICS</div>
+      <i class="fa-solid fa-chart-line text-cyan-400 text-[12px]"></i>
+      <div class="text-[11.5px] font-bold tracking-wide text-slate-100">TELEMETRY &amp; ANALYTICS</div>
     </div>
 
     <!-- Metrics -->
-    <div class="shrink-0 grid grid-cols-2 gap-2">
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg p-2">
-        <div class="text-[8px] font-bold tracking-widest text-slate-500">TOTAL MASS</div>
-        <div class="text-[17px] font-mono text-cyan-300 tabular-nums leading-tight" id="mMass">250.0</div>
-        <div class="text-[8px] text-slate-600 font-mono">grams</div>
+    <div class="shrink-0 grid grid-cols-2 gap-1.5">
+      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">MASS</div>
+        <div class="text-[15px] font-mono text-cyan-300 tabular-nums leading-tight" id="mMass">250.0</div>
+        <div class="text-[7.5px] text-slate-600 font-mono">grams</div>
       </div>
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg p-2">
-        <div class="text-[8px] font-bold tracking-widest text-slate-500">VOLUME</div>
-        <div class="text-[17px] font-mono text-blue-300 tabular-nums leading-tight" id="mVol">250.0</div>
-        <div class="text-[8px] text-slate-600 font-mono">mL</div>
+      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">VOLUME</div>
+        <div class="text-[15px] font-mono text-blue-300 tabular-nums leading-tight" id="mVol">250.0</div>
+        <div class="text-[7.5px] text-slate-600 font-mono">mL</div>
       </div>
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg p-2">
-        <div class="text-[8px] font-bold tracking-widest text-slate-500">MOLARITY</div>
-        <div class="text-[17px] font-mono text-violet-300 tabular-nums leading-tight" id="mMol">0.000</div>
-        <div class="text-[8px] text-slate-600 font-mono">mol·L⁻¹</div>
+      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">MOLARITY</div>
+        <div class="text-[15px] font-mono text-violet-300 tabular-nums leading-tight" id="mMol">0.000</div>
+        <div class="text-[7.5px] text-slate-600 font-mono">mol·L⁻¹</div>
       </div>
-      <div class="bg-[#0f1725] border border-slate-800 rounded-lg p-2">
-        <div class="text-[8px] font-bold tracking-widest text-slate-500">ENTHALPY ΔH</div>
-        <div class="text-[17px] font-mono text-rose-300 tabular-nums leading-tight" id="mDH">0.00</div>
-        <div class="text-[8px] text-slate-600 font-mono">kJ (cumulative)</div>
+      <div class="bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1">
+        <div class="text-[7.5px] font-bold tracking-widest text-slate-500">ENTHALPY ΔH</div>
+        <div class="text-[15px] font-mono text-rose-300 tabular-nums leading-tight" id="mDH">0.00</div>
+        <div class="text-[7.5px] text-slate-600 font-mono">kJ cumulative</div>
       </div>
     </div>
 
     <!-- Species -->
     <div class="shrink-0">
-      <div class="text-[9px] font-bold tracking-widest text-slate-500 mb-1.5">ACTIVE SPECIES</div>
-      <div id="speciesList" class="flex flex-wrap gap-1 max-h-[72px] overflow-y-auto custom-scrollbar pr-1">
-        <span class="text-[9px] text-slate-600 font-mono italic">no solutes</span>
+      <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1">ACTIVE SPECIES</div>
+      <div id="speciesList" class="flex flex-wrap gap-1 max-h-[58px] overflow-y-auto custom-scrollbar pr-1">
+        <span class="text-[8.5px] text-slate-600 font-mono italic">no solutes</span>
       </div>
     </div>
 
     <!-- Equations -->
-    <div class="shrink-0 flex flex-col min-h-0 max-h-[150px]">
-      <div class="text-[9px] font-bold tracking-widest text-slate-500 mb-1.5 shrink-0">
+    <div class="shrink-0 flex flex-col min-h-0 max-h-[110px]">
+      <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1 shrink-0">
         <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS
       </div>
       <div id="eqList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1">
-        <div class="text-[9px] text-slate-600 font-mono italic">awaiting reaction…</div>
+        <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
       </div>
     </div>
 
-    <!-- Log — fills remaining vertical space -->
-    <div class="flex-1 min-h-0 flex flex-col border-t border-slate-800/60 pt-2">
+    <!-- Log — fixed height -->
+    <div class="shrink-0 h-48 flex flex-col border-t border-slate-800/60 pt-1.5">
       <div class="shrink-0 flex items-center justify-between mb-1">
-        <div class="text-[9px] font-bold tracking-widest text-slate-500">
+        <div class="text-[8.5px] font-bold tracking-widest text-slate-500">
           <i class="fa-solid fa-terminal mr-1 text-emerald-500"></i>REACTION LOG
         </div>
-        <button onclick="clearLog()" class="text-[9px] text-slate-600 hover:text-slate-300 font-mono">clear</button>
+        <button onclick="clearLog()" class="text-[8.5px] text-slate-600 hover:text-slate-300 font-mono">clear</button>
       </div>
       <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 font-mono"></div>
     </div>
@@ -307,12 +316,12 @@ const CX  = BX + BW / 2;            // 380  (axis of symmetry)
 const MAXVOL = 500;                 // mL full scale
 const MAXLH  = 292;                 // px max liquid column height
 
-/* Burette tip anchor (single source of truth for drip spawn Y) */
+/* Burette tip anchor */
 const BURETTE_TOP = 20;
 const BURETTE_BOT = 126;
 const BURETTE_TIP_Y = BURETTE_BOT + 30;   // 156
 
-/* Burner anchor (shifted up 38px with the vessel) */
+/* Burner anchor */
 const BURNER_BASE_Y = 594;
 
 /* ───────────────────────── CHEMICAL DATABASE ───────────────────────── */
@@ -378,7 +387,7 @@ const CHEMS = [
   {id:'litmus',n:'Litmus Solution',    f:'Lit',  c:'Indicators', st:'l', ind:'lit',  max:10, def:1, rgb:[150,110,190]},
 ];
 
-/* ───────────────────────── ION COLOUR TABLE (Beer–Lambert tints) ───────────────────────── */
+/* ───────────────────────── ION COLOUR TABLE ───────────────────────── */
 const ION_COLORS = {
   'Cu2+':   [ 34,118,225],
   'Fe2+':   [110,165,120],
@@ -404,7 +413,7 @@ const PRECIP_RULES = [
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
-   AUDIO ENGINE — Web Audio API synthesis (no external files)
+   AUDIO ENGINE — Web Audio API synthesis
    ══════════════════════════════════════════════════════════════════════════ */
 const LabAudio = {
   ctx:null, master:null, ready:false, enabled:true,
@@ -419,28 +428,24 @@ const LabAudio = {
     this.master.gain.value = 0.30;
     this.master.connect(this.ctx.destination);
 
-    /* --- shared white-noise buffer --- */
     const len = this.ctx.sampleRate * 2;
     const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
     const d = buf.getChannelData(0);
     for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
     this.noiseBuf = buf;
 
-    /* --- 1. FIZZ / EFFERVESCENCE (band-passed noise) --- */
     const fs = this.ctx.createBufferSource(); fs.buffer = buf; fs.loop = true;
     const ff = this.ctx.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 4800; ff.Q.value = 0.7;
     this.fizzGain = this.ctx.createGain(); this.fizzGain.gain.value = 0;
     fs.connect(ff).connect(this.fizzGain).connect(this.master);
     fs.start();
 
-    /* --- 2. BUNSEN HISS (high-passed noise) --- */
     const hs = this.ctx.createBufferSource(); hs.buffer = buf; hs.loop = true;
     const hf = this.ctx.createBiquadFilter(); hf.type = 'highpass'; hf.frequency.value = 1800;
     this.hissGain = this.ctx.createGain(); this.hissGain.gain.value = 0;
     hs.connect(hf).connect(this.hissGain).connect(this.master);
     hs.start();
 
-    /* --- 3. BOILING RUMBLE (LFO-modulated low sine + noise bed) --- */
     this.boilOsc = this.ctx.createOscillator(); this.boilOsc.type = 'sine'; this.boilOsc.frequency.value = 78;
     const bfilt = this.ctx.createBiquadFilter(); bfilt.type = 'lowpass'; bfilt.frequency.value = 420;
     this.boilGain = this.ctx.createGain(); this.boilGain.gain.value = 0;
@@ -459,7 +464,6 @@ const LabAudio = {
   setHiss(v){ if (this.ready) this.hissGain.gain.setTargetAtTime(this.enabled ? Math.min(v, 0.4) : 0, this.ctx.currentTime, 0.08); },
   setBoil(v){ if (this.ready) this.boilGain.gain.setTargetAtTime(this.enabled ? Math.min(v, 0.35) : 0, this.ctx.currentTime, 0.1); },
 
-  /* short bubble pop */
   pop(){
     if (!this.ready || !this.enabled) return;
     const t = this.ctx.currentTime;
@@ -474,7 +478,6 @@ const LabAudio = {
     o.start(t); o.stop(t + 0.13);
   },
 
-  /* glass click */
   click(){
     if (!this.ready || !this.enabled) return;
     const t = this.ctx.currentTime;
@@ -488,7 +491,6 @@ const LabAudio = {
     o.start(t); o.stop(t + 0.07);
   },
 
-  /* stirrer whirr */
   whirr(){
     if (!this.ready || !this.enabled) return;
     const t = this.ctx.currentTime;
@@ -504,7 +506,6 @@ const LabAudio = {
     o.start(t); o.stop(t + 0.55);
   },
 
-  /* exothermic explosive pop */
   explode(){
     if (!this.ready || !this.enabled) return;
     const t = this.ctx.currentTime;
@@ -526,7 +527,6 @@ const LabAudio = {
     n.start(t); n.stop(t + 0.6);
   },
 
-  /* glass shatter */
   shatter(){
     if (!this.ready || !this.enabled) return;
     const t = this.ctx.currentTime;
@@ -557,44 +557,21 @@ const LabAudio = {
    SIMULATION STATE
    ══════════════════════════════════════════════════════════════════════════ */
 const state = {
-  volume: 250,          // mL of liquid
-  temp: 25,             // °C
-  mass: 250,            // g total
-  ions: {},             // ion species -> moles
-  solids: {},           // undissolved solid -> moles
-  fuels: {},            // organic fuel -> moles
-  precip: {},           // precipitated compound -> moles
-  ind: {},              // indicator key -> arbitrary units (mL added)
-  dH: 0,                // cumulative enthalpy kJ
-  pH: 7,
-  flame: 0,             // 0..100 slider
-  stir: 0,              // 0..100 slider
-  drip: 0,              // drops/sec
-  shattered: false,
-  buretteFrac: 1,
-  buretteChem: 'naoh',
+  volume: 250, temp: 25, mass: 250,
+  ions: {}, solids: {}, fuels: {}, precip: {}, ind: {},
+  dH: 0, pH: 7,
+  flame: 0, stir: 0, drip: 0,
+  shattered: false, buretteFrac: 1, buretteChem: 'naoh',
   eq: new Set(),
   fluidColor: [200, 225, 240],
-  // particle systems
-  bubbles: [],
-  steam: [],
-  smoke: [],
-  precipParticles: [],
-  drops: [],
-  ripples: [],
-  flash: 0,
-  shake: 0,
-  gasRate: 0,
-  steamRate: 0,
-  stirPhase: 0,
-  tick: 0,
+  bubbles: [], steam: [], smoke: [], precipParticles: [], drops: [], ripples: [],
+  flash: 0, shake: 0, gasRate: 0, steamRate: 0, stirPhase: 0, tick: 0,
 };
 
-/* ───────────────────────── DOM REFS ───────────────────────── */
 const canvas = document.getElementById('stage');
 const ctx = canvas.getContext('2d');
 let ACTIVE_CAT = 'All';
-const QTY = {};   // per-chemical slider value memory
+const QTY = {};
 
 /* ══════════════════════════════════════════════════════════════════════════
    UTILITIES
@@ -604,34 +581,22 @@ const getIon = k => state.ions[k] || 0;
 const setIon = (k,v) => { state.ions[k] = Math.max(0, v); if (state.ions[k] < 1e-13) delete state.ions[k]; };
 const addIon = (k,v) => setIon(k, getIon(k) + v);
 
-/** Arrhenius rate factor relative to 298.15 K */
 function kFactor(Ea_kJ, tempC){
   const T = tempC + 273.15, T0 = 298.15;
-  const R = 8.314e-3; // kJ·mol⁻¹·K⁻¹
+  const R = 8.314e-3;
   return Math.exp(-(Ea_kJ / R) * (1 / T - 1 / T0));
 }
 
-function heatCapacity(){
-  return 4.18 * Math.max(0, state.volume) + 82;   // J/K  (water + glass)
-}
-
-function addHeat(joules){
-  state.temp += joules / heatCapacity();
-}
-
-function nowStamp(){
-  const d = new Date();
-  return d.toTimeString().slice(0,8);
-}
+function heatCapacity(){ return 4.18 * Math.max(0, state.volume) + 82; }
+function addHeat(joules){ state.temp += joules / heatCapacity(); }
+function nowStamp(){ return new Date().toTimeString().slice(0,8); }
 
 /* ══════════════════════════════════════════════════════════════════════════
    LOG & EQUATION TERMINAL
    ══════════════════════════════════════════════════════════════════════════ */
 function log(msg, type){
   const el = document.getElementById('log');
-  const colors = {
-    info:'#7dd3fc', warn:'#fbbf24', danger:'#f87171', good:'#6ee7b7', react:'#c4b5fd'
-  };
+  const colors = { info:'#7dd3fc', warn:'#fbbf24', danger:'#f87171', good:'#6ee7b7', react:'#c4b5fd' };
   const div = document.createElement('div');
   div.className = 'log-line';
   div.innerHTML = `<span class="text-slate-600">[${nowStamp()}]</span> <span style="color:${colors[type]||'#94a3b8'}">${msg}</span>`;
@@ -646,14 +611,14 @@ function eqAdd(str){
   const el = document.getElementById('eqList');
   if (el.querySelector('.italic')) el.innerHTML = '';
   const d = document.createElement('div');
-  d.className = 'text-[10px] font-mono text-amber-200/90 bg-[#131c2b] border border-slate-800 rounded px-2 py-1 fade-in';
+  d.className = 'text-[9.5px] font-mono text-amber-200/90 bg-[#131c2b] border border-slate-800 rounded px-2 py-1 fade-in';
   d.textContent = str;
   el.insertBefore(d, el.firstChild);
   while (el.children.length > 40) el.removeChild(el.lastChild);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LEFT PANEL BUILD
+   LEFT PANEL BUILD — COMPACT HORIZONTAL ROWS
    ══════════════════════════════════════════════════════════════════════════ */
 function buildTabs(){
   const wrap = document.getElementById('catTabs');
@@ -673,30 +638,33 @@ function buildShelf(){
   CHEMS.filter(c => ACTIVE_CAT === 'All' || c.c === ACTIVE_CAT).forEach(c => {
     if (QTY[c.id] === undefined) QTY[c.id] = c.def;
     const unit = c.st === 's' ? 'g' : 'mL';
-    const card = document.createElement('div');
-    card.className = 'reagent-card';
-    card.innerHTML = `
-      <div class="flex items-start justify-between gap-2">
-        <div class="min-w-0">
-          <div class="text-[11.5px] font-semibold text-slate-100 truncate leading-tight">${c.n}</div>
-          <div class="text-[9.5px] text-slate-500 font-mono">${c.f}</div>
-        </div>
-        <div class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-800/70 text-slate-400 shrink-0">${c.st === 's' ? 'SOLID' : 'LIQ'}</div>
+    const row = document.createElement('div');
+    row.className = 'reagent-row';
+    row.innerHTML = `
+      <div class="flex-1 min-w-0">
+        <div class="text-[10.5px] font-semibold text-slate-100 truncate leading-tight">${c.n}</div>
+        <div class="text-[8.5px] text-slate-500 font-mono truncate leading-tight">${c.f}</div>
       </div>
-      <input type="range" class="w-full mt-2" min="0.1" max="${c.max}" step="0.1" value="${QTY[c.id]}" data-slider="${c.id}">
-      <div class="flex items-center justify-between mt-1.5">
-        <span class="text-[10px] font-mono text-cyan-400" data-lbl="${c.id}">${QTY[c.id]} ${unit}</span>
-        <button class="vl-add" data-add="${c.id}">ADD</button>
-      </div>`;
-    shelf.appendChild(card);
+      <input type="number" inputmode="decimal" min="0.1" max="${c.max}" step="0.1"
+             value="${QTY[c.id]}" data-qty="${c.id}"
+             class="w-[52px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1.5 py-[2px] text-[10px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
+      <span class="text-[8.5px] text-slate-500 w-[16px] shrink-0 font-mono">${unit}</span>
+      <button class="vl-add shrink-0" data-add="${c.id}">ADD</button>`;
+    shelf.appendChild(row);
   });
 
-  shelf.querySelectorAll('[data-slider]').forEach(sl => {
-    sl.addEventListener('input', e => {
-      const id = e.target.dataset.slider;
-      const chem = CHEMS.find(x => x.id === id);
-      QTY[id] = parseFloat(e.target.value);
-      shelf.querySelector(`[data-lbl="${id}"]`).textContent = `${QTY[id]} ${chem.st === 's' ? 'g' : 'mL'}`;
+  shelf.querySelectorAll('[data-qty]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const id = e.target.dataset.qty;
+      const v = parseFloat(e.target.value);
+      QTY[id] = isNaN(v) ? 0 : v;
+    });
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter'){
+        const id = e.target.dataset.qty;
+        const chem = CHEMS.find(x => x.id === id);
+        if (QTY[id] > 0){ addChemical(chem, QTY[id]); LabAudio.click(); }
+      }
     });
   });
 
@@ -704,7 +672,9 @@ function buildShelf(){
     btn.addEventListener('click', e => {
       const id = e.target.dataset.add;
       const chem = CHEMS.find(x => x.id === id);
-      addChemical(chem, QTY[id]);
+      const q = QTY[id];
+      if (!q || q <= 0){ log('Enter a valid quantity first', 'warn'); return; }
+      addChemical(chem, q);
       LabAudio.click();
     });
   });
@@ -741,7 +711,6 @@ function addChemical(chem, qty){
   else if (chem.M) moles = (qty / 1000) * chem.M;
   else if (chem.dens) moles = (qty * chem.dens) / chem.mm;
 
-  /* ---- indicators ---- */
   if (chem.ind){
     state.ind[chem.ind] = (state.ind[chem.ind] || 0) + qty;
     state.volume += qty;
@@ -750,7 +719,6 @@ function addChemical(chem, qty){
     return;
   }
 
-  /* ---- organic fuels ---- */
   if (chem.fuel){
     state.fuels[chem.id] = (state.fuels[chem.id] || 0) + moles;
     state.volume += qty;
@@ -759,16 +727,14 @@ function addChemical(chem, qty){
     return;
   }
 
-  /* ---- liquid reagents (volume addition) ---- */
   if (chem.st === 'l'){
     state.volume += qty;
     state.mass += qty;
   } else {
     state.mass += qty;
-    state.volume += qty * 0.35;   // slight displacement
+    state.volume += qty * 0.35;
   }
 
-  /* ---- ionic contribution ---- */
   let reacted = false;
   if (chem.ions){
     for (const [k, v] of Object.entries(chem.ions)) addIon(k, v * moles);
@@ -777,22 +743,19 @@ function addChemical(chem, qty){
   if (chem.weakAcid) addIon('CH3COOH', moles);
   if (chem.weakBase) addIon('NH3', moles);
 
-  /* ---- insoluble solid goes to the solid pool ---- */
   if (!chem.soluble && chem.st === 's' && !chem.ions){
     state.solids[chem.id] = (state.solids[chem.id] || 0) + moles;
     reacted = true;
   }
 
-  /* ---- dissolution enthalpy ---- */
   if (chem.dhSol && reacted){
-    addHeat(-chem.dhSol * moles * 1000);   // dhSol negative → exothermic
+    addHeat(-chem.dhSol * moles * 1000);
     state.dH += chem.dhSol * moles;
   }
 
   const unit = chem.st === 's' ? 'g' : 'mL';
   log(`Added ${qty.toFixed(1)} ${unit} ${chem.n} → ${moles.toFixed(4)} mol`, 'info');
 
-  /* ---- alkali metal hazard check ---- */
   if (chem.alkali && moles > 0.055){
     setTimeout(() => triggerExplosion(`${chem.n} + H₂O runaway`), 220);
   }
@@ -803,25 +766,22 @@ function addChemical(chem, qty){
    ══════════════════════════════════════════════════════════════════════════ */
 function updateThermo(dt){
   const s = state;
-  const flameTemp = (s.flame / 100) * 1500;         // °C
-  const flamePower = (s.flame / 100) * 4500;        // W
+  const flameTemp = (s.flame / 100) * 1500;
+  const flamePower = (s.flame / 100) * 4500;
 
   let P = 0;
   if (s.flame > 0 && s.temp < flameTemp){
     P += flamePower * (1 - 0.45 * (s.temp / Math.max(1, flameTemp)));
   }
-  // convective + radiative loss to ambient
   P -= (s.temp - 25) * 0.95;
 
   const C = heatCapacity();
-  const dT = (P * dt) / C;
-  s.temp += dT;
+  s.temp += (P * dt) / C;
 
-  /* phase change: boiling */
   if (s.temp > 100 && s.volume > 0.01){
     const excessJ = (s.temp - 100) * C;
     s.temp = 100;
-    const evapG = excessJ / 700;                    // scaled latent heat for pedagogy
+    const evapG = excessJ / 700;
     const evap = Math.min(evapG, s.volume);
     s.volume -= evap;
     s.mass   -= evap;
@@ -830,12 +790,10 @@ function updateThermo(dt){
 
   if (s.temp < 0) s.temp = 0;
 
-  /* thermal shock / glass failure */
   if (s.temp > 1200 && !s.shattered){
     triggerShatter('Thermal shock — borosilicate limit exceeded (T > 1200 °C)');
   }
 
-  /* audio mapping */
   const boilLevel = s.temp >= 99.5 && s.volume > 0 ? clamp((s.temp - 99) / 3, 0, 1) : 0;
   LabAudio.setBoil(boilLevel * 0.9);
   LabAudio.setHiss(s.flame / 100 * 0.55);
@@ -846,12 +804,12 @@ function updateThermo(dt){
    REACTION KERNEL
    ══════════════════════════════════════════════════════════════════════════ */
 function react(dt){
-  const s = state, I = s.ions;
+  const s = state;
   if (s.shattered) return;
   const T = s.temp;
-  const V = Math.max(0.0005, s.volume / 1000);       // L
+  const V = Math.max(0.0005, s.volume / 1000);
 
-  /* ── 1. ACID–BASE NEUTRALISATION ───────────────────────────── */
+  /* 1. ACID-BASE NEUTRALISATION */
   {
     const h = getIon('H+'), oh = getIon('OH-');
     const n = Math.min(h, oh);
@@ -866,7 +824,7 @@ function react(dt){
     }
   }
 
-  /* ── 2. ALKALI METAL + WATER ───────────────────────────────── */
+  /* 2. ALKALI METAL + WATER */
   for (const m of ['na','k','li']){
     const mol = s.solids[m] || 0;
     if (mol > 1e-9 && s.volume > 0.5){
@@ -891,7 +849,7 @@ function react(dt){
     }
   }
 
-  /* ── 3. CALCIUM + WATER ───────────────────────────────────── */
+  /* 3. CALCIUM + WATER */
   {
     const mol = s.solids['ca'] || 0;
     if (mol > 1e-9 && s.volume > 0.5){
@@ -913,7 +871,7 @@ function react(dt){
     }
   }
 
-  /* ── 4. METAL + ACID (Zn, Fe, Mg) ─────────────────────────── */
+  /* 4. METAL + ACID */
   const hMol = getIon('H+');
   const hConc = hMol / V;
   for (const m of ['zn','fe','mg']){
@@ -940,7 +898,7 @@ function react(dt){
     }
   }
 
-  /* ── 5. CARBONATE + ACID ──────────────────────────────────── */
+  /* 5. CARBONATE + ACID */
   {
     const co3 = getIon('CO3^2-'), h = getIon('H+');
     if (co3 > 1e-12 && h > 1e-12){
@@ -957,7 +915,6 @@ function react(dt){
         log('Carbonate + acid → CO₂ effervescence', 'react');
       }
     }
-    /* solid CaCO₃ */
     const sc = s.solids['caco3'] || 0;
     const h2 = getIon('H+');
     if (sc > 1e-9 && h2 > 1e-9){
@@ -978,7 +935,7 @@ function react(dt){
     }
   }
 
-  /* ── 6. METAL OXIDE + ACID ────────────────────────────────── */
+  /* 6. METAL OXIDE + ACID */
   {
     const cuo = s.solids['cuo'] || 0, h = getIon('H+');
     if (cuo > 1e-9 && h > 1e-9){
@@ -996,7 +953,6 @@ function react(dt){
         }
       }
     }
-    /* CaO slaking */
     const cao = s.solids['cao'] || 0;
     if (cao > 1e-9 && s.volume > 0.5){
       const amt = Math.min(cao * 0.8 * dt, cao, s.volume / 18.0 * 0.3);
@@ -1016,7 +972,7 @@ function react(dt){
     }
   }
 
-  /* ── 7. PRECIPITATION ─────────────────────────────────────── */
+  /* 7. PRECIPITATION */
   for (const r of PRECIP_RULES){
     const a = getIon(r.a), b = getIon(r.b);
     if (a > 1e-12 && b > 1e-12){
@@ -1026,7 +982,7 @@ function react(dt){
         setIon(r.a, a - consumed * r.ra);
         setIon(r.b, b - consumed * r.rb);
         s.precip[r.prod] = (s.precip[r.prod] || 0) + consumed;
-        addHeat(-30000 * consumed);     // precipitation usually slightly exothermic
+        addHeat(-30000 * consumed);
         s.dH += 30 * consumed;
         spawnPrecip(Math.min(24, consumed * 4000), r.col);
         if (!s.eq.has('p_' + r.prod)){
@@ -1038,7 +994,7 @@ function react(dt){
     }
   }
 
-  /* ── 8. COMBUSTION OF ORGANIC FUELS ───────────────────────── */
+  /* 8. COMBUSTION */
   for (const [id, mol] of Object.entries(s.fuels)){
     if (mol <= 1e-9) continue;
     const fuel = CHEMS.find(c => c.id === id);
@@ -1064,18 +1020,15 @@ function react(dt){
     }
   }
 
-  /* ── 9. DECAY of gas generation rate ──────────────────────── */
   s.gasRate *= Math.pow(0.35, dt);
   s.steamRate *= Math.pow(0.5, dt);
 
-  /* ── 10. BOILING BUBBLE GENERATION ────────────────────────── */
   if (s.temp >= 99.5 && s.volume > 1){
     const n = clamp((s.temp - 99) * 3, 0, 8) * dt * 60;
     spawnBubbles(n * 0.35, [255, 255, 255]);
     if (Math.random() < 0.14) LabAudio.pop();
   }
 
-  /* ── 11. GAS-EVOLUTION BUBBLES ────────────────────────────── */
   if (s.gasRate > 5 && Math.random() < 0.5) LabAudio.pop();
 }
 
@@ -1089,8 +1042,8 @@ function computePH(){
   const net = hM - ohM;
   let hConc;
 
-  const cw = getIon('CH3COOH') / V;       // weak acid conc
-  const cb = getIon('NH3') / V;            // weak base conc
+  const cw = getIon('CH3COOH') / V;
+  const cb = getIon('NH3') / V;
   const Ka = 1.8e-5, Kb = 1.8e-5;
 
   if (net > 1e-13){
@@ -1127,22 +1080,13 @@ function mix(a, b, t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2
 
 function uiColor(pH){
   const stops = [
-    [0,   [215, 30, 40]],
-    [2,   [230, 90, 30]],
-    [4,   [240, 200, 40]],
-    [6,   [200, 220, 60]],
-    [7,   [ 60, 190, 90]],
-    [8,   [ 40, 190, 170]],
-    [10,  [ 50, 110, 220]],
-    [12,  [ 90, 60, 200]],
-    [14,  [130, 30, 160]],
+    [0, [215,30,40]], [2, [230,90,30]], [4, [240,200,40]],
+    [6, [200,220,60]], [7, [60,190,90]], [8, [40,190,170]],
+    [10, [50,110,220]], [12, [90,60,200]], [14, [130,30,160]],
   ];
   for (let i = 0; i < stops.length - 1; i++){
     const [p0, c0] = stops[i], [p1, c1] = stops[i+1];
-    if (pH >= p0 && pH <= p1){
-      const t = (pH - p0) / (p1 - p0);
-      return mix(c0, c1, t);
-    }
+    if (pH >= p0 && pH <= p1) return mix(c0, c1, (pH - p0) / (p1 - p0));
   }
   return stops[stops.length-1][1];
 }
@@ -1150,9 +1094,8 @@ function uiColor(pH){
 function computeFluidColor(){
   const s = state;
   const V = Math.max(0.0005, s.volume / 1000);
-  let col = [198, 224, 240];   // pure water base
+  let col = [198, 224, 240];
 
-  /* ionic tints (Beer–Lambert approximation) */
   for (const [ion, rgb] of Object.entries(ION_COLORS)){
     const c = getIon(ion) / V;
     if (c > 1e-6){
@@ -1161,21 +1104,17 @@ function computeFluidColor(){
     }
   }
 
-  /* precipitates suspended near the top give a cloudy tint */
   const totalPrecip = Object.values(s.precip).reduce((a,b)=>a+b, 0);
   if (totalPrecip > 1e-6){
     const turb = clamp(totalPrecip / V * 0.06, 0, 0.55);
     col = mix(col, [235, 235, 232], turb);
   }
 
-  /* indicators */
   const indStrength = k => clamp((s.ind[k] || 0) / 2.0, 0, 1);
 
   const uiA = indStrength('ui');
-  if (uiA > 0.01){
-    const c = uiColor(s.pH);
-    col = mix(col, c, clamp(uiA * 0.92, 0, 0.92));
-  }
+  if (uiA > 0.01) col = mix(col, uiColor(s.pH), clamp(uiA * 0.92, 0, 0.92));
+
   const phA = indStrength('phph');
   if (phA > 0.01){
     let t = 0;
@@ -1188,10 +1127,7 @@ function computeFluidColor(){
     let c;
     if (s.pH < 6) c = [230, 215, 45];
     else if (s.pH > 7.6) c = [30, 90, 215];
-    else {
-      const t = (s.pH - 6) / 1.6;
-      c = mix([230,215,45],[30,90,215], t);
-    }
+    else c = mix([230,215,45],[30,90,215], (s.pH - 6) / 1.6);
     col = mix(col, c, clamp(btbA * 0.9, 0, 0.9));
   }
   const moA = indStrength('mor');
@@ -1231,8 +1167,7 @@ function spawnBubbles(n, col){
       vy: 0.5 + Math.random() * 1.4,
       vx: (Math.random() - 0.5) * 0.5,
       wob: Math.random() * Math.PI * 2,
-      col: col || [255,255,255],
-      top
+      col: col || [255,255,255], top
     });
   }
 }
@@ -1285,12 +1220,10 @@ function updateParticles(dt){
   const s = state;
   const top = liquidTop();
 
-  /* bubbles */
   for (let i = s.bubbles.length - 1; i >= 0; i--){
     const b = s.bubbles[i];
     b.wob += dt * 7;
-    b.vy += 0.06;
-    b.vy *= 0.97;
+    b.vy += 0.06; b.vy *= 0.97;
     b.y -= b.vy * dt * 60;
     b.x += Math.sin(b.wob) * 0.5 + b.vx;
     b.vx *= 0.98;
@@ -1303,7 +1236,6 @@ function updateParticles(dt){
     if (b.x > INX + INW - 4) b.x = INX + INW - 4;
   }
 
-  /* steam */
   if (s.steamRate > 0.4) spawnSteam(s.steamRate * 0.35);
   for (let i = s.steam.length - 1; i >= 0; i--){
     const p = s.steam[i];
@@ -1314,7 +1246,6 @@ function updateParticles(dt){
     if (p.life <= 0 || p.y < -30) s.steam.splice(i, 1);
   }
 
-  /* smoke */
   for (let i = s.smoke.length - 1; i >= 0; i--){
     const p = s.smoke[i];
     p.y += p.vy * dt * 60;
@@ -1324,7 +1255,6 @@ function updateParticles(dt){
     if (p.life <= 0 || p.y < -40) s.smoke.splice(i, 1);
   }
 
-  /* precipitate */
   const stirring = s.stir > 12;
   for (const p of s.precipParticles){
     if (stirring){
@@ -1333,11 +1263,8 @@ function updateParticles(dt){
       p.vx = clamp(p.vx, -2.4, 2.4);
       p.vy = clamp(p.vy, -2.4, 2.0);
     }
-    p.vy += 0.035;
-    p.vy *= 0.94;
-    p.vx *= 0.95;
-    p.y += p.vy;
-    p.x += p.vx;
+    p.vy += 0.035; p.vy *= 0.94; p.vx *= 0.95;
+    p.y += p.vy; p.x += p.vx;
     if (p.x < INX + 4) { p.x = INX + 4; p.vx *= -0.4; }
     if (p.x > INX + INW - 4) { p.x = INX + INW - 4; p.vx *= -0.4; }
     const lim = stirring ? BOT - 4 : p.floor;
@@ -1345,18 +1272,13 @@ function updateParticles(dt){
     if (p.y < top + 6) { p.y = top + 6; p.vy = Math.abs(p.vy) * 0.4; }
   }
 
-  /* falling drops */
   for (let i = s.drops.length - 1; i >= 0; i--){
     const d = s.drops[i];
     d.vy += 0.55;
     d.y += d.vy;
-    if (d.y > top + 6){
-      s.drops.splice(i, 1);
-      spawnRipple(d.x);
-    }
+    if (d.y > top + 6){ s.drops.splice(i, 1); spawnRipple(d.x); }
   }
 
-  /* ripples */
   for (let i = s.ripples.length - 1; i >= 0; i--){
     const r = s.ripples[i];
     r.r += dt * 42;
@@ -1364,7 +1286,6 @@ function updateParticles(dt){
     if (r.a <= 0) s.ripples.splice(i, 1);
   }
 
-  /* screen flash / shake decay */
   s.flash = Math.max(0, s.flash - dt * 2.2);
   s.shake = Math.max(0, s.shake - dt * 3.5);
 }
@@ -1390,14 +1311,13 @@ function updateBurette(dt){
     dropAccumulator -= 1;
     if (s.buretteFrac <= 0) break;
 
-    const dropVol = 0.10;                          // mL per drop
+    const dropVol = 0.10;
     const chem = CHEMS.find(c => c.id === s.buretteChem);
     if (!chem) break;
 
     s.buretteFrac = Math.max(0, s.buretteFrac - dropVol / 50);
     s.drops.push({ x: CX + (Math.random() - 0.5) * 2, y: BURETTE_TIP_Y, vy: 0.6 });
 
-    /* deliver reagent */
     const moles = (dropVol / 1000) * (chem.M || 1);
     s.volume += dropVol;
     s.mass += dropVol;
@@ -1415,9 +1335,7 @@ function updateBurette(dt){
 function triggerShatter(reason){
   if (state.shattered) return;
   state.shattered = true;
-  state.flame = 0;
-  state.stir = 0;
-  state.drip = 0;
+  state.flame = 0; state.stir = 0; state.drip = 0;
   document.getElementById('flameSlider').value = 0;
   document.getElementById('stirSlider').value = 0;
   document.getElementById('dripSlider').value = 0;
@@ -1453,25 +1371,12 @@ function emergencyFlush(){
    ══════════════════════════════════════════════════════════════════════════ */
 function flushAll(){
   const s = state;
-  s.volume = 250;
-  s.temp = 25;
-  s.mass = 250;
-  s.ions = {};
-  s.solids = {};
-  s.fuels = {};
-  s.precip = {};
-  s.ind = {};
-  s.dH = 0;
-  s.pH = 7;
-  s.shattered = false;
-  s.bubbles = [];
-  s.steam = [];
-  s.smoke = [];
-  s.precipParticles = [];
-  s.drops = [];
-  s.ripples = [];
-  s.gasRate = 0;
-  s.steamRate = 0;
+  s.volume = 250; s.temp = 25; s.mass = 250;
+  s.ions = {}; s.solids = {}; s.fuels = {}; s.precip = {}; s.ind = {};
+  s.dH = 0; s.pH = 7; s.shattered = false;
+  s.bubbles = []; s.steam = []; s.smoke = [];
+  s.precipParticles = []; s.drops = []; s.ripples = [];
+  s.gasRate = 0; s.steamRate = 0;
   s.eq.clear();
   s.flame = 0; s.stir = 0; s.drip = 0;
   s.buretteFrac = 1;
@@ -1479,7 +1384,7 @@ function flushAll(){
   document.getElementById('flameSlider').value = 0;
   document.getElementById('stirSlider').value = 0;
   document.getElementById('dripSlider').value = 0;
-  document.getElementById('eqList').innerHTML = '<div class="text-[9px] text-slate-600 font-mono italic">awaiting reaction…</div>';
+  document.getElementById('eqList').innerHTML = '<div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>';
 
   LabAudio.setBoil(0); LabAudio.setFizz(0); LabAudio.setHiss(0);
   log('⚗️ System purged. 250 mL distilled H₂O charged, 25 °C.', 'good');
@@ -1496,11 +1401,6 @@ function resizeCanvas(){
 
   const s = Math.min(rect.width / W, rect.height / H);
   const ox = ((rect.width - W * s) / 2) * dpr;
-
-  /* ── VERTICAL ELEVATION BIAS ─────────────────────────────────────────
-     Anchor the apparatus toward the upper-middle of the stage instead of
-     dead-centre, so the vessel + burette sit high and the pH strip /
-     control dock ride directly beneath the beaker.                      */
   const extraY = Math.max(0, rect.height - H * s);
   const oy = (extraY * 0.18) * dpr;
 
@@ -1533,7 +1433,6 @@ function roundRect(x, y, w, h, r){
   ctx.closePath();
 }
 
-/* ---------- background ---------- */
 function drawBackdrop(){
   const g = ctx.createRadialGradient(CX, 300, 40, CX, 300, 560);
   g.addColorStop(0, '#0d1727');
@@ -1541,7 +1440,6 @@ function drawBackdrop(){
   ctx.fillStyle = g;
   ctx.fillRect(-1400, -1400, W + 2800, H + 2800);
 
-  /* bench surface */
   const bg = ctx.createLinearGradient(0, 590, 0, H + 200);
   bg.addColorStop(0, '#101a28');
   bg.addColorStop(1, '#070b12');
@@ -1552,7 +1450,6 @@ function drawBackdrop(){
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(-1400, 590.5); ctx.lineTo(W + 1400, 590.5); ctx.stroke();
 
-  /* subtle grid */
   ctx.strokeStyle = 'rgba(56,189,248,0.035)';
   for (let x = -1400; x < W + 1400; x += 38){
     ctx.beginPath(); ctx.moveTo(x, -600); ctx.lineTo(x, 590); ctx.stroke();
@@ -1562,29 +1459,24 @@ function drawBackdrop(){
   }
 }
 
-/* ---------- bunsen burner + flame ---------- */
 function flameTint(){
-  const I = state.ions;
   if (state.temp < 250) return null;
-  if (getIon('Na+') > 1e-6 || (state.solids['na'] || 0) > 0) return [255, 190, 40];   // golden yellow
-  if (getIon('K+')  > 1e-6 || (state.solids['k']  || 0) > 0) return [190, 130, 255];  // lilac
-  if (getIon('Cu2+') > 1e-6 || (state.solids['cu'] || 0) > 0) return [70, 235, 160];  // green/blue
-  if (getIon('Ca2+') > 1e-6 || (state.solids['ca'] || 0) > 0) return [255, 110, 70];  // brick red
-  if (getIon('Li+')  > 1e-6 || (state.solids['li'] || 0) > 0) return [255, 70, 100];  // crimson
-  if (getIon('Ba2+') > 1e-6) return [180, 255, 150];                                  // apple green
+  if (getIon('Na+') > 1e-6 || (state.solids['na'] || 0) > 0) return [255, 190, 40];
+  if (getIon('K+')  > 1e-6 || (state.solids['k']  || 0) > 0) return [190, 130, 255];
+  if (getIon('Cu2+') > 1e-6 || (state.solids['cu'] || 0) > 0) return [70, 235, 160];
+  if (getIon('Ca2+') > 1e-6 || (state.solids['ca'] || 0) > 0) return [255, 110, 70];
+  if (getIon('Li+')  > 1e-6 || (state.solids['li'] || 0) > 0) return [255, 70, 100];
+  if (getIon('Ba2+') > 1e-6) return [180, 255, 150];
   return null;
 }
 
 function drawBurner(){
-  /* tube */
   ctx.fillStyle = '#1b2534';
   roundRect(CX - 21, 602, 42, 52, 5); ctx.fill();
   ctx.fillStyle = '#243044';
   roundRect(CX - 21, 602, 42, 8, 3); ctx.fill();
-  /* collar */
   ctx.fillStyle = '#334155';
   roundRect(CX - 25, 592, 50, 14, 4); ctx.fill();
-  /* base */
   ctx.fillStyle = '#151e2b';
   roundRect(CX - 52, 644, 104, 14, 5); ctx.fill();
 
@@ -1593,14 +1485,13 @@ function drawBurner(){
   const inten = state.flame / 100;
   const fh = 34 + inten * 92;
   const fw = 13 + inten * 13;
-  const baseY = BURNER_BASE_Y;        // 594
+  const baseY = BURNER_BASE_Y;
   const tipY = baseY - fh;
   const tint = flameTint();
 
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
 
-  /* outer glow */
   const og = ctx.createRadialGradient(CX, baseY - fh * 0.35, 4, CX, baseY - fh * 0.35, fw * 4.2 + 18);
   og.addColorStop(0, 'rgba(255,150,40,0.35)');
   og.addColorStop(0.5, 'rgba(255,110,20,0.12)');
@@ -1610,7 +1501,6 @@ function drawBurner(){
   ctx.ellipse(CX, baseY - fh * 0.35, fw * 4.2 + 18, fh * 0.82, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  /* outer flame body */
   const og2 = ctx.createLinearGradient(0, baseY, 0, tipY);
   if (tint){
     og2.addColorStop(0, `rgba(${tint[0]},${tint[1]},${tint[2]},0.85)`);
@@ -1629,7 +1519,6 @@ function drawBurner(){
   ctx.closePath();
   ctx.fill();
 
-  /* inner cone (hot blue) */
   const ig = ctx.createLinearGradient(0, baseY, 0, baseY - fh * 0.55);
   ig.addColorStop(0, 'rgba(120,200,255,0.75)');
   ig.addColorStop(0.6, 'rgba(90,160,255,0.32)');
@@ -1645,10 +1534,8 @@ function drawBurner(){
   ctx.restore();
 }
 
-/* ---------- beaker glass back ---------- */
 function drawBeakerBack(){
   ctx.save();
-  /* glass body fill */
   const g = ctx.createLinearGradient(BX, 0, BX + BW, 0);
   g.addColorStop(0, 'rgba(160,220,245,0.10)');
   g.addColorStop(0.22, 'rgba(200,240,255,0.04)');
@@ -1658,7 +1545,6 @@ function drawBeakerBack(){
   beakerInnerPath();
   ctx.fill();
 
-  /* graduated markings */
   ctx.strokeStyle = 'rgba(180,225,245,0.22)';
   ctx.lineWidth = 1;
   for (let i = 1; i <= 5; i++){
@@ -1675,7 +1561,6 @@ function drawBeakerBack(){
   ctx.restore();
 }
 
-/* ---------- liquid ---------- */
 function drawLiquid(){
   const s = state;
   if (s.volume <= 0.2) return;
@@ -1692,7 +1577,6 @@ function drawLiquid(){
   beakerInnerPath();
   ctx.clip();
 
-  /* body */
   const g = ctx.createLinearGradient(0, top, 0, BOT);
   g.addColorStop(0, light);
   g.addColorStop(0.10, base);
@@ -1708,7 +1592,6 @@ function drawLiquid(){
   ctx.closePath();
   ctx.fill();
 
-  /* refraction / specular band */
   const rf = ctx.createLinearGradient(INX, 0, INX + INW, 0);
   rf.addColorStop(0, 'rgba(255,255,255,0.10)');
   rf.addColorStop(0.12, 'rgba(255,255,255,0.02)');
@@ -1717,7 +1600,6 @@ function drawLiquid(){
   ctx.fillStyle = rf;
   ctx.fillRect(INX - 4, top, INW + 8, BOT - top + 20);
 
-  /* vertical light shaft */
   const shaft = ctx.createLinearGradient(INX + 18, 0, INX + 46, 0);
   shaft.addColorStop(0, 'rgba(255,255,255,0)');
   shaft.addColorStop(0.5, 'rgba(255,255,255,0.11)');
@@ -1725,7 +1607,6 @@ function drawLiquid(){
   ctx.fillStyle = shaft;
   ctx.fillRect(INX + 18, top, 30, BOT - top);
 
-  /* ripples */
   for (const r of state.ripples){
     ctx.beginPath();
     ctx.ellipse(r.x, r.y, r.r, r.r * 0.22, 0, 0, Math.PI * 2);
@@ -1734,7 +1615,6 @@ function drawLiquid(){
     ctx.stroke();
   }
 
-  /* precipitate particles */
   for (const p of state.precipParticles){
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -1742,7 +1622,6 @@ function drawLiquid(){
     ctx.fill();
   }
 
-  /* bubbles */
   for (const b of state.bubbles){
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
@@ -1757,7 +1636,6 @@ function drawLiquid(){
     ctx.fill();
   }
 
-  /* meniscus highlight */
   ctx.beginPath();
   ctx.moveTo(INX - 4, top);
   ctx.quadraticCurveTo(CX, top + meniscusDepth, INX + INW + 4, top);
@@ -1772,7 +1650,6 @@ function drawLiquid(){
   ctx.lineWidth = 1.4;
   ctx.stroke();
 
-  /* stirrer vortex */
   if (s.stir > 8){
     const amp = (s.stir / 100) * 7;
     ctx.beginPath();
@@ -1788,7 +1665,6 @@ function drawLiquid(){
 
   ctx.restore();
 
-  /* magnetic stir bar */
   if (s.stir > 2){
     const spin = s.stirPhase * 0.16 * (s.stir / 100);
     const barW = 62, barH = 8;
@@ -1806,11 +1682,9 @@ function drawLiquid(){
   }
 }
 
-/* ---------- beaker glass front ---------- */
 function drawBeakerFront(){
   ctx.save();
 
-  /* outline */
   const x = BX, y = BY, w = BW, h = BH, r = 24;
   ctx.beginPath();
   ctx.moveTo(x, y);
@@ -1823,13 +1697,11 @@ function drawBeakerFront(){
   ctx.lineWidth = 2.6;
   ctx.stroke();
 
-  /* inner edge */
   beakerInnerPath();
   ctx.strokeStyle = 'rgba(190,235,255,0.22)';
   ctx.lineWidth = 1;
   ctx.stroke();
 
-  /* rim */
   ctx.beginPath();
   ctx.moveTo(x - 9, y);
   ctx.lineTo(x + w + 9, y);
@@ -1838,7 +1710,6 @@ function drawBeakerFront(){
   ctx.lineCap = 'round';
   ctx.stroke();
 
-  /* spout */
   ctx.beginPath();
   ctx.moveTo(x + w + 4, y - 3);
   ctx.quadraticCurveTo(x + w + 16, y - 2, x + w + 18, y + 8);
@@ -1846,7 +1717,6 @@ function drawBeakerFront(){
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  /* left highlight streak */
   const hl = ctx.createLinearGradient(x + 14, 0, x + 34, 0);
   hl.addColorStop(0, 'rgba(255,255,255,0)');
   hl.addColorStop(0.5, 'rgba(255,255,255,0.30)');
@@ -1861,7 +1731,6 @@ function drawBeakerFront(){
   ctx.fillStyle = hl2;
   ctx.fillRect(x + 30, y + 40, 10, h - 120);
 
-  /* shatter cracks */
   if (state.shattered){
     ctx.strokeStyle = 'rgba(255,255,255,0.85)';
     ctx.lineWidth = 1.4;
@@ -1883,7 +1752,6 @@ function drawBeakerFront(){
   ctx.restore();
 }
 
-/* ---------- steam / smoke ---------- */
 function drawVapours(){
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
@@ -1911,12 +1779,10 @@ function drawVapours(){
   ctx.restore();
 }
 
-/* ---------- burette ---------- */
 function drawBurette(){
   const s = state;
   const x = CX - 14, w = 28, top = BURETTE_TOP, bot = BURETTE_BOT;
 
-  /* glass tube */
   ctx.save();
   roundRect(x, top, w, bot - top, 7);
   ctx.fillStyle = 'rgba(170,215,240,0.07)';
@@ -1926,7 +1792,6 @@ function drawBurette(){
   ctx.stroke();
   ctx.restore();
 
-  /* liquid column */
   const chem = CHEMS.find(c => c.id === s.buretteChem);
   const lvl = s.buretteFrac;
   const ly = top + (1 - lvl) * (bot - top - 8);
@@ -1947,7 +1812,6 @@ function drawBurette(){
     ctx.stroke();
   }
 
-  /* graduations */
   ctx.strokeStyle = 'rgba(190,230,250,0.25)';
   ctx.lineWidth = 1;
   for (let i = 0; i <= 10; i++){
@@ -1959,13 +1823,11 @@ function drawBurette(){
     ctx.stroke();
   }
 
-  /* stopcock */
   ctx.fillStyle = '#334155';
   roundRect(CX - 9, bot, 18, 12, 3); ctx.fill();
   ctx.fillStyle = '#475569';
   ctx.beginPath(); ctx.arc(CX, bot + 6, 7, 0, Math.PI * 2); ctx.fill();
 
-  /* tip */
   ctx.beginPath();
   ctx.moveTo(CX - 5, bot + 12);
   ctx.lineTo(CX + 5, bot + 12);
@@ -1978,7 +1840,6 @@ function drawBurette(){
   ctx.lineWidth = 1.6;
   ctx.stroke();
 
-  /* falling drops */
   for (const d of s.drops){
     ctx.beginPath();
     ctx.ellipse(d.x, d.y, 2.6, 3.6, 0, 0, Math.PI * 2);
@@ -1987,7 +1848,6 @@ function drawBurette(){
     ctx.fill();
   }
 
-  /* label */
   ctx.font = 'bold 9px ui-monospace, monospace';
   ctx.fillStyle = 'rgba(148,163,184,0.85)';
   ctx.textAlign = 'center';
@@ -1995,13 +1855,11 @@ function drawBurette(){
   ctx.textAlign = 'left';
 }
 
-/* ---------- overlays ---------- */
 function drawOverlays(){
   if (state.flash > 0){
     ctx.fillStyle = `rgba(255,220,180,${state.flash * 0.45})`;
     ctx.fillRect(-1400, -1400, W + 2800, H + 2800);
   }
-  /* thermal aura around beaker when very hot */
   if (state.temp > 250){
     const a = clamp((state.temp - 250) / 950, 0, 0.45);
     ctx.save();
@@ -2015,9 +1873,7 @@ function drawOverlays(){
   }
 }
 
-/* ---------- master render ---------- */
 function render(){
-  /* full-canvas base fill so the stage never shows dead transparent space */
   ctx.save();
   ctx.fillStyle = '#070b12';
   ctx.fillRect(-6000, -6000, 12000, 12000);
@@ -2049,7 +1905,6 @@ function updateHUD(dt){
 
   const s = state;
 
-  /* top HUD */
   document.getElementById('tempC').textContent = s.temp.toFixed(1);
   document.getElementById('tempK').textContent = (s.temp + 273.15).toFixed(2);
 
@@ -2065,13 +1920,12 @@ function updateHUD(dt){
 
   const ts = document.getElementById('thermalState');
   ts.textContent = stateName;
-  ts.className = `px-3 py-1 rounded-full text-[10px] font-bold tracking-wider border ${stateCls}`;
+  ts.className = `px-2.5 py-0.5 rounded-full text-[9.5px] font-bold tracking-wider border ${stateCls}`;
 
   document.getElementById('hudFlame').textContent = s.flame.toFixed(0) + '%';
   document.getElementById('hudStir').textContent = (s.stir * 12).toFixed(0) + ' rpm';
   document.getElementById('hudDrip').textContent = s.drip.toFixed(1) + ' d/s';
 
-  /* pH */
   document.getElementById('phValue').textContent = s.pH.toFixed(2);
   document.getElementById('phMarker').style.left = `calc(${(s.pH / 14) * 100}% - 1.5px)`;
 
@@ -2084,9 +1938,8 @@ function updateHUD(dt){
   else if (s.pH <= 11) { phTxt = 'BASIC';      phCol = 'text-blue-400'; }
   else                 { phTxt = 'STRONG BASE';phCol = 'text-violet-400'; }
   const pl = document.getElementById('phLabel');
-  pl.textContent = phTxt; pl.className = `w-[92px] text-right text-[10px] font-bold tracking-wider ${phCol}`;
+  pl.textContent = phTxt; pl.className = `w-[90px] text-right text-[10px] font-bold tracking-wider ${phCol}`;
 
-  /* telemetry */
   document.getElementById('mMass').textContent = s.mass.toFixed(1);
   document.getElementById('mVol').textContent = s.volume.toFixed(1);
   const totalMoles = Object.values(s.ions).reduce((a,b)=>a+b,0)
@@ -2095,19 +1948,17 @@ function updateHUD(dt){
   document.getElementById('mMol').textContent = (totalMoles / Math.max(0.0005, s.volume/1000)).toFixed(3);
   document.getElementById('mDH').textContent = s.dH.toFixed(2);
 
-  /* species chips */
   const sp = document.getElementById('speciesList');
   const entries = Object.entries(s.ions).filter(([k,v]) => v > 1e-7)
     .sort((a,b) => b[1] - a[1]).slice(0, 14);
   if (entries.length === 0){
-    sp.innerHTML = '<span class="text-[9px] text-slate-600 font-mono italic">no solutes</span>';
+    sp.innerHTML = '<span class="text-[8.5px] text-slate-600 font-mono italic">no solutes</span>';
   } else {
     sp.innerHTML = entries.map(([k,v]) =>
-      `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#131c2b] border border-slate-800 text-cyan-300">${k} <span class="text-slate-500">${(v*1000).toFixed(2)}mM</span></span>`
+      `<span class="text-[8.5px] font-mono px-1.5 py-0.5 rounded bg-[#131c2b] border border-slate-800 text-cyan-300">${k} <span class="text-slate-500">${(v*1000).toFixed(2)}mM</span></span>`
     ).join('');
   }
 
-  /* fps */
   document.getElementById('fps').textContent = Math.round(1 / Math.max(dt, 1e-4));
   document.getElementById('tickCount').textContent = s.tick;
 }
@@ -2137,7 +1988,6 @@ function loop(now){
   updateParticles(dt);
   updateHUD(dt);
 
-  /* continuous steam from hot surface even below boiling */
   if (s.temp > 60 && s.temp < 100 && s.volume > 1){
     if (Math.random() < (s.temp - 60) / 400) spawnSteam(1);
   }
@@ -2155,8 +2005,7 @@ function wireControls(){
 
   flame.addEventListener('input', e => {
     state.flame = parseFloat(e.target.value);
-    const t = (state.flame / 100) * 1500;
-    document.getElementById('flameLbl').textContent = t.toFixed(0) + ' °C';
+    document.getElementById('flameLbl').textContent = ((state.flame / 100) * 1500).toFixed(0) + ' °C';
     LabAudio.init(); LabAudio.resume();
   });
 
@@ -2211,7 +2060,6 @@ function wireControls(){
     log('Audio ' + (LabAudio.enabled ? 'enabled' : 'muted'), 'info');
   };
 
-  /* unlock audio on first interaction */
   const unlock = () => { LabAudio.init(); LabAudio.resume(); document.removeEventListener('click', unlock); };
   document.addEventListener('click', unlock);
   document.addEventListener('keydown', unlock);
