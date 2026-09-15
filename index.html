@@ -17,11 +17,17 @@ tailwind.config = {
 </script>
 <style>
   html,body{height:100%;}
-  body{ background:#070b12; }
+  body{ background:#05080f; overflow:hidden; }
   ::-webkit-scrollbar{width:8px;height:8px;}
   ::-webkit-scrollbar-track{background:#0b1220;}
   ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px;}
   ::-webkit-scrollbar-thumb:hover{background:#334155;}
+
+  /* Dedicated slim scrollbar for the reagent shelf */
+  .custom-scrollbar::-webkit-scrollbar{width:6px;}
+  .custom-scrollbar::-webkit-scrollbar-track{background:transparent;}
+  .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
 
   input[type=range]{
     -webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
@@ -81,13 +87,13 @@ tailwind.config = {
   @keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
-<body class="text-slate-200 font-sans overflow-hidden">
+<body class="text-slate-200 font-sans">
 
-<div class="flex h-screen w-screen">
+<div class="flex h-screen w-screen items-center gap-3 px-3 py-3 overflow-hidden">
 
   <!-- ══════════════════ LEFT PANEL : REAGENT SHELF ══════════════════ -->
-  <aside class="w-[300px] shrink-0 bg-[#0b111c] border-r border-slate-800/80 flex flex-col">
-    <div class="px-3 py-3 border-b border-slate-800/80">
+  <aside class="w-[300px] shrink-0 h-[calc(100vh-60px)] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
+    <div class="px-3 py-3 border-b border-slate-800/80 shrink-0">
       <div class="flex items-center gap-2">
         <div class="w-7 h-7 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-lg shadow-cyan-900/50">
           <i class="fa-solid fa-flask text-[12px] text-white"></i>
@@ -99,21 +105,21 @@ tailwind.config = {
       </div>
     </div>
 
-    <div id="catTabs" class="px-2 py-2 flex flex-wrap gap-1 border-b border-slate-800/80"></div>
+    <div id="catTabs" class="px-2 py-2 flex flex-wrap gap-1 border-b border-slate-800/80 shrink-0"></div>
 
-    <div id="shelf" class="flex-1 overflow-y-auto px-2 py-2 space-y-2"></div>
+    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-2 pr-1 space-y-2"></div>
 
-    <div class="px-3 py-2 border-t border-slate-800/80 text-[9px] text-slate-600 font-mono leading-relaxed">
+    <div class="px-3 py-2 border-t border-slate-800/80 text-[9px] text-slate-600 font-mono leading-relaxed shrink-0">
       <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i>
       Handle alkali metals &amp; concentrated acids with care.
     </div>
   </aside>
 
   <!-- ══════════════════ CENTER : WORKSPACE ══════════════════ -->
-  <main class="flex-1 flex flex-col min-w-0 bg-[#070b12] gap-2 p-2">
+  <main class="flex-1 min-w-0 h-[calc(100vh-60px)] flex flex-col items-center justify-start gap-3 py-2 overflow-hidden">
 
     <!-- TOP HUD -->
-    <div class="h-[56px] shrink-0 glass-panel rounded-xl flex items-center px-4 gap-4">
+    <div class="w-full shrink-0 glass-panel rounded-xl h-[56px] flex items-center px-4 gap-4">
       <div class="flex items-baseline gap-2">
         <i class="fa-solid fa-temperature-half text-orange-400 text-[15px]"></i>
         <span id="tempC" class="text-[26px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
@@ -136,8 +142,8 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- CANVAS STAGE -->
-    <div class="flex-1 min-h-0 relative glass-panel rounded-xl overflow-hidden">
+    <!-- CANVAS STAGE (apparatus: burette + beaker + burner) -->
+    <div class="w-full flex-1 min-h-0 relative glass-panel rounded-xl overflow-hidden">
       <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
 
       <!-- HAZARD OVERLAY -->
@@ -153,8 +159,8 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- BOTTOM pH HUD -->
-    <div class="shrink-0 glass-panel rounded-xl px-4 py-2">
+    <!-- BOTTOM pH HUD — pinned immediately under the burner -->
+    <div class="w-full shrink-0 glass-panel rounded-xl px-4 py-2">
       <div class="flex items-center gap-4">
         <div class="flex items-baseline gap-1.5 w-[130px]">
           <span class="text-[10px] font-bold tracking-widest text-slate-500">pH</span>
@@ -173,8 +179,8 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- CONTROL DOCK -->
-    <div class="shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-4 py-3">
+    <!-- CONTROL DOCK — attached directly under the pH bar -->
+    <div class="w-full shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-4 py-3">
       <div class="grid grid-cols-12 gap-3 items-end">
 
         <!-- Flame -->
@@ -225,15 +231,15 @@ tailwind.config = {
   </main>
 
   <!-- ══════════════════ RIGHT PANEL : TELEMETRY ══════════════════ -->
-  <aside class="w-[320px] shrink-0 bg-[#0b111c] border-l border-slate-800/80 flex flex-col">
+  <aside class="w-[320px] shrink-0 h-[calc(100vh-60px)] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col justify-start gap-3 p-3 overflow-hidden">
 
-    <div class="px-3 py-3 border-b border-slate-800/80 flex items-center gap-2">
+    <div class="shrink-0 flex items-center gap-2">
       <i class="fa-solid fa-chart-line text-cyan-400 text-[13px]"></i>
       <div class="text-[12px] font-bold tracking-wide text-slate-100">TELEMETRY &amp; ANALYTICS</div>
     </div>
 
     <!-- Metrics -->
-    <div class="grid grid-cols-2 gap-2 p-3 border-b border-slate-800/80">
+    <div class="shrink-0 grid grid-cols-2 gap-2">
       <div class="bg-[#0f1725] border border-slate-800 rounded-lg p-2">
         <div class="text-[8px] font-bold tracking-widest text-slate-500">TOTAL MASS</div>
         <div class="text-[17px] font-mono text-cyan-300 tabular-nums leading-tight" id="mMass">250.0</div>
@@ -257,32 +263,32 @@ tailwind.config = {
     </div>
 
     <!-- Species -->
-    <div class="px-3 py-2 border-b border-slate-800/80">
+    <div class="shrink-0">
       <div class="text-[9px] font-bold tracking-widest text-slate-500 mb-1.5">ACTIVE SPECIES</div>
-      <div id="speciesList" class="flex flex-wrap gap-1 max-h-[74px] overflow-y-auto">
+      <div id="speciesList" class="flex flex-wrap gap-1 max-h-[72px] overflow-y-auto custom-scrollbar pr-1">
         <span class="text-[9px] text-slate-600 font-mono italic">no solutes</span>
       </div>
     </div>
 
     <!-- Equations -->
-    <div class="px-3 py-2 border-b border-slate-800/80 flex-1 min-h-0 flex flex-col">
-      <div class="text-[9px] font-bold tracking-widest text-slate-500 mb-1.5">
+    <div class="shrink-0 flex flex-col min-h-0 max-h-[150px]">
+      <div class="text-[9px] font-bold tracking-widest text-slate-500 mb-1.5 shrink-0">
         <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS
       </div>
-      <div id="eqList" class="flex-1 overflow-y-auto space-y-1 pr-1">
+      <div id="eqList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1">
         <div class="text-[9px] text-slate-600 font-mono italic">awaiting reaction…</div>
       </div>
     </div>
 
-    <!-- Log -->
-    <div class="h-[210px] shrink-0 flex flex-col border-t border-slate-800/80">
-      <div class="px-3 py-1.5 flex items-center justify-between">
+    <!-- Log — fills remaining vertical space -->
+    <div class="flex-1 min-h-0 flex flex-col border-t border-slate-800/60 pt-2">
+      <div class="shrink-0 flex items-center justify-between mb-1">
         <div class="text-[9px] font-bold tracking-widest text-slate-500">
           <i class="fa-solid fa-terminal mr-1 text-emerald-500"></i>REACTION LOG
         </div>
         <button onclick="clearLog()" class="text-[9px] text-slate-600 hover:text-slate-300 font-mono">clear</button>
       </div>
-      <div id="log" class="flex-1 overflow-y-auto px-3 pb-2 font-mono"></div>
+      <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 font-mono"></div>
     </div>
   </aside>
 </div>
@@ -292,10 +298,7 @@ tailwind.config = {
    VIRTUALAB ENGINE  ·  Core Simulation Kernel
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* ───────────────────────── GEOMETRY CONSTANTS ─────────────────────────
-   NOTE: Only render-space coordinates were re-anchored (vessel & burette
-   raised) to remove dead vertical space. All derived physics anchors
-   (BOT / liquidTop / particle spawn bounds) follow automatically.        */
+/* ───────────────────────── GEOMETRY CONSTANTS ───────────────────────── */
 const W = 760, H = 680;
 const BX = 255, BY = 162, BW = 250, BH = 350;
 const INX = BX + 9, INY = BY + 8, INW = BW - 18, INH = BH - 16;
