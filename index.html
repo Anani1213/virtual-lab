@@ -1,2508 +1,1695 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>VirtuaLab Pro — Virtual Chemistry &amp; Physics Laboratory</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VirtuaLab Pro — Virtual Chemistry Laboratory</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-<script>
-tailwind.config = {
-  theme: { extend: { fontFamily: { mono: ['ui-monospace','SFMono-Regular','Menlo','Consolas','monospace'] } } }
-}
-</script>
 <style>
-  html,body{height:100%;margin:0;padding:0;}
-  body{ background:#020617; overflow:hidden; }
-  ::-webkit-scrollbar{width:8px;height:8px;}
-  ::-webkit-scrollbar-track{background:#0b1220;}
-  ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px;}
-  ::-webkit-scrollbar-thumb:hover{background:#334155;}
-
-  .custom-scrollbar::-webkit-scrollbar{width:5px;height:5px;}
-  .custom-scrollbar::-webkit-scrollbar-track{background:transparent;}
-  .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
-
-  .horiz-tabs::-webkit-scrollbar{height:3px;}
-  .horiz-tabs::-webkit-scrollbar-track{background:transparent;}
-  .horiz-tabs::-webkit-scrollbar-thumb{background:#1e293b;border-radius:2px;}
-
-  .reagent-row{
-    display:flex; align-items:center; gap:6px;
-    padding:3px 7px;
-    background:#0f172a; border:1px solid #1e293b; border-radius:6px; transition:.15s;
-  }
-  .reagent-row:hover{ background:#172033; border-color:#334155; }
-
-  .reagent-row input[type=number]::-webkit-outer-spin-button,
-  .reagent-row input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
-  .reagent-row input[type=number]{ -moz-appearance:textfield; appearance:textfield; }
-
-  input[type=range]{
-    -webkit-appearance:none;appearance:none;height:5px;border-radius:3px;
-    background:linear-gradient(90deg,#0891b2,#1e293b);outline:none;cursor:pointer;
-  }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;width:13px;height:13px;border-radius:50%;
-    background:#22d3ee;cursor:pointer;box-shadow:0 0 10px rgba(34,211,238,.75);
-    border:1px solid #0e7490;
-  }
-  input[type=range]::-moz-range-thumb{
-    width:13px;height:13px;border-radius:50%;background:#22d3ee;border:1px solid #0e7490;cursor:pointer;
-  }
-  input[type=range].flame{background:linear-gradient(90deg,#1e293b,#f59e0b,#ef4444);}
-  input[type=range].flame::-webkit-slider-thumb{background:#fb923c;box-shadow:0 0 10px rgba(251,146,60,.85);}
-  input[type=range].stir{background:linear-gradient(90deg,#1e293b,#22d3ee,#a78bfa);}
-  input[type=range].stir::-webkit-slider-thumb{background:#a78bfa;box-shadow:0 0 10px rgba(167,139,250,.85);}
-  input[type=range].drip{background:linear-gradient(90deg,#1e293b,#34d399,#06b6d4);}
-  input[type=range].drip::-webkit-slider-thumb{background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.85);}
-  input[type=range].phslider{background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%);}
-  input[type=range].phslider::-webkit-slider-thumb{background:#fff;box-shadow:0 0 10px #fff;}
-  input[type=range].phslider::-moz-range-thumb{background:#fff;}
-
-  .vl-add{
-    font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 7px;border-radius:4px;
-    background:linear-gradient(180deg,#0e7490,#155e75);color:#a5f3fc;border:1px solid #164e63;
-    transition:.15s;cursor:pointer;line-height:1.4;
-  }
-  .vl-add:hover{background:linear-gradient(180deg,#0891b2,#0e7490);color:#ecfeff;box-shadow:0 0 10px rgba(34,211,238,.55);}
-  .vl-add:active{transform:scale(.94);}
-
-  .cat-tab{
-    font-size:9px;font-weight:600;padding:2px 8px;border-radius:5px;cursor:pointer;
-    background:#131c2b;color:#7c8ba1;border:1px solid #1e293b;transition:.15s;white-space:nowrap;flex-shrink:0;
-  }
-  .cat-tab:hover{color:#a5f3fc;border-color:#164e63;}
-  .cat-tab.active{background:linear-gradient(180deg,#0e7490,#155e75);color:#ecfeff;border-color:#22d3ee;box-shadow:0 0 8px rgba(34,211,238,.4);}
-
-  .dock-btn{
-    font-size:9.5px;font-weight:700;letter-spacing:.04em;padding:5px 9px;border-radius:6px;
-    border:1px solid #1e293b;background:#131c2b;color:#94a3b8;cursor:pointer;transition:.15s;
-  }
-  .dock-btn:hover{color:#67e8f9;border-color:#164e63;background:#16202f;}
-  .dock-btn.warn:hover{color:#fca5a5;border-color:#7f1d1d;}
-  .dock-btn.go:hover{color:#6ee7b7;border-color:#065f46;}
-  .dock-btn.danger{ border-color:#7f1d1d; color:#fca5a5; }
-  .dock-btn.danger:hover{ background:#7f1d1d; color:#fee2e2; border-color:#991b1b; }
-  .dock-btn.pulse{ border-color:#4338ca; color:#a5b4fc; }
-  .dock-btn.pulse:hover{ background:#312e81; color:#e0e7ff; border-color:#6366f1; }
-
-  .log-line{ font-size:9.5px; line-height:1.45; padding:2px 0; border-bottom:1px dashed #16202f; }
-
-  .glass-panel{
-    background:linear-gradient(180deg,rgba(15,23,42,.9),rgba(2,6,23,.95));
-    border:1px solid #1e293b;
-    backdrop-filter:blur(6px);
-  }
-
-  @keyframes pulseWarn{0%,100%{opacity:1}50%{opacity:.35}}
-  .hazard-blink{animation:pulseWarn 1s infinite;}
-  .fade-in{animation:fi .35s ease-out;}
-  @keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes modalIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-  .modal-in{animation:modalIn .22s ease-out;}
-  .hazard-icon{ display:inline-block; filter:drop-shadow(0 0 14px rgba(255,80,40,.9)); }
-
-  .metric-card{
-    background:#0f172a; border:1px solid #1e293b; border-radius:7px; padding:5px 7px;
-    display:flex; flex-direction:column; gap:1px;
-  }
-  .metric-lbl{ font-size:7.5px; font-weight:700; letter-spacing:.06em; color:#64748b; }
-  .metric-val{ font-size:13px; font-family:ui-monospace, monospace; line-height:1.1; }
-  .metric-unit{ font-size:6.5px; color:#475569; font-family:ui-monospace, monospace; }
-
-  .eq-item{
-    font-size:9.5px; font-family:ui-monospace, monospace;
-    background:#0f172a; border:1px solid #1e293b; border-radius:6px;
-    padding:4px 7px; line-height:1.35;
-  }
-  .eq-type{
-    font-size:6.5px; padding:1px 5px; border-radius:3px; font-weight:800; letter-spacing:.06em;
-    display:inline-block;
-  }
+  html,body{height:100%;}
+  body{background:#020617;}
+  .custom-scrollbar::-webkit-scrollbar{width:6px;height:6px}
+  .custom-scrollbar::-webkit-scrollbar-track{background:rgba(15,23,42,.6);border-radius:8px}
+  .custom-scrollbar::-webkit-scrollbar-thumb{background:#334155;border-radius:8px}
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#475569}
+  .custom-scrollbar{scrollbar-width:thin;scrollbar-color:#334155 rgba(15,23,42,.6)}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:9999px;background:#1e293b;outline:none;width:100%}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#38bdf8;cursor:pointer;box-shadow:0 0 8px rgba(56,189,248,.8)}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:#38bdf8;cursor:pointer}
+  input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .log-line{animation:fadeIn .22s ease-out}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .flash-on{opacity:1 !important}
+  .tutor-open{transform:translateX(0) !important}
+  .pulse-btn:active{transform:scale(.96)}
 </style>
 </head>
-<body class="text-slate-200 font-sans h-screen overflow-hidden">
+<body class="h-screen overflow-hidden p-2 bg-slate-950 text-slate-200 font-sans antialiased select-none">
 
-<!-- ═══════════════════════════════════════════════════════════════
-     STRICT 3-COLUMN VIEWPORT — 100vh LOCK
-     LEFT (3): Canvas Beaker (60%) + Logs (40%)
-     MIDDLE (5): Controls (50%) + Telemetry (50%)
-     RIGHT (4): Reagent Library (100%)
-     ═══════════════════════════════════════════════════════════════ -->
-<div class="grid grid-cols-12 gap-2 p-2 h-screen overflow-hidden">
+<div class="grid grid-cols-12 gap-2 h-full">
 
-  <!-- ═══════════════════ LEFT COLUMN (3/12) ═══════════════════ -->
+  <!-- ══════════════ LEFT COLUMN ══════════════ -->
   <div class="col-span-3 flex flex-col gap-2 h-full min-h-0">
 
-    <!-- ─── TOP 60% : CANVAS BEAKER + BURNER ─── -->
-    <div class="flex-[6] min-h-0 relative glass-panel rounded-xl overflow-hidden">
-      <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
-
-      <!-- HUD overlays on canvas -->
-      <div class="absolute top-2 left-2 right-2 flex items-center gap-2 pointer-events-none">
-        <div class="flex items-baseline gap-1.5 bg-slate-950/70 border border-slate-800 rounded-lg px-2 py-0.5 backdrop-blur-sm">
-          <i class="fa-solid fa-temperature-half text-orange-400 text-[10px]"></i>
-          <span id="tempC" class="text-[13px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
-          <span class="text-[8.5px] text-slate-500">°C</span>
-        </div>
-        <div id="thermalState" class="text-[8.5px] font-bold tracking-wider px-2 py-1 rounded-full border border-cyan-800 bg-cyan-950/60 text-cyan-300 backdrop-blur-sm">
-          AMBIENT
-        </div>
-        <div class="flex-1"></div>
-        <div class="flex items-center gap-2 text-[8.5px] font-mono text-slate-400 bg-slate-950/70 border border-slate-800 rounded-lg px-2 py-0.5 backdrop-blur-sm">
-          <span><i class="fa-solid fa-fire-flame-simple text-orange-500 mr-1"></i><span id="hudFlame">0%</span></span>
-          <span><i class="fa-solid fa-arrows-spin text-violet-400 mr-1"></i><span id="hudStir">0</span></span>
-        </div>
-      </div>
-
-      <!-- pH readout on canvas -->
-      <div class="absolute bottom-2 left-2 right-2 pointer-events-none">
-        <div class="bg-slate-950/75 border border-slate-800 rounded-lg px-2 py-1 backdrop-blur-sm">
-          <div class="flex items-center gap-2">
-            <span class="text-[8px] font-bold tracking-widest text-slate-500">pH</span>
-            <span id="phValue" class="text-[15px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
-            <div class="flex-1 h-[7px] rounded-full overflow-hidden border border-slate-700 relative"
-                 style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
-              <div id="phMarker" class="absolute top-[-3px] w-[2.5px] h-[13px] bg-white rounded-full shadow-[0_0_10px_#fff] transition-all duration-150" style="left:50%"></div>
-            </div>
-            <span id="phLabel" class="text-[8.5px] font-bold tracking-wider text-emerald-400">NEUTRAL</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Hazard overlay -->
-      <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2 px-3">
-        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-400 hazard-blink"></i>
-        <div class="text-center">
-          <div class="text-[14px] font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
-          <div id="hazardMsg" class="text-[9.5px] text-red-300/90 mt-1 font-mono text-center"></div>
-        </div>
-        <button onclick="emergencyFlush()" class="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[9.5px] tracking-wider shadow-lg shadow-red-900/50 transition">
-          <i class="fa-solid fa-broom mr-1.5"></i>EMERGENCY FLUSH
-        </button>
-      </div>
+    <!-- Canvas Stage -->
+    <div class="relative flex-[3] min-h-0 rounded-lg border border-slate-800 bg-slate-900/90 overflow-hidden shadow-lg shadow-black/40">
+      <div class="absolute top-1.5 left-2.5 z-10 text-[10px] font-semibold tracking-[0.2em] text-slate-500 uppercase pointer-events-none">⬢ Reaction Vessel</div>
+      <div id="vesselBadge" class="absolute top-1.5 right-2.5 z-10 text-[10px] font-mono text-emerald-400 pointer-events-none">IDLE</div>
+      <canvas id="stage" class="block w-full h-full"></canvas>
+      <div id="flash" class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200"
+           style="background:radial-gradient(circle at 50% 55%, rgba(255,255,255,.95), rgba(255,200,120,.4) 40%, transparent 72%)"></div>
+      <button id="btnWhy" class="absolute bottom-1.5 right-2 z-10 text-[10px] px-2 py-1 rounded bg-slate-800/80 border border-slate-700 text-sky-300 hover:bg-slate-700 hover:text-sky-200">❓ WHY?</button>
     </div>
 
-    <!-- ─── BOTTOM 40% : SCROLLABLE LOGS TERMINAL ─── -->
-    <div class="flex-[4] min-h-0 bg-slate-900/90 border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-      <div class="px-3 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
-        <i class="fa-solid fa-terminal text-emerald-500 text-[11px]"></i>
-        <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">REACTION LOG</div>
-        <div class="flex-1"></div>
-        <div class="text-[8px] font-mono text-slate-500" id="logCount">0 entries</div>
-        <button onclick="clearLog()" class="text-[8.5px] text-slate-600 hover:text-slate-300 font-mono ml-2">clear</button>
+    <!-- Logs Terminal -->
+    <div class="flex-[2] min-h-0 rounded-lg border border-slate-800 bg-slate-900/90 flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-2 py-1 border-b border-slate-800 shrink-0">
+        <span class="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">▸ System Log</span>
+        <button id="clearLogs" class="text-[10px] text-slate-500 hover:text-sky-400 transition">clear</button>
       </div>
-      <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2.5 py-1 font-mono"></div>
+      <div id="logs" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-2 space-y-1 text-[10.5px] font-mono leading-snug bg-slate-900/90 rounded-lg"></div>
     </div>
   </div>
 
-  <!-- ═══════════════════ MIDDLE COLUMN (5/12) ═══════════════════ -->
+  <!-- ══════════════ MIDDLE COLUMN ══════════════ -->
   <div class="col-span-5 flex flex-col gap-2 h-full min-h-0">
 
-    <!-- ─── TOP 50% : APPARATUS CONTROL DASHBOARD ─── -->
-    <div class="flex-[5] min-h-0 bg-slate-900/90 border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-      <div class="px-3 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
-        <i class="fa-solid fa-sliders text-cyan-400 text-[11px]"></i>
-        <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">APPARATUS CONTROL DASHBOARD</div>
-        <div class="flex-1"></div>
-        <div class="text-[8px] font-mono text-slate-500 hidden lg:block"><span id="fps">60</span> fps</div>
+    <!-- Apparatus Control Dashboard -->
+    <div class="flex-[1] min-h-0 rounded-lg border border-slate-800 bg-slate-900/90 p-2 flex flex-col gap-1.5 overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">⚙ Apparatus Control</span>
+        <button id="btnTutor" class="text-[10px] px-2 py-0.5 rounded bg-sky-600/80 hover:bg-sky-500 text-white font-semibold transition">🤖 AI TUTOR</button>
       </div>
 
-      <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-2.5 space-y-2.5">
-
-        <!-- pH Slider -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="flex justify-between items-center mb-1.5">
-            <label class="text-[9px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-flask-vial mr-1"></i>pH SPECTRUM (0 – 14)</label>
-            <span id="phSliderLbl" class="text-[10px] font-mono text-emerald-300 tabular-nums">7.00</span>
+      <div class="grid grid-cols-2 gap-1.5">
+        <!-- pH -->
+        <div class="rounded-md bg-slate-950/60 border border-slate-800 p-1.5">
+          <div class="flex justify-between text-[9px] uppercase tracking-wider text-slate-400">
+            <span>pH Spectrum</span><span id="phVal" class="text-sky-400 font-mono text-[11px]">7.00</span>
           </div>
-          <input id="phSlider" type="range" class="phslider w-full" min="0" max="14" step="0.01" value="7">
-          <div class="flex justify-between text-[7px] font-mono text-slate-600 mt-0.5 px-0.5">
-            <span>0</span><span>2</span><span>4</span><span>6</span><span>7</span><span>8</span><span>10</span><span>12</span><span>14</span>
-          </div>
+          <input id="phSlider" type="range" min="0" max="14" step="0.1" value="7" class="mt-1.5">
+          <div class="flex justify-between text-[8px] text-slate-600 mt-0.5"><span>0 acid</span><span>7</span><span>14 base</span></div>
         </div>
-
-        <!-- Flame Slider -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="flex justify-between items-center mb-1.5">
-            <label class="text-[9px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN BURNER INTENSITY</label>
-            <span id="flameLbl" class="text-[10px] font-mono text-orange-300 tabular-nums">0 °C</span>
+        <!-- Flame -->
+        <div class="rounded-md bg-slate-950/60 border border-slate-800 p-1.5">
+          <div class="flex justify-between text-[9px] uppercase tracking-wider text-slate-400">
+            <span>Bunsen Flame</span><span id="flameVal" class="text-orange-400 font-mono text-[11px]">0%</span>
           </div>
-          <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
+          <input id="flameSlider" type="range" min="0" max="100" step="1" value="0" class="mt-1.5">
+          <div class="flex justify-between text-[8px] text-slate-600 mt-0.5"><span>off</span><span>roaring</span></div>
         </div>
-
-        <!-- Stirrer Slider -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="flex justify-between items-center mb-1.5">
-            <label class="text-[9px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>MAGNETIC STIRRER SPEED</label>
-            <span id="stirLbl" class="text-[10px] font-mono text-violet-300 tabular-nums">0 rpm</span>
+        <!-- Stirrer -->
+        <div class="rounded-md bg-slate-950/60 border border-slate-800 p-1.5">
+          <div class="flex justify-between text-[9px] uppercase tracking-wider text-slate-400">
+            <span>Magnetic Stirrer</span><span id="stirVal" class="text-emerald-400 font-mono text-[11px]">0 rpm</span>
           </div>
-          <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
+          <input id="stirSlider" type="range" min="0" max="100" step="1" value="0" class="mt-1.5">
+          <div class="flex justify-between text-[8px] text-slate-600 mt-0.5"><span>still</span><span>vortex</span></div>
         </div>
-
-        <!-- Drip Slider -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="flex justify-between items-center mb-1.5">
-            <label class="text-[9px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>TITRATION BURETTE DRIP VALVE</label>
-            <span id="dripLbl" class="text-[10px] font-mono text-emerald-300 tabular-nums">0.0 d/s</span>
+        <!-- Drip -->
+        <div class="rounded-md bg-slate-950/60 border border-slate-800 p-1.5">
+          <div class="flex justify-between text-[9px] uppercase tracking-wider text-slate-400">
+            <span>Titration Drip</span><span id="dripVal" class="text-cyan-400 font-mono text-[11px]">0.0 mL/s</span>
           </div>
-          <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
+          <input id="dripSlider" type="range" min="0" max="100" step="1" value="0" class="mt-1.5">
+          <div class="flex justify-between text-[8px] text-slate-600 mt-0.5"><span>closed</span><span>open</span></div>
         </div>
+      </div>
 
-        <!-- Burette reagent -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <label class="text-[9px] font-bold tracking-widest text-cyan-400 block mb-1.5"><i class="fa-solid fa-vial mr-1"></i>BURETTE REAGENT CHARGE</label>
-          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[10px] px-2 py-[3px] text-slate-200 outline-none focus:border-cyan-600"></select>
-        </div>
+      <div class="grid grid-cols-4 gap-1">
+        <button id="btnClear" class="pulse-btn text-[10px] py-1.5 rounded bg-rose-700/80 hover:bg-rose-600 text-white font-semibold transition">🗑️ CLEAR</button>
+        <button id="btnRefill" class="pulse-btn text-[10px] py-1.5 rounded bg-sky-700/80 hover:bg-sky-600 text-white font-semibold transition">🔄 REFILL</button>
+        <button id="btnStirPulse" class="pulse-btn text-[10px] py-1.5 rounded bg-emerald-700/80 hover:bg-emerald-600 text-white font-semibold transition">🌀 STIR</button>
+        <button id="btnFlush" class="pulse-btn text-[10px] py-1.5 rounded bg-slate-700 hover:bg-slate-600 text-white font-semibold transition">🧹 FLUSH</button>
+      </div>
 
-        <!-- Measured Water + Actions -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="text-[9px] font-bold tracking-widest text-blue-400 mb-1.5"><i class="fa-solid fa-droplet mr-1"></i>DISTILLED WATER DILUTION</div>
-          <div class="flex items-center gap-1.5 mb-2">
-            <input id="water-vol" type="number" min="0.1" max="500" step="1" value="50"
-                   class="w-[64px] bg-[#0a111e] border border-slate-700 rounded-md text-[11px] font-mono text-blue-300 outline-none px-1.5 py-[3px] text-right focus:border-cyan-500">
-            <span class="text-[9.5px] text-slate-500 font-mono">mL H₂O</span>
-            <button id="btnWater" class="vl-add ml-auto">+ ADD WATER</button>
-          </div>
-
-          <div class="grid grid-cols-2 gap-1.5">
-            <button id="btnClearVessel" class="dock-btn danger justify-center"><i class="fa-solid fa-trash-can mr-1"></i>CLEAR VESSEL</button>
-            <button id="btnRefill" class="dock-btn go justify-center"><i class="fa-solid fa-arrows-rotate mr-1"></i>REFILL BURETTE</button>
-            <button id="btnStirPulse" class="dock-btn pulse justify-center"><i class="fa-solid fa-water mr-1"></i>STIR PULSE</button>
-            <button id="btnFlush" class="dock-btn warn justify-center"><i class="fa-solid fa-broom mr-1"></i>FLUSH SYSTEM</button>
-          </div>
-
-          <button id="btnSound" class="dock-btn w-full justify-center mt-1.5"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">SOUND: ON</span></button>
-        </div>
+      <div class="flex items-center gap-1.5 rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1.5">
+        <span class="text-[10px] text-slate-400">Measured:</span>
+        <input id="waterQty" type="number" min="1" max="300" value="50" class="w-14 bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[11px] text-center text-slate-100">
+        <span class="text-[10px] text-slate-500">mL H₂O</span>
+        <button id="btnAddWater" class="pulse-btn ml-auto text-[10px] px-3 py-1.5 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition">+ ADD WATER</button>
       </div>
     </div>
 
-    <!-- ─── BOTTOM 50% : ANALYTICAL & THERMODYNAMIC TELEMETRY ─── -->
-    <div class="flex-[5] min-h-0 bg-slate-900/90 border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-      <div class="px-3 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
-        <i class="fa-solid fa-square-root-variable text-cyan-400 text-[11px]"></i>
-        <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
-        <div class="flex-1"></div>
-        <div class="text-[8px] font-mono text-slate-500 hidden lg:block tracking-wider">q = mcΔT · V<sub>STP</sub> = n×22.4 · M = n/V</div>
+    <!-- Analytics & Thermodynamics -->
+    <div class="flex-[1] min-h-0 rounded-lg border border-slate-800 bg-slate-900/90 flex flex-col overflow-hidden">
+      <div class="px-2 py-1 border-b border-slate-800 shrink-0">
+        <span class="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">📊 Analytics &amp; Thermodynamics</span>
       </div>
-
       <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-2 space-y-2">
-
-        <!-- Metrics row 1 -->
-        <div class="grid grid-cols-4 gap-1.5">
-          <div class="metric-card"><div class="metric-lbl">MASS</div><div class="metric-val text-cyan-300" id="mMass">250.0</div><div class="metric-unit">g</div></div>
-          <div class="metric-card"><div class="metric-lbl">VOLUME</div><div class="metric-val text-blue-300" id="mVol">250.0</div><div class="metric-unit">mL</div></div>
-          <div class="metric-card"><div class="metric-lbl">M = n/V</div><div class="metric-val text-violet-300" id="mMol">0.000</div><div class="metric-unit">mol·L⁻¹</div></div>
-          <div class="metric-card"><div class="metric-lbl">ΔH<sub>rxn</sub></div><div class="metric-val text-rose-300" id="mDH">0.0</div><div class="metric-unit">kJ·mol⁻¹</div></div>
-        </div>
-
-        <!-- Metrics row 2 -->
-        <div class="grid grid-cols-4 gap-1.5">
-          <div class="metric-card"><div class="metric-lbl">q = mcΔT</div><div class="metric-val text-amber-300" id="mQ">0.0</div><div class="metric-unit">J</div></div>
-          <div class="metric-card"><div class="metric-lbl">V<sub>STP</sub></div><div class="metric-val text-emerald-300" id="mVstp">0.00</div><div class="metric-unit">L · 22.4/mol</div></div>
-          <div class="metric-card"><div class="metric-lbl">Σ n<sub>gas</sub></div><div class="metric-val text-teal-300" id="mNgas">0.000</div><div class="metric-unit">mol</div></div>
-          <div class="metric-card"><div class="metric-lbl">ΔT</div><div class="metric-val text-orange-300" id="mDT">0.0</div><div class="metric-unit">K vs 25°C</div></div>
-        </div>
-
-        <!-- Enthalpy cumulative bar -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg px-2.5 py-1.5 flex items-center gap-2">
-          <i class="fa-solid fa-fire-flame-curved text-rose-400 text-[10px]"></i>
-          <div class="text-[8px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
-          <div class="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden relative">
-            <div id="dHBar" class="absolute inset-y-0 left-1/2 bg-gradient-to-r from-rose-500 to-orange-400 transition-all" style="width:0%"></div>
-            <div class="absolute inset-y-0 left-1/2 w-px bg-slate-500"></div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Total Mass</div>
+            <div id="mMass" class="text-[13px] font-mono text-sky-300">0.00 g</div>
           </div>
-          <div class="text-[10px] font-mono text-rose-300 tabular-nums min-w-[70px] text-right" id="mDHCumul">0.00 kJ</div>
-        </div>
-
-        <!-- Active ionic species -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-1.5">
-            <i class="fa-solid fa-atom mr-1 text-cyan-500"></i>ACTIVE IONIC SPECIES · M = n/V
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Volume</div>
+            <div id="mVolume" class="text-[13px] font-mono text-cyan-300">0.0 mL</div>
           </div>
-          <div id="speciesList" class="flex flex-wrap gap-1">
-            <span class="text-[8.5px] text-slate-600 font-mono italic">no solutes in vessel</span>
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Molarity (n/V)</div>
+            <div id="mMolarity" class="text-[13px] font-mono text-emerald-300">0.000 M</div>
+          </div>
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Temperature</div>
+            <div id="mTemp" class="text-[13px] font-mono text-orange-300">25.0 °C</div>
+          </div>
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Heat q = mcΔT</div>
+            <div id="mHeat" class="text-[13px] font-mono text-rose-300">0.00 kJ</div>
+          </div>
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Enthalpy ΔH</div>
+            <div id="mEnthalpy" class="text-[13px] font-mono text-fuchsia-300">0.0 kJ</div>
+          </div>
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Gas @ STP (n·22.4)</div>
+            <div id="mGas" class="text-[13px] font-mono text-amber-300">0.000 L</div>
+          </div>
+          <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1">
+            <div class="text-[9px] uppercase tracking-wider text-slate-500">Precipitate</div>
+            <div id="mPrecip" class="text-[13px] font-mono text-slate-300">0.00 g</div>
           </div>
         </div>
 
-        <!-- Balanced equations -->
-        <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-          <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-1.5">
-            <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED STOICHIOMETRIC EQUATIONS
-          </div>
-          <div id="eqList" class="space-y-1">
-            <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
-          </div>
+        <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1.5">
+          <div class="text-[9px] uppercase tracking-wider text-slate-500 mb-1">Active Ions in Solution</div>
+          <div id="mIons" class="text-[10.5px] font-mono text-slate-300 leading-relaxed">— none —</div>
+        </div>
+
+        <div class="rounded-md bg-slate-950/60 border border-slate-800 px-2 py-1.5">
+          <div class="text-[9px] uppercase tracking-wider text-slate-500 mb-1">Balanced Stoichiometric Equations</div>
+          <div id="mEq" class="text-[10.5px] font-mono text-slate-300 space-y-1">— no reactions yet —</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════ RIGHT COLUMN (4/12) ═══════════════════ -->
-  <div class="col-span-4 h-full min-h-0 bg-slate-900 border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-
-    <div class="px-3 py-2 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
-      <div class="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
-        <i class="fa-solid fa-flask text-[11px] text-white"></i>
-      </div>
-      <div class="flex-1">
-        <div class="text-[12px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT &amp; ELEMENT LIBRARY</div>
-        <div class="text-[8px] text-slate-500 font-mono tracking-wider leading-tight">VIRTUALAB PRO · STOCKROOM v4.0</div>
-      </div>
-      <div class="text-[8.5px] font-mono text-slate-500" id="reagentCount">0 items</div>
-    </div>
-
-    <div id="catTabs" class="px-2 py-1.5 flex flex-wrap gap-1 border-b border-slate-800/80 shrink-0"></div>
-
-    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-2 space-y-1"></div>
-
-    <div class="px-3 py-1.5 border-t border-slate-800/80 shrink-0 text-[8px] text-slate-600 font-mono leading-tight flex items-center gap-1">
-      <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-      <span>Hazard-aware interlock active — alkali metals &amp; conc. acids flagged.</span>
+  <!-- ══════════════ RIGHT COLUMN ══════════════ -->
+  <div class="col-span-4 flex flex-col h-full min-h-0 bg-slate-900 border border-slate-800 p-2 rounded-lg">
+    <div class="text-[10px] font-semibold tracking-widest text-slate-400 uppercase shrink-0">🧪 Reagent Library</div>
+    <div id="catTabs" class="flex flex-wrap gap-1 my-1.5 shrink-0"></div>
+    <input id="search" type="text" placeholder="Search reagent…"
+           class="w-full mb-1.5 shrink-0 bg-slate-950/70 border border-slate-800 rounded px-2 py-1 text-[11px] text-slate-200 placeholder-slate-600 outline-none focus:border-sky-600">
+    <div id="reagentList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1"></div>
+    <div class="shrink-0 pt-1.5 mt-1.5 border-t border-slate-800 text-[9px] text-slate-600 text-center">
+      VirtuaLab Pro · 40+ reagents · real thermodynamics
     </div>
   </div>
 </div>
 
-<!-- ═══════════ SAFETY INTERLOCK MODAL ═══════════ -->
-<div id="safetyModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-  <div class="max-w-lg w-full bg-gradient-to-b from-red-950 via-[#1a0707] to-[#0a0303] border-2 border-red-600 rounded-2xl shadow-2xl shadow-red-900/70 overflow-hidden modal-in">
-    <div class="bg-gradient-to-r from-red-900/80 via-red-800/60 to-red-900/80 px-5 py-3 flex items-center gap-3 border-b-2 border-red-700">
-      <i class="fa-solid fa-triangle-exclamation text-3xl text-red-300 hazard-blink"></i>
-      <div class="flex-1">
-        <div class="text-[9px] font-mono tracking-[0.2em] text-red-300/80">SAFETY INTERLOCK · ENGINE PAUSED</div>
-        <div class="text-[15px] font-black tracking-wider text-red-100 leading-tight">HAZARD DETECTED</div>
+<!-- ══════════════ SAFETY MODAL ══════════════ -->
+<div id="safetyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+  <div class="w-full max-w-md rounded-xl border-2 border-red-500/60 bg-slate-900 p-4 shadow-2xl shadow-red-900/40">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-2xl">⚠️</span>
+      <div>
+        <div class="text-sm font-bold text-red-400 tracking-wide">SAFETY INTERCEPT</div>
+        <div id="safetyLevel" class="text-[10px] font-mono text-red-300/80">HAZARD LEVEL: HIGH</div>
       </div>
-      <div id="hazardLevelBadge" class="px-2.5 py-1 rounded text-[9px] font-black tracking-wider bg-red-700 text-white border border-red-500">CRITICAL</div>
     </div>
-    <div class="p-5 space-y-4">
-      <div id="hazardIcons" class="flex justify-center gap-4 text-[44px] leading-none py-1"></div>
-      <div class="text-center">
-        <div id="hazardTitle" class="text-[18px] font-black text-red-200 tracking-wide"></div>
-        <div id="hazardDesc" class="text-[12px] text-red-300/90 mt-2 leading-relaxed font-mono"></div>
-      </div>
-      <div id="hazardDetail" class="text-[10.5px] font-mono text-red-400/90 bg-red-950/60 border border-red-900/70 rounded-lg px-3 py-2 leading-relaxed"></div>
-      <div class="bg-amber-950/40 border border-amber-800/50 rounded-lg px-3 py-2 text-[10.5px] text-amber-300/90 font-mono">
-        <i class="fa-solid fa-flask mr-1.5"></i>Pending: <span id="hazardPending" class="text-amber-100 font-bold"></span>
-      </div>
-      <div class="grid grid-cols-2 gap-3 pt-1">
-        <button id="btnHazardAllow" class="px-4 py-3 rounded-lg bg-gradient-to-b from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold text-[11px] tracking-wider border border-red-500 shadow-lg shadow-red-900/50 transition active:scale-[.97]">
-          <i class="fa-solid fa-bolt mr-1.5"></i>ALLOW &amp; EXECUTE
-        </button>
-        <button id="btnHazardCancel" class="px-4 py-3 rounded-lg bg-gradient-to-b from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-slate-100 font-bold text-[11px] tracking-wider border border-slate-500 transition active:scale-[.97]">
-          <i class="fa-solid fa-ban mr-1.5"></i>CANCEL &amp; ABORT
-        </button>
-      </div>
-      <div class="text-center text-[9px] font-mono text-red-500/60 tracking-wider">
-        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v4.0 · ESC = ABORT · ENTER = ALLOW
-      </div>
+    <div class="rounded-md bg-red-950/40 border border-red-900/60 p-2 mb-2">
+      <div id="safetyName" class="text-[11px] font-bold text-slate-100 mb-1">—</div>
+      <div id="safetyEq" class="text-[11px] font-mono text-amber-300 mb-1">—</div>
+      <div id="safetyMsg" class="text-[10.5px] text-slate-300 leading-relaxed">—</div>
+    </div>
+    <div class="text-[10px] text-slate-500 mb-3">Simulation engine is PAUSED. Choose an action to continue.</div>
+    <div class="flex gap-2">
+      <button id="btnAllow" class="flex-1 text-[11px] py-2 rounded bg-red-600 hover:bg-red-500 text-white font-bold transition">⚠️ ALLOW &amp; EXECUTE</button>
+      <button id="btnCancel" class="flex-1 text-[11px] py-2 rounded bg-slate-700 hover:bg-slate-600 text-white font-bold transition">🛑 CANCEL &amp; ABORT</button>
     </div>
   </div>
+</div>
+
+<!-- ══════════════ AI TUTOR DRAWER ══════════════ -->
+<div id="tutor" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900 border-l border-slate-700 shadow-2xl z-40 transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="flex items-center justify-between px-3 py-2 border-b border-slate-800 shrink-0">
+    <span class="text-xs font-bold text-sky-400 tracking-wide">🤖 AI LAB TUTOR</span>
+    <button id="tutorClose" class="text-slate-500 hover:text-white text-lg leading-none transition">✕</button>
+  </div>
+  <div id="tutorBody" class="flex-1 overflow-y-auto custom-scrollbar p-3 text-[11px] leading-relaxed text-slate-300 space-y-2"></div>
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════════════════════════
-   VIRTUALAB PRO v4.0  ·  Core Simulation Kernel
-   ══════════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   VIRTUALAB PRO — ENGINE
+   ═══════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
 
-/* ── GEOMETRY (canvas internal coordinate system) ── */
-const W = 760, H = 680;
-const BX = 255, BY = 162, BW = 250, BH = 350;
-const INX = BX + 9, INY = BY + 8, INW = BW - 18, INH = BH - 16;
-const BOT = INY + INH;
-const CX  = BX + BW / 2;
-const MAXVOL = 500;
-const MAXLH  = 292;
-const BURETTE_TOP = 20;
-const BURETTE_BOT = 126;
-const BURETTE_TIP_Y = BURETTE_BOT + 30;
-const BURNER_BASE_Y = 594;
-
-/* ── CATEGORIES (matching new spec) ── */
+/* ───────────── REAGENT LIBRARY ───────────── */
 const CATS = [
-  'All','Elements','Metals','Non-Metals',
-  'Basic Oxides','Acidic Oxides','Amphoteric Oxides','Neutral Oxides',
-  'Strong Acids','Weak Acids','Bases','Salts','Solvents','Indicators'
+  ['all','All'],['elements','Elements'],['atoms','Atoms'],['metals','Metals'],
+  ['nonmetals','Non-Metals'],['basicoxides','Basic Oxides'],['acidicoxides','Acidic Oxides'],
+  ['amphoteric','Amphoteric Oxides'],['neutraloxides','Neutral Oxides'],['acids','Acids'],
+  ['bases','Bases'],['salts','Salts'],['solvents','Solvents'],['indicators','Indicators']
 ];
 
-/* ── REAGENT DATABASE ── */
-const CHEMS = [
-  /* ELEMENTS / METALS */
-  {id:'na',  n:'Sodium',           f:'Na',       c:'Metals', st:'s', mm:22.99, max:5, def:1,   rgb:[205,210,220], alkali:true, dhSol:-184},
-  {id:'k',   n:'Potassium',        f:'K',        c:'Metals', st:'s', mm:39.10, max:5, def:1,   rgb:[205,210,220], alkali:true, dhSol:-196},
-  {id:'li',  n:'Lithium',          f:'Li',       c:'Metals', st:'s', mm:6.94,  max:5, def:0.5, rgb:[200,205,215], alkali:true, dhSol:-190},
-  {id:'ca',  n:'Calcium',          f:'Ca',       c:'Metals', st:'s', mm:40.08, max:10, def:2, rgb:[190,190,185], dhSol:-230},
-  {id:'mg',  n:'Magnesium',        f:'Mg',       c:'Metals', st:'s', mm:24.31, max:10, def:1, rgb:[200,200,205]},
-  {id:'zn',  n:'Zinc',             f:'Zn',       c:'Metals', st:'s', mm:65.38, max:20, def:3, rgb:[170,175,185]},
-  {id:'fe',  n:'Iron',             f:'Fe',       c:'Metals', st:'s', mm:55.85, max:20, def:3, rgb:[90,90,95]},
-  {id:'cu',  n:'Copper',           f:'Cu',       c:'Metals', st:'s', mm:63.55, max:20, def:3, rgb:[190,110,60]},
-  {id:'al',  n:'Aluminium',        f:'Al',       c:'Metals', st:'s', mm:26.98, max:20, def:2, rgb:[210,210,215]},
-  {id:'ag',  n:'Silver',           f:'Ag',       c:'Metals', st:'s', mm:107.87,max:10, def:1, rgb:[230,230,235]},
+const REAGENTS = [
+  /* Elements / Metals / Atoms */
+  {id:'na', name:'Sodium', formula:'Na', cats:['elements','atoms','metals'], M:22.99, color:'#e2e8f0', ions:['Na⁺'], st:'s'},
+  {id:'k',  name:'Potassium', formula:'K', cats:['elements','atoms','metals'], M:39.10, color:'#e2e8f0', ions:['K⁺'], st:'s'},
+  {id:'mg', name:'Magnesium', formula:'Mg', cats:['elements','atoms','metals'], M:24.31, color:'#cbd5e1', ions:['Mg²⁺'], st:'s'},
+  {id:'zn', name:'Zinc', formula:'Zn', cats:['elements','atoms','metals'], M:65.38, color:'#94a3b8', ions:['Zn²⁺'], st:'s'},
+  {id:'cu', name:'Copper', formula:'Cu', cats:['elements','atoms','metals'], M:63.55, color:'#f59e0b', ions:['Cu²⁺'], st:'s'},
+  {id:'fe', name:'Iron', formula:'Fe', cats:['elements','atoms','metals'], M:55.85, color:'#9ca3af', ions:['Fe²⁺','Fe³⁺'], st:'s'},
+  {id:'al', name:'Aluminium', formula:'Al', cats:['elements','atoms','metals'], M:26.98, color:'#cbd5e1', ions:['Al³⁺'], st:'s'},
+  {id:'ca', name:'Calcium', formula:'Ca', cats:['elements','atoms','metals'], M:40.08, color:'#e5e7eb', ions:['Ca²⁺'], st:'s'},
+  {id:'s',  name:'Sulfur', formula:'S', cats:['elements','atoms','nonmetals'], M:32.06, color:'#facc15', ions:[], st:'s'},
+  {id:'c',  name:'Carbon (graphite)', formula:'C', cats:['elements','atoms','nonmetals'], M:12.01, color:'#334155', ions:[], st:'s'},
+  {id:'p4', name:'White Phosphorus', formula:'P₄', cats:['elements','atoms','nonmetals'], M:123.9, color:'#fde68a', ions:[], st:'s'},
+  {id:'i2', name:'Iodine', formula:'I₂', cats:['elements','atoms','nonmetals'], M:253.8, color:'#7c3aed', ions:[], st:'s'},
+  {id:'o2', name:'Oxygen', formula:'O₂', cats:['elements','atoms','nonmetals'], M:32.00, color:'#bae6fd', ions:[], st:'g'},
+  /* Basic oxides */
+  {id:'na2o', name:'Sodium Oxide', formula:'Na₂O', cats:['basicoxides'], M:61.98, color:'#f8fafc', ions:['Na⁺'], st:'s', OH:2},
+  {id:'cao', name:'Calcium Oxide (Quicklime)', formula:'CaO', cats:['basicoxides'], M:56.08, color:'#f1f5f9', ions:['Ca²⁺'], st:'s'},
+  {id:'cuo', name:'Copper(II) Oxide', formula:'CuO', cats:['basicoxides'], M:79.55, color:'#1f2937', ions:['Cu²⁺'], st:'s'},
+  {id:'mgo', name:'Magnesium Oxide', formula:'MgO', cats:['basicoxides'], M:40.30, color:'#ffffff', ions:['Mg²⁺'], st:'s'},
+  /* Acidic oxides */
+  {id:'so2', name:'Sulfur Dioxide', formula:'SO₂', cats:['acidicoxides'], M:64.07, color:'#e2e8f0', ions:[], st:'g'},
+  {id:'co2', name:'Carbon Dioxide', formula:'CO₂', cats:['acidicoxides'], M:44.01, color:'#e5e7eb', ions:[], st:'g'},
+  {id:'p4o10', name:'Phosphorus Pentoxide', formula:'P₄O₁₀', cats:['acidicoxides'], M:283.9, color:'#ffffff', ions:[], st:'s'},
+  /* Amphoteric oxides */
+  {id:'al2o3', name:'Aluminium Oxide', formula:'Al₂O₃', cats:['amphoteric'], M:101.96, color:'#f8fafc', ions:[], st:'s'},
+  {id:'zno', name:'Zinc Oxide', formula:'ZnO', cats:['amphoteric'], M:81.38, color:'#f8fafc', ions:[], st:'s'},
+  /* Neutral oxides */
+  {id:'co', name:'Carbon Monoxide', formula:'CO', cats:['neutraloxides'], M:28.01, color:'#e5e7eb', ions:[], st:'g'},
+  {id:'no', name:'Nitric Oxide', formula:'NO', cats:['neutraloxides'], M:30.01, color:'#e5e7eb', ions:[], st:'g'},
+  /* Acids */
+  {id:'hcl', name:'Hydrochloric Acid', formula:'HCl', cats:['acids'], M:36.46, color:'#dbeafe', ions:['H⁺','Cl⁻'], st:'aq', H:1},
+  {id:'h2so4', name:'Sulfuric Acid', formula:'H₂SO₄', cats:['acids'], M:98.08, color:'#dbeafe', ions:['H⁺','SO₄²⁻'], st:'aq', H:2},
+  {id:'hno3', name:'Nitric Acid', formula:'HNO₃', cats:['acids'], M:63.01, color:'#dbeafe', ions:['H⁺','NO₃⁻'], st:'aq', H:1},
+  {id:'ch3cooh', name:'Acetic Acid', formula:'CH₃COOH', cats:['acids'], M:60.05, color:'#e0f2fe', ions:['H⁺','CH₃COO⁻'], st:'aq', H:0.05},
+  /* Bases */
+  {id:'naoh', name:'Sodium Hydroxide', formula:'NaOH', cats:['bases'], M:40.00, color:'#e0f2fe', ions:['Na⁺','OH⁻'], st:'aq', OH:1},
+  {id:'koh', name:'Potassium Hydroxide', formula:'KOH', cats:['bases'], M:56.11, color:'#e0f2fe', ions:['K⁺','OH⁻'], st:'aq', OH:1},
+  {id:'caoh2', name:'Calcium Hydroxide', formula:'Ca(OH)₂', cats:['bases'], M:74.09, color:'#f1f5f9', ions:['Ca²⁺','OH⁻'], st:'aq', OH:2},
+  {id:'nh3', name:'Ammonia Solution', formula:'NH₃(aq)', cats:['bases'], M:17.03, color:'#e0f2fe', ions:['NH₄⁺','OH⁻'], st:'aq', OH:0.02},
+  /* Salts */
+  {id:'nacl', name:'Sodium Chloride', formula:'NaCl', cats:['salts'], M:58.44, color:'#f8fafc', ions:['Na⁺','Cl⁻'], st:'s'},
+  {id:'agno3', name:'Silver Nitrate', formula:'AgNO₃', cats:['salts'], M:169.87, color:'#f8fafc', ions:['Ag⁺','NO₃⁻'], st:'s'},
+  {id:'pbno3', name:'Lead(II) Nitrate', formula:'Pb(NO₃)₂', cats:['salts'], M:331.2, color:'#f8fafc', ions:['Pb²⁺','NO₃⁻'], st:'s'},
+  {id:'ki', name:'Potassium Iodide', formula:'KI', cats:['salts'], M:166.0, color:'#f8fafc', ions:['K⁺','I⁻'], st:'s'},
+  {id:'cuso4', name:'Copper(II) Sulfate', formula:'CuSO₄', cats:['salts'], M:159.6, color:'#38bdf8', ions:['Cu²⁺','SO₄²⁻'], st:'s', solColor:[56,189,248,0.55]},
+  {id:'caco3', name:'Calcium Carbonate', formula:'CaCO₃', cats:['salts'], M:100.1, color:'#ffffff', ions:['Ca²⁺','CO₃²⁻'], st:'s'},
+  {id:'na2co3', name:'Sodium Carbonate', formula:'Na₂CO₃', cats:['salts'], M:106.0, color:'#f8fafc', ions:['Na⁺','CO₃²⁻'], st:'s'},
+  {id:'bacl2', name:'Barium Chloride', formula:'BaCl₂', cats:['salts'], M:208.2, color:'#f8fafc', ions:['Ba²⁺','Cl⁻'], st:'s'},
+  {id:'kmno4', name:'Potassium Permanganate', formula:'KMnO₄', cats:['salts'], M:158.0, color:'#7c3aed', ions:['K⁺','MnO₄⁻'], st:'s', solColor:[124,58,237,0.6]},
+  /* Solvents */
+  {id:'h2o', name:'Distilled Water', formula:'H₂O', cats:['solvents'], M:18.02, color:'#bae6fd', ions:[], st:'l'},
+  {id:'etoh', name:'Ethanol', formula:'C₂H₅OH', cats:['solvents'], M:46.07, color:'#e0f2fe', ions:[], st:'l'},
+  {id:'ccl4', name:'Carbon Tetrachloride', formula:'CCl₄', cats:['solvents'], M:153.8, color:'#e2e8f0', ions:[], st:'l'},
+  /* Indicators */
+  {id:'pth', name:'Phenolphthalein', formula:'C₂₀H₁₄O₄', cats:['indicators'], M:318.3, color:'#f0abfc', ions:[], st:'aq', indicator:'pth'},
+  {id:'litmus', name:'Litmus Solution', formula:'—', cats:['indicators'], M:100, color:'#a78bfa', ions:[], st:'aq', indicator:'litmus'},
+  {id:'mo', name:'Methyl Orange', formula:'C₁₄H₁₄N₃NaO₃S', cats:['indicators'], M:327.3, color:'#fb923c', ions:[], st:'aq', indicator:'mo'}
+];
+const RMAP = Object.fromEntries(REAGENTS.map(r => [r.id, r]));
 
-  /* NON-METALS */
-  {id:'s', n:'Sulfur',             f:'S',  c:'Non-Metals', st:'s', mm:32.06, max:10, def:1, rgb:[230,220,60]},
-  {id:'c', n:'Carbon',             f:'C',  c:'Non-Metals', st:'s', mm:12.01, max:10, def:1, rgb:[35,35,40]},
-  {id:'p', n:'Phosphorus (Red)',   f:'P',  c:'Non-Metals', st:'s', mm:30.97, max:10, def:1, rgb:[205,80,60]},
-  {id:'i2',n:'Iodine',             f:'I₂', c:'Non-Metals', st:'s', mm:253.8, max:10, def:1, rgb:[90,40,120]},
+/* ───────────── REACTION DATABASE ───────────── */
+const REACTIONS = [
+  { id:'na_h2o', pair:['na','h2o'], stoich:{na:2,h2o:2}, name:'Sodium in Water',
+    eq:'2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g)↑', dH:-184,
+    prod:[{id:'naoh', n:2}], gas:{formula:'H₂', name:'Hydrogen', n:1},
+    fx:{explode:1.0, sparks:34, smoke:{c:'236,236,236', n:26}, bubbles:34, flame:'#fbbf24'},
+    hazard:{level:'EXTREME', msg:'Alkali metal + water: violent exothermic reaction producing flammable hydrogen gas. Risk of ignition, spattering of hot alkali and thermal burns.'},
+    explain:'Sodium is an alkali metal with ONE valence electron. Water molecules pull that electron away, forming Na⁺ and OH⁻. The leftover hydrogen atoms pair up into H₂ gas. The reaction is extremely exothermic (ΔH = −184 kJ/mol) because sodium has a very low ionisation energy — the energy released when Na⁺ hydrates far exceeds the energy needed to break the O–H bond. Because the heat ignites the hydrogen, the reaction can look explosive.' },
 
-  /* BASIC OXIDES */
-  {id:'na2o', n:'Sodium Oxide',    f:'Na₂O', c:'Basic Oxides', st:'s', mm:61.98, max:20, def:2, rgb:[245,240,235], basicOxide:true, ions:{'Na+':2,'OH-':2}},
-  {id:'cao',  n:'Calcium Oxide',   f:'CaO',  c:'Basic Oxides', st:'s', mm:56.08, max:20, def:5, rgb:[235,235,230], basicOxide:true},
-  {id:'mgo',  n:'Magnesium Oxide', f:'MgO',  c:'Basic Oxides', st:'s', mm:40.30, max:20, def:2, rgb:[245,245,245], basicOxide:true, ions:{'Mg2+':1,'OH-':2}},
+  { id:'k_h2o', pair:['k','h2o'], stoich:{k:2,h2o:2}, name:'Potassium in Water',
+    eq:'2K(s) + 2H₂O(l) → 2KOH(aq) + H₂(g)↑', dH:-196,
+    prod:[{id:'koh', n:2}], gas:{formula:'H₂', name:'Hydrogen', n:1},
+    fx:{explode:1.6, sparks:46, smoke:{c:'226,226,226', n:34}, bubbles:40, flame:'#c084fc'},
+    hazard:{level:'EXTREME', msg:'Potassium is MORE reactive than sodium. It ignites instantly on contact with water and burns with a lilac flame. Hydrogen/alkali spray hazard.'},
+    explain:'Potassium sits below sodium in Group 1, so its single valence electron is held more loosely. That means the reaction with water is faster and releases even more energy. The hydrogen produced ignites immediately, and potassium ions give a characteristic lilac flame colour in a flame test.' },
 
-  /* ACIDIC OXIDES */
-  {id:'so2',   n:'Sulfur Dioxide',       f:'SO₂',   c:'Acidic Oxides', st:'s', mm:64.07, max:20, def:2, rgb:[240,250,240], acidicOxide:true, toxic:true, ions:{'H+':2,'SO3^2-':1}},
-  {id:'co2',   n:'Carbon Dioxide',       f:'CO₂',   c:'Acidic Oxides', st:'s', mm:44.01, max:20, def:2, rgb:[240,250,245], acidicOxide:true, ions:{'H+':1,'HCO3-':1}},
-  {id:'p4o10', n:'Phosphorus Pentoxide', f:'P₄O₁₀', c:'Acidic Oxides', st:'s', mm:283.89,max:10, def:1, rgb:[245,245,240], acidicOxide:true, ions:{'H+':12,'PO4^3-':4}},
+  { id:'ca_h2o', pair:['ca','h2o'], stoich:{ca:1,h2o:2}, name:'Calcium in Water',
+    eq:'Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)↑', dH:-414,
+    prod:[{id:'caoh2', n:1}], gas:{formula:'H₂', name:'Hydrogen', n:1},
+    fx:{explode:0, sparks:10, smoke:{c:'240,240,240', n:14}, bubbles:24, flame:'#fb923c'},
+    hazard:{level:'MODERATE', msg:'Calcium sinks and fizzes vigorously, producing hydrogen gas and a hot alkaline suspension. Avoid contact with eyes.'},
+    explain:'Calcium is an alkaline-earth metal. It reacts more slowly than sodium because it must lose TWO electrons, but it still displaces hydrogen from cold water. The product, calcium hydroxide, is only slightly soluble — that is why the solution turns milky (limewater).' },
 
-  /* AMPHOTERIC OXIDES */
-  {id:'al2o3', n:'Aluminium Oxide', f:'Al₂O₃', c:'Amphoteric Oxides', st:'s', mm:101.96, max:20, def:2, rgb:[240,240,245], amphoteric:true},
-  {id:'zno',   n:'Zinc Oxide',      f:'ZnO',   c:'Amphoteric Oxides', st:'s', mm:81.38,  max:20, def:2, rgb:[245,245,240], amphoteric:true},
+  { id:'h2so4_h2o', pair:['h2so4','h2o'], stoich:{h2so4:1,h2o:1}, name:'Dilution of Sulfuric Acid',
+    eq:'H₂SO₄(l) + H₂O(l) → 2H⁺(aq) + SO₄²⁻(aq) + heat', dH:-88,
+    prod:[], gas:null,
+    fx:{explode:0, sparks:6, smoke:{c:'255,255,255', n:18}, bubbles:18, flame:null},
+    hazard:{level:'HIGH', msg:'Concentrated acid + water is violently exothermic. ALWAYS add acid TO water, never water to acid — otherwise the mixture can superheat and spatter.'},
+    explain:'When H₂SO₄ dissolves, the H⁺ ions are heavily hydrated by water molecules. That hydration shell formation releases a lot of energy (ΔH = −88 kJ/mol). If you pour water into concentrated acid, the water is less dense and sits on top, so the heat is concentrated in a small volume and can boil instantly. Adding acid to water spreads the heat through the whole volume safely.' },
 
-  /* NEUTRAL OXIDES */
-  {id:'co', n:'Carbon Monoxide', f:'CO',  c:'Neutral Oxides', st:'s', mm:28.01, max:20, def:2, rgb:[240,245,245], neutral:true, toxic:true},
-  {id:'no', n:'Nitric Oxide',    f:'NO',  c:'Neutral Oxides', st:'s', mm:30.01, max:20, def:2, rgb:[240,245,245], neutral:true, toxic:true},
-  {id:'n2o',n:'Nitrous Oxide',   f:'N₂O', c:'Neutral Oxides', st:'s', mm:44.01, max:20, def:2, rgb:[240,245,245], neutral:true},
+  { id:'na2o_h2o', pair:['na2o','h2o'], stoich:{na2o:1,h2o:1}, name:'Sodium Oxide + Water',
+    eq:'Na₂O(s) + H₂O(l) → 2NaOH(aq)', dH:-120,
+    prod:[{id:'naoh', n:2}], gas:null,
+    fx:{explode:0, sparks:8, smoke:{c:'245,245,245', n:16}, bubbles:14, flame:null},
+    hazard:{level:'MODERATE', msg:'Basic oxide dissolving in water is strongly exothermic and produces a corrosive alkali solution.'},
+    explain:'Na₂O is a BASIC oxide. In water it acts as a base: the oxide ion O²⁻ is a very strong proton acceptor, ripping H⁺ off water molecules and leaving OH⁻ behind. This is why solutions of basic oxides have a high pH.' },
 
-  /* STRONG ACIDS */
-  {id:'hcl',   n:'Hydrochloric Acid', f:'HCl',   c:'Strong Acids', st:'l', M:1.0, max:100, def:20, rgb:[235,245,255], ions:{'H+':1,'Cl-':1},  dhSol:-75},
-  {id:'h2so4', n:'Sulfuric Acid',     f:'H₂SO₄', c:'Strong Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':2,'SO4^2-':1},dhSol:-88},
-  {id:'hno3',  n:'Nitric Acid',       f:'HNO₃',  c:'Strong Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':1,'NO3-':1},  dhSol:-80},
+  { id:'cao_h2o', pair:['cao','h2o'], stoich:{cao:1,h2o:1}, name:'Slaking of Quicklime',
+    eq:'CaO(s) + H₂O(l) → Ca(OH)₂(aq) + heat', dH:-64,
+    prod:[{id:'caoh2', n:1}], gas:null,
+    fx:{explode:0, sparks:12, smoke:{c:'255,255,255', n:26}, bubbles:26, flame:null},
+    hazard:{level:'HIGH', msg:'Slaking quicklime releases enough heat to boil water and can shatter the vessel. Steam and caustic spray hazard.'},
+    explain:'CaO is a basic oxide. Water attacks the Ca²⁺–O²⁻ lattice, forming hydroxide ions. The reaction is so exothermic that builders call it "slaking" — the lime literally steams and cracks if too much water is added at once.' },
 
-  /* WEAK ACIDS */
-  {id:'ch3cooh',n:'Acetic Acid',   f:'CH₃COOH', c:'Weak Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,250], weakAcid:true, dhSol:-10},
-  {id:'h2co3',  n:'Carbonic Acid', f:'H₂CO₃',   c:'Weak Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true, dhSol:-20},
-  {id:'h3po4',  n:'Phosphoric Acid',f:'H₃PO₄',  c:'Weak Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true, dhSol:-40},
+  { id:'so2_h2o', pair:['so2','h2o'], stoich:{so2:1,h2o:1}, name:'Sulfur Dioxide + Water',
+    eq:'SO₂(g) + H₂O(l) ⇌ H₂SO₃(aq)', dH:-30,
+    prod:[{name:'Sulfurous Acid', formula:'H₂SO₃', M:82.08, n:1, ions:['H⁺','HSO₃⁻'], H:0.6, color:'#e2e8f0'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'220,220,220', n:12}, bubbles:12, flame:null},
+    explain:'SO₂ is an ACIDIC oxide: it reacts with water to give an acid (sulfurous acid). Non-metal oxides are generally acidic because the non-metal has a high electronegativity and pulls electron density away from the oxygen, making the resulting solution rich in H⁺.' },
 
-  /* BASES */
-  {id:'naoh', n:'Sodium Hydroxide',    f:'NaOH',    c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'Na+':1,'OH-':1}, dhSol:-44},
-  {id:'koh',  n:'Potassium Hydroxide', f:'KOH',     c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'K+':1,'OH-':1},  dhSol:-57},
-  {id:'nh3',  n:'Ammonia',             f:'NH₃(aq)', c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[235,245,250], weakBase:true,          dhSol:-30},
-  {id:'caoh2',n:'Limewater',           f:'Ca(OH)₂', c:'Bases', st:'l', M:0.02, max:100, def:30, rgb:[240,250,250], ions:{'Ca2+':1,'OH-':2}},
-  {id:'mgoh2',n:'Magnesium Hydroxide', f:'Mg(OH)₂', c:'Bases', st:'s', mm:58.32, max:20, def:3, rgb:[245,245,245], ions:{'Mg2+':1,'OH-':2}},
-  {id:'baoh2',n:'Barium Hydroxide',    f:'Ba(OH)₂', c:'Bases', st:'l', M:0.1,  max:100, def:30, rgb:[240,250,255], ions:{'Ba2+':1,'OH-':2}},
+  { id:'co2_h2o', pair:['co2','h2o'], stoich:{co2:1,h2o:1}, name:'Carbon Dioxide + Water',
+    eq:'CO₂(g) + H₂O(l) ⇌ H₂CO₃(aq)', dH:-20,
+    prod:[{name:'Carbonic Acid', formula:'H₂CO₃', M:62.03, n:1, ions:['H⁺','HCO₃⁻'], H:0.05, color:'#e5e7eb'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'235,235,235', n:10}, bubbles:14, flame:null},
+    explain:'CO₂ is an acidic oxide. It dissolves in water to form weak carbonic acid — the same reaction that makes rainwater slightly acidic (pH ≈ 5.6) and gives fizzy drinks their sharp taste.' },
 
-  /* SALTS */
-  {id:'nacl',  n:'Sodium Chloride',  f:'NaCl',  c:'Salts', st:'s', mm:58.44,  max:50, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':1,'Cl-':1}},
-  {id:'ki',    n:'Potassium Iodide', f:'KI',    c:'Salts', st:'s', mm:166.0,  max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'K+':1,'I-':1}},
-  {id:'bacl2', n:'Barium Chloride',  f:'BaCl₂', c:'Salts', st:'s', mm:208.23, max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'Ba2+':1,'Cl-':2}},
-  {id:'na2co3',n:'Sodium Carbonate', f:'Na₂CO₃',c:'Salts', st:'s', mm:105.99, max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':2,'CO3^2-':1}},
-  {id:'caco3', n:'Calcium Carbonate',f:'CaCO₃', c:'Salts', st:'s', mm:100.09, max:30, def:5, rgb:[240,240,235]},
-  {id:'kno3',  n:'Potassium Nitrate',f:'KNO₃',  c:'Salts', st:'s', mm:101.1,  max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'K+':1,'NO3-':1}},
-  {id:'cuso4', n:'Copper(II) Sulfate',f:'CuSO₄',c:'Salts', st:'s', mm:159.6,  max:30, def:5, rgb:[40,110,220], soluble:true, ions:{'Cu2+':1,'SO4^2-':1}},
-  {id:'agno3', n:'Silver Nitrate',    f:'AgNO₃',c:'Salts', st:'s', mm:169.87, max:20, def:2, rgb:[240,240,245], soluble:true, ions:{'Ag+':1,'NO3-':1}},
-  {id:'pbno3', n:'Lead(II) Nitrate',  f:'Pb(NO₃)₂',c:'Salts',st:'s', mm:331.2,  max:20, def:2, rgb:[240,240,245], soluble:true, ions:{'Pb2+':1,'NO3-':2}},
-  {id:'kmno4', n:'Potassium Permanganate',f:'KMnO₄',c:'Salts',st:'s', mm:158.03,max:10, def:1, rgb:[130,10,90], soluble:true, ions:{'K+':1,'MnO4-':1}},
-  {id:'fecl3', n:'Iron(III) Chloride',f:'FeCl₃',c:'Salts', st:'s', mm:162.2,  max:20, def:2, rgb:[200,140,60], soluble:true, ions:{'Fe3+':1,'Cl-':3}},
-  {id:'cuo',   n:'Copper(II) Oxide',  f:'CuO',  c:'Salts', st:'s', mm:79.55,  max:20, def:2, rgb:[25,25,30]},
+  { id:'hcl_naoh', pair:['hcl','naoh'], stoich:{hcl:1,naoh:1}, name:'Neutralisation (Strong Acid + Strong Base)',
+    eq:'HCl(aq) + NaOH(aq) → NaCl(aq) + H₂O(l)', dH:-57.3,
+    prod:[{id:'nacl', n:1}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'255,255,255', n:8}, bubbles:6, flame:null},
+    explain:'This is a neutralisation reaction. H⁺ from the acid and OH⁻ from the base combine to form water. The ΔH is almost always about −57 kJ/mol for strong acid + strong base, because the only real chemical change is H⁺ + OH⁻ → H₂O. The spectator ions (Na⁺ and Cl⁻) stay dissolved.' },
 
-  /* SOLVENTS */
-  {id:'h2o',   n:'Distilled Water', f:'H₂O',    c:'Solvents', st:'l', M:0.0, max:500, def:50, rgb:[230,240,250]},
-  {id:'etoh',  n:'Ethanol',         f:'C₂H₅OH', c:'Solvents', st:'l', mm:46.07, dens:0.789, max:100, def:20, rgb:[245,250,255], fuel:true, ign:300, dhComb:1367, co2:2},
-  {id:'meoh',  n:'Methanol',        f:'CH₃OH',  c:'Solvents', st:'l', mm:32.04, dens:0.792, max:100, def:20, rgb:[245,250,255], fuel:true, ign:280, dhComb:726,  co2:1},
-  {id:'acetone',n:'Acetone',        f:'C₃H₆O',  c:'Solvents', st:'l', mm:58.08, dens:0.784, max:100, def:20, rgb:[245,250,255], fuel:true, ign:290, dhComb:1790, co2:3},
-  {id:'hexane',n:'Hexane',          f:'C₆H₁₄',  c:'Solvents', st:'l', mm:86.18, dens:0.659, max:100, def:20, rgb:[245,248,255], fuel:true, ign:225, dhComb:4163, co2:6},
-  {id:'ch4',   n:'Methane',         f:'CH₄',    c:'Solvents', st:'l', mm:16.04, dens:0.4226, max:100, def:20, rgb:[245,250,255], fuel:true, ign:537, dhComb:890, co2:1},
+  { id:'h2so4_naoh', pair:['h2so4','naoh'], stoich:{h2so4:1,naoh:2}, name:'Neutralisation (Diprotic Acid)',
+    eq:'H₂SO₄(aq) + 2NaOH(aq) → Na₂SO₄(aq) + 2H₂O(l)', dH:-114,
+    prod:[{name:'Sodium Sulfate', formula:'Na₂SO₄', M:142.04, n:1, ions:['Na⁺','SO₄²⁻'], color:'#e2e8f0'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'255,255,255', n:8}, bubbles:6, flame:null},
+    explain:'Sulfuric acid is diprotic — it can donate two protons. So one mole of H₂SO₄ needs TWO moles of NaOH. The enthalpy is roughly double that of a monoprotic neutralisation, because two H⁺ + OH⁻ events occur.' },
 
-  /* INDICATORS */
-  {id:'ui',   n:'Universal Indicator', f:'UI', c:'Indicators', st:'l', ind:'ui',  max:10, def:1, rgb:[180,200,120]},
-  {id:'phph', n:'Phenolphthalein', f:'C₂₀H₁₄O₄', c:'Indicators', st:'l', ind:'phph', max:10, def:1, rgb:[250,240,250]},
-  {id:'btb',  n:'Bromothymol Blue',f:'BTB', c:'Indicators', st:'l', ind:'btb',  max:10, def:1, rgb:[220,200,90]},
-  {id:'mor',  n:'Methyl Orange',   f:'MO',  c:'Indicators', st:'l', ind:'mor',  max:10, def:1, rgb:[240,170,60]},
-  {id:'litmus',n:'Litmus Solution',f:'Lit', c:'Indicators', st:'l', ind:'lit',  max:10, def:1, rgb:[150,110,190]},
+  { id:'nh3_hcl', pair:['nh3','hcl'], stoich:{nh3:1,hcl:1}, name:'Ammonia + Hydrogen Chloride',
+    eq:'NH₃(aq) + HCl(aq) → NH₄Cl(s)', dH:-52,
+    prod:[{name:'Ammonium Chloride', formula:'NH₄Cl', M:53.49, n:1, ions:['NH₄⁺','Cl⁻'], color:'#ffffff'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'255,255,255', n:34}, bubbles:4, flame:null},
+    explain:'Ammonia is a base because the nitrogen lone pair accepts a proton (H⁺) from HCl. The product NH₄Cl forms as a fine white smoke/solid — this is the classic "white ring" diffusion experiment.' },
+
+  { id:'agno3_nacl', pair:['agno3','nacl'], stoich:{agno3:1,nacl:1}, name:'Silver Chloride Precipitation',
+    eq:'AgNO₃(aq) + NaCl(aq) → AgCl(s)↓ + NaNO₃(aq)', dH:-65,
+    prod:[{name:'Sodium Nitrate', formula:'NaNO₃', M:84.99, n:1, ions:['Na⁺','NO₃⁻'], color:'#f8fafc'}],
+    precip:{name:'Silver Chloride', formula:'AgCl', color:'#f1f5f9', M:143.32},
+    fx:{explode:0, sparks:0, smoke:{c:'255,255,255', n:16}, bubbles:2, flame:null},
+    explain:'A precipitation reaction. AgCl is insoluble in water (Ksp ≈ 1.8 × 10⁻¹⁰), so Ag⁺ and Cl⁻ leave the solution and lock into a solid lattice. The white curdy precipitate turns purple-grey in sunlight as Ag⁺ is reduced to metallic silver — that is photographic chemistry.' },
+
+  { id:'pbno3_ki', pair:['pbno3','ki'], stoich:{pbno3:1,ki:2}, name:'Golden Rain (Lead Iodide)',
+    eq:'Pb(NO₃)₂(aq) + 2KI(aq) → PbI₂(s)↓ + 2KNO₃(aq)', dH:-70,
+    prod:[{name:'Potassium Nitrate', formula:'KNO₃', M:101.1, n:2, ions:['K⁺','NO₃⁻'], color:'#f8fafc'}],
+    precip:{name:'Lead(II) Iodide', formula:'PbI₂', color:'#facc15', M:461.0},
+    fx:{explode:0, sparks:0, smoke:{c:'250,220,120', n:18}, bubbles:2, flame:null},
+    explain:'PbI₂ is only very slightly soluble, so it precipitates as beautiful bright-yellow hexagonal crystals ("golden rain"). This is a double-displacement (metathesis) reaction: the cations and anions simply swap partners, and the insoluble pair drops out of solution.' },
+
+  { id:'cuso4_naoh', pair:['cuso4','naoh'], stoich:{cuso4:1,naoh:2}, name:'Copper Hydroxide Precipitation',
+    eq:'CuSO₄(aq) + 2NaOH(aq) → Cu(OH)₂(s)↓ + Na₂SO₄(aq)', dH:-80,
+    prod:[{name:'Sodium Sulfate', formula:'Na₂SO₄', M:142.04, n:1, ions:['Na⁺','SO₄²⁻'], color:'#e2e8f0'}],
+    precip:{name:'Copper(II) Hydroxide', formula:'Cu(OH)₂', color:'#38bdf8', M:97.56},
+    fx:{explode:0, sparks:0, smoke:{c:'120,190,240', n:20}, bubbles:2, flame:null},
+    explain:'The blue colour of CuSO₄ solution comes from the hydrated [Cu(H₂O)₆]²⁺ complex. When OH⁻ is added, it displaces the water ligands and forms insoluble Cu(OH)₂ — a pale blue gelatinous precipitate. On gentle heating this decomposes to black CuO.' },
+
+  { id:'caco3_hcl', pair:['caco3','hcl'], stoich:{caco3:1,hcl:2}, name:'Marble + Hydrochloric Acid',
+    eq:'CaCO₃(s) + 2HCl(aq) → CaCl₂(aq) + H₂O(l) + CO₂(g)↑', dH:-15,
+    prod:[{name:'Calcium Chloride', formula:'CaCl₂', M:110.98, n:1, ions:['Ca²⁺','Cl⁻'], color:'#f8fafc'}],
+    gas:{formula:'CO₂', name:'Carbon Dioxide', n:1},
+    fx:{explode:0, sparks:0, smoke:{c:'240,240,240', n:14}, bubbles:40, flame:null},
+    explain:'Acid + carbonate → salt + water + carbon dioxide. The acid protonates the carbonate ion (CO₃²⁻), which is unstable and decomposes into CO₂ and water. The vigorous fizzing is the CO₂ escaping — this is the classic test for carbonates.' },
+
+  { id:'na2co3_hcl', pair:['na2co3','hcl'], stoich:{na2co3:1,hcl:2}, name:'Washing Soda + Acid',
+    eq:'Na₂CO₃(aq) + 2HCl(aq) → 2NaCl(aq) + H₂O(l) + CO₂(g)↑', dH:-25,
+    prod:[{id:'nacl', n:2}], gas:{formula:'CO₂', name:'Carbon Dioxide', n:1},
+    fx:{explode:0, sparks:0, smoke:{c:'240,240,240', n:12}, bubbles:36, flame:null},
+    explain:'Sodium carbonate is a salt of a weak acid (H₂CO₃) and a strong base (NaOH), so its solution is alkaline. Adding strong acid displaces the weak carbonic acid, which immediately breaks down to CO₂ and water.' },
+
+  { id:'zn_hcl', pair:['zn','hcl'], stoich:{zn:1,hcl:2}, name:'Zinc + Hydrochloric Acid',
+    eq:'Zn(s) + 2HCl(aq) → ZnCl₂(aq) + H₂(g)↑', dH:-153,
+    prod:[{name:'Zinc Chloride', formula:'ZnCl₂', M:136.29, n:1, ions:['Zn²⁺','Cl⁻'], color:'#e2e8f0'}],
+    gas:{formula:'H₂', name:'Hydrogen', n:1},
+    fx:{explode:0, sparks:0, smoke:{c:'235,235,235', n:10}, bubbles:30, flame:null},
+    explain:'Zinc is above hydrogen in the reactivity (electrochemical) series, so it can displace H⁺ from the acid. Zinc is oxidised (loses 2 electrons) and H⁺ is reduced to H₂ gas. Copper, sitting below hydrogen, would NOT react this way.' },
+
+  { id:'mg_hcl', pair:['mg','hcl'], stoich:{mg:1,hcl:2}, name:'Magnesium + Hydrochloric Acid',
+    eq:'Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)↑', dH:-462,
+    prod:[{name:'Magnesium Chloride', formula:'MgCl₂', M:95.21, n:1, ions:['Mg²⁺','Cl⁻'], color:'#f8fafc'}],
+    gas:{formula:'H₂', name:'Hydrogen', n:1},
+    fx:{explode:0.4, sparks:14, smoke:{c:'245,245,245', n:18}, bubbles:44, flame:null},
+    hazard:{level:'MODERATE', msg:'Magnesium reacts very vigorously with acid — rapid hydrogen evolution and significant heating of the vessel.'},
+    explain:'Magnesium is a very reactive metal, so this reaction is far faster and hotter than the zinc version. The large negative ΔH (−462 kJ/mol) reflects how strongly Mg²⁺ is stabilised by hydration once it enters solution.' },
+
+  { id:'fe_cuso4', pair:['fe','cuso4'], stoich:{fe:1,cuso4:1}, name:'Iron + Copper Sulfate',
+    eq:'Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)', dH:-149,
+    prod:[{name:'Iron(II) Sulfate', formula:'FeSO₄', M:151.9, n:1, ions:['Fe²⁺','SO₄²⁻'], color:'#4ade80', solColor:[74,222,128,0.5]}],
+    fx:{explode:0, sparks:0, smoke:{c:'200,200,200', n:8}, bubbles:4, flame:null},
+    explain:'A single-displacement (redox) reaction. Iron is more reactive than copper, so it reduces Cu²⁺ to metallic copper while being oxidised to Fe²⁺. The blue solution fades to pale green and a pink-brown copper coating appears on the iron.' },
+
+  { id:'cuo_hcl', pair:['cuo','hcl'], stoich:{cuo:1,hcl:2}, name:'Copper Oxide + Acid',
+    eq:'CuO(s) + 2HCl(aq) → CuCl₂(aq) + H₂O(l)', dH:-85,
+    prod:[{name:'Copper(II) Chloride', formula:'CuCl₂', M:134.45, n:1, ions:['Cu²⁺','Cl⁻'], color:'#22d3ee', solColor:[34,211,238,0.5]}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'180,230,240', n:10}, bubbles:6, flame:null},
+    explain:'Basic oxides react with acids to give a salt and water. The black CuO dissolves and the solution turns blue-green as the [Cu(H₂O)₆]²⁺ complex forms. This is the standard "oxide + acid" pattern that defines a BASIC oxide.' },
+
+  { id:'al2o3_hcl', pair:['al2o3','hcl'], stoich:{al2o3:1,hcl:6}, name:'Aluminium Oxide + Acid',
+    eq:'Al₂O₃(s) + 6HCl(aq) → 2AlCl₃(aq) + 3H₂O(l)', dH:-120,
+    prod:[{name:'Aluminium Chloride', formula:'AlCl₃', M:133.34, n:2, ions:['Al³⁺','Cl⁻'], color:'#f8fafc'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'235,235,235', n:10}, bubbles:6, flame:null},
+    explain:'Al₂O₃ is AMPHOTERIC — it can react with BOTH acids and bases. Here it behaves as a base, neutralising HCl to form aluminium chloride and water.' },
+
+  { id:'al2o3_naoh', pair:['al2o3','naoh'], stoich:{al2o3:1,naoh:2}, name:'Aluminium Oxide + Base',
+    eq:'Al₂O₃(s) + 2NaOH(aq) → 2NaAlO₂(aq) + H₂O(l)', dH:-90,
+    prod:[{name:'Sodium Aluminate', formula:'NaAlO₂', M:81.97, n:2, ions:['Na⁺','AlO₂⁻'], color:'#f8fafc'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'235,235,235', n:8}, bubbles:6, flame:null},
+    explain:'The OTHER half of being amphoteric: Al₂O₃ also dissolves in strong alkali to give an aluminate salt. This dual behaviour is why aluminium metal resists corrosion in air but is attacked by both strong acids and strong bases.' },
+
+  { id:'zno_hcl', pair:['zno','hcl'], stoich:{zno:1,hcl:2}, name:'Zinc Oxide + Acid',
+    eq:'ZnO(s) + 2HCl(aq) → ZnCl₂(aq) + H₂O(l)', dH:-90,
+    prod:[{name:'Zinc Chloride', formula:'ZnCl₂', M:136.29, n:1, ions:['Zn²⁺','Cl⁻'], color:'#e2e8f0'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'240,240,240', n:8}, bubbles:4, flame:null},
+    explain:'ZnO is amphoteric, so it behaves as a base toward strong acids. The white oxide dissolves to give a colourless zinc chloride solution.' },
+
+  { id:'zno_naoh', pair:['zno','naoh'], stoich:{zno:1,naoh:2}, name:'Zinc Oxide + Base',
+    eq:'ZnO(s) + 2NaOH(aq) → Na₂ZnO₂(aq) + H₂O(l)', dH:-80,
+    prod:[{name:'Sodium Zincate', formula:'Na₂ZnO₂', M:143.4, n:1, ions:['Na⁺','ZnO₂²⁻'], color:'#e2e8f0'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'240,240,240', n:8}, bubbles:4, flame:null},
+    explain:'Here ZnO acts as an ACID, reacting with the strong base NaOH to form a zincate salt. Amphoteric oxides like ZnO and Al₂O₃ sit right at the borderline between metallic and non-metallic behaviour.' },
+
+  { id:'nh3_so2', pair:['nh3','so2'], stoich:{nh3:2,so2:1}, name:'Ammonia + Sulfur Dioxide',
+    eq:'2NH₃(aq) + SO₂(g) + H₂O(l) → (NH₄)₂SO₃(aq)', dH:-110,
+    prod:[{name:'Ammonium Sulfite', formula:'(NH₄)₂SO₃', M:116.14, n:1, ions:['NH₄⁺','SO₃²⁻'], color:'#f1f5f9'}], gas:null,
+    fx:{explode:0, sparks:0, smoke:{c:'250,250,250', n:14}, bubbles:10, flame:null},
+    explain:'Acidic oxide + base → salt. Ammonia solution is basic, so it neutralises the acidic SO₂ to form ammonium sulfite. Industrially this exact reaction is used in flue-gas desulfurisation to scrub SO₂ out of smokestack emissions.' },
+
+  { id:'kmno4_hcl', pair:['kmno4','hcl'], stoich:{kmno4:2,hcl:16}, name:'Permanganate + Concentrated Acid',
+    eq:'2KMnO₄ + 16HCl → 2KCl + 2MnCl₂ + 8H₂O + 5Cl₂↑', dH:-380,
+    prod:[{name:'Manganese(II) Chloride', formula:'MnCl₂', M:125.84, n:2, ions:['Mn²⁺','Cl⁻'], color:'#fda4af'}],
+    gas:{formula:'Cl₂', name:'Chlorine', n:5},
+    fx:{explode:0.5, sparks:10, smoke:{c:'190,220,150', n:40}, bubbles:40, flame:null},
+    hazard:{level:'HIGH', msg:'Chlorine gas is TOXIC. This reaction generates large volumes of Cl₂ which damages the respiratory tract. Only perform in a fume cupboard.'},
+    explain:'Permanganate (MnO₄⁻) is a powerful oxidising agent. In strongly acidic solution it oxidises chloride ions to chlorine gas while being reduced from Mn(VII) to Mn(II). The purple colour disappears as Mn²⁺ (nearly colourless pink) forms.' }
 ];
 
-const ION_COLORS = {
-  'Cu2+': [ 34,118,225], 'Fe2+': [110,165,120], 'Fe3+': [190,125, 45],
-  'MnO4-':[150, 15,115], 'I2':   [165,115, 35], 'I-':   [225,225,205],
-  'Ni2+': [ 60,180,120], 'Co2+': [220,110,170],
-};
-
-const PRECIP_RULES = [
-  { a:'Ag+',  b:'Cl-',    ra:1, rb:1, prod:'AgCl',   col:[248,248,250], name:'Silver Chloride' },
-  { a:'Pb2+', b:'I-',     ra:1, rb:2, prod:'PbI2',   col:[250,208, 40], name:'Lead(II) Iodide' },
-  { a:'Ba2+', b:'SO4^2-', ra:1, rb:1, prod:'BaSO4',  col:[250,250,250], name:'Barium Sulfate' },
-  { a:'Cu2+', b:'OH-',    ra:1, rb:2, prod:'Cu(OH)2',col:[120,190,240], name:'Copper(II) Hydroxide' },
-  { a:'Fe3+', b:'OH-',    ra:1, rb:3, prod:'Fe(OH)3',col:[150, 80, 40], name:'Iron(III) Hydroxide' },
-  { a:'Fe2+', b:'OH-',    ra:1, rb:2, prod:'Fe(OH)2',col:[110,160,110], name:'Iron(II) Hydroxide' },
-  { a:'Ca2+', b:'CO3^2-', ra:1, rb:1, prod:'CaCO3',  col:[245,245,240], name:'Calcium Carbonate' },
-  { a:'Pb2+', b:'SO4^2-', ra:1, rb:1, prod:'PbSO4',  col:[250,250,250], name:'Lead(II) Sulfate' },
-  { a:'Ag+',  b:'OH-',    ra:1, rb:1, prod:'AgOH',   col:[230,225,215], name:'Silver Hydroxide' },
-  { a:'Mg2+', b:'OH-',    ra:1, rb:2, prod:'Mg(OH)2',col:[248,248,248], name:'Magnesium Hydroxide' },
-];
-
-/* ══════════════════════════════════════════════════════════════════════════
-   AUDIO ENGINE — Web Audio API synthesis
-   ══════════════════════════════════════════════════════════════════════════ */
-const LabAudio = {
-  ctx:null, master:null, ready:false, enabled:true,
-  fizzGain:null, hissGain:null, boilGain:null, boilOsc:null, boilLfo:null,
-
-  init(){
-    if (this.ready) return;
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) return;
-    this.ctx = new AC();
-    this.master = this.ctx.createGain();
-    this.master.gain.value = 0.30;
-    this.master.connect(this.ctx.destination);
-
-    const len = this.ctx.sampleRate * 2;
-    const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-    this.noiseBuf = buf;
-
-    const fs = this.ctx.createBufferSource(); fs.buffer = buf; fs.loop = true;
-    const ff = this.ctx.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 4800; ff.Q.value = 0.7;
-    this.fizzGain = this.ctx.createGain(); this.fizzGain.gain.value = 0;
-    fs.connect(ff).connect(this.fizzGain).connect(this.master);
-    fs.start();
-
-    const hs = this.ctx.createBufferSource(); hs.buffer = buf; hs.loop = true;
-    const hf = this.ctx.createBiquadFilter(); hf.type = 'highpass'; hf.frequency.value = 1800;
-    this.hissGain = this.ctx.createGain(); this.hissGain.gain.value = 0;
-    hs.connect(hf).connect(this.hissGain).connect(this.master);
-    hs.start();
-
-    this.boilOsc = this.ctx.createOscillator(); this.boilOsc.type = 'sine'; this.boilOsc.frequency.value = 78;
-    const bfilt = this.ctx.createBiquadFilter(); bfilt.type = 'lowpass'; bfilt.frequency.value = 420;
-    this.boilGain = this.ctx.createGain(); this.boilGain.gain.value = 0;
-    this.boilLfo = this.ctx.createOscillator(); this.boilLfo.type = 'sine'; this.boilLfo.frequency.value = 5.5;
-    const lfoGain = this.ctx.createGain(); lfoGain.gain.value = 0.45;
-    this.boilLfo.connect(lfoGain).connect(this.boilGain.gain);
-    this.boilOsc.connect(bfilt).connect(this.boilGain).connect(this.master);
-    this.boilOsc.start(); this.boilLfo.start();
-
-    this.ready = true;
-  },
-
-  resume(){ if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); },
-  setFizz(v){ if (this.ready) this.fizzGain.gain.setTargetAtTime(this.enabled ? Math.min(v, 0.5) : 0, this.ctx.currentTime, 0.08); },
-  setHiss(v){ if (this.ready) this.hissGain.gain.setTargetAtTime(this.enabled ? Math.min(v, 0.4) : 0, this.ctx.currentTime, 0.08); },
-  setBoil(v){ if (this.ready) this.boilGain.gain.setTargetAtTime(this.enabled ? Math.min(v, 0.35) : 0, this.ctx.currentTime, 0.1); },
-
-  pop(){
-    if (!this.ready || !this.enabled) return;
-    const t = this.ctx.currentTime;
-    const o = this.ctx.createOscillator(); o.type = 'sine';
-    const f0 = 180 + Math.random() * 480;
-    o.frequency.setValueAtTime(f0, t);
-    o.frequency.exponentialRampToValueAtTime(55, t + 0.09);
-    const g = this.ctx.createGain();
-    g.gain.setValueAtTime(0.22, t);
-    g.gain.exponentialRampToValueAtTime(0.0008, t + 0.11);
-    o.connect(g).connect(this.master);
-    o.start(t); o.stop(t + 0.13);
-  },
-
-  click(){
-    if (!this.ready || !this.enabled) return;
-    const t = this.ctx.currentTime;
-    const o = this.ctx.createOscillator(); o.type = 'triangle';
-    o.frequency.setValueAtTime(2400 + Math.random() * 900, t);
-    o.frequency.exponentialRampToValueAtTime(900, t + 0.05);
-    const g = this.ctx.createGain();
-    g.gain.setValueAtTime(0.10, t);
-    g.gain.exponentialRampToValueAtTime(0.0005, t + 0.06);
-    o.connect(g).connect(this.master);
-    o.start(t); o.stop(t + 0.07);
-  },
-
-  whirr(){
-    if (!this.ready || !this.enabled) return;
-    const t = this.ctx.currentTime;
-    const o = this.ctx.createOscillator(); o.type = 'sawtooth';
-    o.frequency.setValueAtTime(90, t);
-    o.frequency.linearRampToValueAtTime(160, t + 0.25);
-    const f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 700;
-    const g = this.ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.linearRampToValueAtTime(0.07, t + 0.05);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
-    o.connect(f).connect(g).connect(this.master);
-    o.start(t); o.stop(t + 0.55);
-  },
-
-  explode(){
-    if (!this.ready || !this.enabled) return;
-    const t = this.ctx.currentTime;
-    const o = this.ctx.createOscillator(); o.type = 'sine';
-    o.frequency.setValueAtTime(130, t);
-    o.frequency.exponentialRampToValueAtTime(24, t + 0.65);
-    const g = this.ctx.createGain();
-    g.gain.setValueAtTime(0.85, t);
-    g.gain.exponentialRampToValueAtTime(0.0008, t + 0.85);
-    o.connect(g).connect(this.master);
-    o.start(t); o.stop(t + 0.9);
-    const n = this.ctx.createBufferSource(); n.buffer = this.noiseBuf;
-    const nf = this.ctx.createBiquadFilter(); nf.type = 'lowpass'; nf.frequency.value = 1300;
-    const ng = this.ctx.createGain();
-    ng.gain.setValueAtTime(0.7, t);
-    ng.gain.exponentialRampToValueAtTime(0.0008, t + 0.55);
-    n.connect(nf).connect(ng).connect(this.master);
-    n.start(t); n.stop(t + 0.6);
-  },
-
-  shatter(){
-    if (!this.ready || !this.enabled) return;
-    const t = this.ctx.currentTime;
-    const n = this.ctx.createBufferSource(); n.buffer = this.noiseBuf;
-    const f = this.ctx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.4;
-    f.frequency.setValueAtTime(3200, t);
-    f.frequency.exponentialRampToValueAtTime(11000, t + 0.32);
-    const g = this.ctx.createGain();
-    g.gain.setValueAtTime(0.55, t);
-    g.gain.exponentialRampToValueAtTime(0.0005, t + 0.6);
-    n.connect(f).connect(g).connect(this.master);
-    n.start(t); n.stop(t + 0.65);
-    for (let i = 0; i < 7; i++) {
-      const to = this.ctx.createOscillator(); to.type = 'triangle';
-      const tt = t + i * 0.035;
-      to.frequency.setValueAtTime(3200 + Math.random() * 4200, tt);
-      const tg = this.ctx.createGain();
-      tg.gain.setValueAtTime(0.07, tt);
-      tg.gain.exponentialRampToValueAtTime(0.0004, tt + 0.2);
-      to.connect(tg).connect(this.master);
-      to.start(tt); to.stop(tt + 0.22);
-    }
-  },
-
-  warn(){
-    if (!this.ready || !this.enabled) return;
-    const t = this.ctx.currentTime;
-    for (let i = 0; i < 2; i++){
-      const tt = t + i * 0.18;
-      const o = this.ctx.createOscillator(); o.type = 'square';
-      o.frequency.setValueAtTime(880, tt);
-      o.frequency.exponentialRampToValueAtTime(440, tt + 0.12);
-      const g = this.ctx.createGain();
-      g.gain.setValueAtTime(0.06, tt);
-      g.gain.exponentialRampToValueAtTime(0.0003, tt + 0.15);
-      o.connect(g).connect(this.master);
-      o.start(tt); o.stop(tt + 0.17);
-    }
-  }
-};
-
-/* ══════════════════════════════════════════════════════════════════════════
-   SIMULATION STATE
-   ══════════════════════════════════════════════════════════════════════════ */
+/* ───────────── ENGINE STATE ───────────── */
 const state = {
-  volume: 250, temp: 25, mass: 250,
-  ions: {}, solids: {}, fuels: {}, precip: {}, ind: {},
-  dH: 0, pH: 7,
+  volume: 0, temp: 25, ph: 7,
   flame: 0, stir: 0, drip: 0,
-  shattered: false, paused: false,
-  buretteFrac: 1, buretteChem: 'naoh',
-  eq: new Set(),
-  fluidColor: [200, 225, 240],
-  bubbles: [], steam: [], smoke: [], precipParticles: [], drops: [], ripples: [],
-  flash: 0, shake: 0, gasRate: 0, steamRate: 0, stirPhase: 0, tick: 0,
-  gasMoles: { H2:0, CO2:0, O2:0, SO2:0 },
-  lastDeltaH_kJmol: 0,
-  lastReactionType: '—',
-  lastReactionEq: '—',
+  contents: [], gasMoles: 0, heat: 0, enthalpy: 0, precipMass: 0,
+  shake: 0, flameTint: null,
+  paused: false, pending: null, approved: new Set(),
+  lastReaction: null, equations: [],
+  sol: {r:150, g:205, b:235, a:0.30},
+  lastAddedId: null, dripAccum: 0, boilingAccum: 0, fizzLevel: 0
 };
 
-let pendingAddition = null;
+/* ═══════════════════════════════════════════════════════════════
+   WEB AUDIO SYNTHESIZER
+   ═══════════════════════════════════════════════════════════════ */
+const Audio2 = (() => {
+  let ac = null, master = null, noiseBuf = null;
+  let hissGain = null, fizzGain = null, hissFilter = null, fizzFilter = null;
+  let ambientBuilt = false;
 
-const canvas = document.getElementById('stage');
-const ctx = canvas.getContext('2d');
-let ACTIVE_CAT = 'All';
-const QTY = {};
+  function init() {
+    if (ac) return;
+    try {
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      master = ac.createGain();
+      master.gain.value = 0.55;
+      master.connect(ac.destination);
+      const len = ac.sampleRate * 2;
+      noiseBuf = ac.createBuffer(1, len, ac.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    } catch (e) { ac = null; }
+  }
+  function resume() { init(); if (ac && ac.state === 'suspended') ac.resume(); }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   UTILITIES
-   ══════════════════════════════════════════════════════════════════════════ */
-const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
-const getIon = k => state.ions[k] || 0;
-const setIon = (k,v) => { state.ions[k] = Math.max(0, v); if (state.ions[k] < 1e-13) delete state.ions[k]; };
-const addIon = (k,v) => setIon(k, getIon(k) + v);
+  function buildAmbient() {
+    if (!ac || ambientBuilt) return;
+    ambientBuilt = true;
+    // Bunsen hiss
+    const s1 = ac.createBufferSource(); s1.buffer = noiseBuf; s1.loop = true;
+    hissFilter = ac.createBiquadFilter(); hissFilter.type = 'bandpass';
+    hissFilter.frequency.value = 2400; hissFilter.Q.value = 0.7;
+    hissGain = ac.createGain(); hissGain.gain.value = 0;
+    s1.connect(hissFilter); hissFilter.connect(hissGain); hissGain.connect(master);
+    s1.start();
+    // Gas fizz
+    const s2 = ac.createBufferSource(); s2.buffer = noiseBuf; s2.loop = true;
+    fizzFilter = ac.createBiquadFilter(); fizzFilter.type = 'lowpass';
+    fizzFilter.frequency.value = 1100;
+    fizzGain = ac.createGain(); fizzGain.gain.value = 0;
+    s2.connect(fizzFilter); fizzFilter.connect(fizzGain); fizzGain.connect(master);
+    s2.start();
+  }
 
-function kFactor(Ea_kJ, tempC){
-  const T = tempC + 273.15, T0 = 298.15;
-  const R = 8.314e-3;
-  return Math.exp(-(Ea_kJ / R) * (1 / T - 1 / T0));
-}
+  function setHiss(level) {
+    init(); if (!ac) return; buildAmbient();
+    if (hissGain) hissGain.gain.setTargetAtTime(Math.max(0, level) * 0.055, ac.currentTime, 0.08);
+  }
+  function setFizz(level) {
+    init(); if (!ac) return; buildAmbient();
+    if (fizzGain) fizzGain.gain.setTargetAtTime(Math.max(0, level) * 0.06, ac.currentTime, 0.06);
+  }
 
-function heatCapacity(){ return 4.18 * Math.max(0, state.volume) + 82; }
-function addHeat(joules){ state.temp += joules / heatCapacity(); }
-function nowStamp(){ return new Date().toTimeString().slice(0,8); }
-
-function computeMoles(chem, qty){
-  if (chem.st === 's') return qty / chem.mm;
-  if (chem.M) return (qty / 1000) * chem.M;
-  if (chem.dens) return (qty * chem.dens) / chem.mm;
-  return 0;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   HAZARD INTERCEPT ENGINE
-   ══════════════════════════════════════════════════════════════════════════ */
-function detectHazard(chem, qty){
-  const s = state;
-  const hazards = [];
-  const moles = computeMoles(chem, qty);
-  const V = Math.max(0.0005, s.volume / 1000);
-
-  if (chem.alkali && s.volume > 0.5 && moles > 0.03){
-    hazards.push({
-      icons:['💥','🔥','☣️'], level:'CRITICAL',
-      title:'EXTREME EXOTHERMIC REACTION',
-      desc:`${chem.f} + H₂O → rapid hydrogen evolution, ignition & thermal runaway.`,
-      detail:`Detected: ${(moles*1000).toFixed(1)} mmol ${chem.f} into ${s.volume.toFixed(0)} mL H₂O. Reaction may shatter vessel.`
+  function click() {
+    resume(); if (!ac) return;
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.setValueAtTime(1400, ac.currentTime);
+    o.frequency.exponentialRampToValueAtTime(600, ac.currentTime + 0.06);
+    g.gain.setValueAtTime(0.10, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.08);
+    o.connect(g); g.connect(master); o.start(); o.stop(ac.currentTime + 0.09);
+  }
+  function bubble() {
+    resume(); if (!ac) return;
+    const t = ac.currentTime;
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(280 + Math.random() * 260, t);
+    o.frequency.exponentialRampToValueAtTime(700 + Math.random() * 500, t + 0.07);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.035, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.1);
+  }
+  function explosion(power = 1) {
+    resume(); if (!ac) return;
+    const t = ac.currentTime;
+    // noise burst
+    const s = ac.createBufferSource(); s.buffer = noiseBuf;
+    const f = ac.createBiquadFilter(); f.type = 'lowpass';
+    f.frequency.setValueAtTime(1800, t);
+    f.frequency.exponentialRampToValueAtTime(120, t + 0.5 * power);
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.min(0.6, 0.35 * power), t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55 * power);
+    s.connect(f); f.connect(g); g.connect(master);
+    s.start(t); s.stop(t + 0.7 * power);
+    // sub thump
+    const o = ac.createOscillator(), og = ac.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(140, t);
+    o.frequency.exponentialRampToValueAtTime(35, t + 0.35 * power);
+    og.gain.setValueAtTime(0.0001, t);
+    og.gain.exponentialRampToValueAtTime(0.5 * power, t + 0.02);
+    og.gain.exponentialRampToValueAtTime(0.0001, t + 0.45 * power);
+    o.connect(og); og.connect(master); o.start(t); o.stop(t + 0.5 * power);
+  }
+  function pour() {
+    resume(); if (!ac) return;
+    const t = ac.currentTime;
+    const s = ac.createBufferSource(); s.buffer = noiseBuf;
+    const f = ac.createBiquadFilter(); f.type = 'bandpass';
+    f.frequency.setValueAtTime(900, t);
+    f.frequency.linearRampToValueAtTime(1600, t + 0.35);
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.09, t + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+    s.connect(f); f.connect(g); g.connect(master);
+    s.start(t); s.stop(t + 0.5);
+  }
+  function glass() {
+    resume(); if (!ac) return;
+    const t = ac.currentTime;
+    [2100, 3150, 4300].forEach((fr, i) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine'; o.frequency.value = fr;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.05 / (i + 1), t + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.2);
     });
   }
+  return { resume, click, bubble, explosion, pour, glass, setHiss, setFizz, init };
+})();
 
-  if (chem.ions && moles > 0.05 && s.volume > 5){
-    const addsH  = !!chem.ions['H+'] && !chem.weakAcid;
-    const addsOH = !!chem.ions['OH-'];
-    const existingOH = getIon('OH-') / V;
-    const existingH  = getIon('H+') / V;
-    if (addsH && existingOH > 0.5 && (chem.M || 1) >= 1.0){
-      hazards.push({
-        icons:['🔥','☣️'], level:'HIGH',
-        title:'VIOLENT NEUTRALISATION',
-        desc:'Concentrated strong acid + strong base → intense exotherm, spatter & burn risk.',
-        detail:`Detected: adding ${moles.toFixed(3)} mol H⁺ to a solution with [OH⁻] ≈ ${existingOH.toFixed(2)} M.`
-      });
-    }
-    if (addsOH && existingH > 0.5 && (chem.M || 1) >= 1.0){
-      hazards.push({
-        icons:['🔥','☣️'], level:'HIGH',
-        title:'VIOLENT NEUTRALISATION',
-        desc:'Concentrated strong base + strong acid → intense exotherm, spatter & burn risk.',
-        detail:`Detected: adding ${moles.toFixed(3)} mol OH⁻ to a solution with [H⁺] ≈ ${existingH.toFixed(2)} M.`
-      });
-    }
-  }
+/* ═══════════════════════════════════════════════════════════════
+   PARTICLE SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+const particles = [];
+const MAX_PARTICLES = 750;
 
-  if (chem.acidicOxide && s.volume > 0.5){
-    const isP = chem.id === 'p4o10';
-    hazards.push({
-      icons:['☣️','🔥'], level: isP ? 'HIGH' : 'MODERATE',
-      title: isP ? 'PHOSPHORUS PENTOXIDE HYDROLYSIS' : 'ACIDIC OXIDE HYDROLYSIS',
-      desc: isP ? 'P₄O₁₀ + 6H₂O → 4H₃PO₄ — strongly exothermic, corrosive acid mist.'
-                : `${chem.n} + H₂O → corrosive acid formation, exothermic.`,
-      detail:'Fume hood recommended. Vessel may heat rapidly.'
-    });
-  }
-
-  if (chem.id === 'cao' && s.volume > 0.5){
-    hazards.push({
-      icons:['🔥','☣️'], level:'HIGH',
-      title:'LIME SLAKING — INTENSE EXOTHERM',
-      desc:'CaO + H₂O → Ca(OH)₂, ΔH = −350 kJ·mol⁻¹. Rapid boiling & spatter.',
-      detail:'Thermal burn & caustic splash risk. Do not add rapidly.'
-    });
-  }
-
-  if (chem.toxic){
-    hazards.push({
-      icons:['☣️'], level:'CRITICAL',
-      title:'TOXIC GAS RELEASE',
-      desc: chem.id === 'co' ? 'Carbon monoxide — odourless, lethal, binds haemoglobin irreversibly.'
-          : chem.id === 'no' ? 'Nitric oxide — toxic, oxidises to NO₂ in air; pulmonary oedema risk.'
-          : `${chem.n} — respiratory & mucosal irritant.`,
-      detail:'Fume hood required. Do not inhale vapours.'
-    });
-  }
-
-  return hazards.length ? hazards : null;
+function pushParticle(p) {
+  if (particles.length >= MAX_PARTICLES) particles.shift();
+  particles.push(p);
 }
 
-function showHazardModal(chem, qty, hazards){
-  const modal = document.getElementById('safetyModal');
-  const top = hazards[0];
-  const unit = chem.st === 's' ? 'g' : 'mL';
-
-  const badge = document.getElementById('hazardLevelBadge');
-  const levelColors = {
-    CRITICAL: 'bg-red-700 text-white border-red-500',
-    HIGH:     'bg-orange-700 text-white border-orange-500',
-    MODERATE: 'bg-amber-700 text-white border-amber-500'
-  };
-  badge.textContent = top.level;
-  badge.className = 'px-2.5 py-1 rounded text-[9px] font-black tracking-wider border ' + (levelColors[top.level] || levelColors.HIGH);
-
-  const iconsWrap = document.getElementById('hazardIcons');
-  const iconMap = { '💥': { c:'text-orange-300' }, '🔥': { c:'text-red-400' }, '☣️': { c:'text-lime-400' }, '⚠️': { c:'text-amber-300' } };
-  const allIcons = [...new Set(hazards.flatMap(h => h.icons))];
-  iconsWrap.innerHTML = allIcons.map(i => `<span class="hazard-icon hazard-blink ${iconMap[i] ? iconMap[i].c : 'text-red-300'}">${i}</span>`).join('');
-
-  document.getElementById('hazardTitle').textContent = top.title;
-  document.getElementById('hazardDesc').textContent  = top.desc;
-  document.getElementById('hazardDetail').innerHTML  = hazards.map(h => `<div>• ${h.detail}</div>`).join('');
-  document.getElementById('hazardPending').textContent = `${qty.toFixed(1)} ${unit} of ${chem.f} (${chem.n})`;
-
-  modal.classList.remove('hidden');
-  LabAudio.warn();
-  log('🛡️ SAFETY INTERLOCK — hazard detected, engine paused.', 'warn');
-  hazards.forEach(h => log(`   ${h.icons.join(' ')} ${h.title}`, 'danger'));
-}
-
-function hideHazardModal(){ document.getElementById('safetyModal').classList.add('hidden'); }
-
-/* ══════════════════════════════════════════════════════════════════════════
-   LOG & EQUATION TERMINAL
-   ══════════════════════════════════════════════════════════════════════════ */
-function log(msg, type){
-  const el = document.getElementById('log');
-  const colors = { info:'#7dd3fc', warn:'#fbbf24', danger:'#f87171', good:'#6ee7b7', react:'#c4b5fd' };
-  const div = document.createElement('div');
-  div.className = 'log-line';
-  div.innerHTML = `<span class="text-slate-600">[${nowStamp()}]</span> <span style="color:${colors[type]||'#94a3b8'}">${msg}</span>`;
-  el.insertBefore(div, el.firstChild);
-  while (el.children.length > 200) el.removeChild(el.lastChild);
-  const lc = document.getElementById('logCount');
-  if (lc) lc.textContent = el.children.length + ' entries';
-}
-function clearLog(){
-  document.getElementById('log').innerHTML = '';
-  const lc = document.getElementById('logCount');
-  if (lc) lc.textContent = '0 entries';
-}
-
-function eqAdd(str, type){
-  const key = str + '|' + (type||'');
-  if (state.eq.has(key)) return;
-  state.eq.add(key);
-  const el = document.getElementById('eqList');
-  if (el.querySelector('.italic')) el.innerHTML = '';
-
-  const typeColors = {
-    'NEUTRALIZATION': 'bg-emerald-700 text-emerald-100',
-    'PRECIPITATION':  'bg-cyan-700 text-cyan-100',
-    'REDOX':          'bg-violet-700 text-violet-100',
-    'SINGLE DISPL.':  'bg-amber-700 text-amber-100',
-    'DOUBLE DISPL.':  'bg-blue-700 text-blue-100',
-    'DECOMPOSITION':  'bg-rose-700 text-rose-100',
-    'COMBUSTION':     'bg-orange-700 text-orange-100',
-    'GAS EVOLUTION':  'bg-teal-700 text-teal-100',
-    'ACID-BASE':      'bg-emerald-700 text-emerald-100',
-    'HYDROLYSIS':     'bg-lime-700 text-lime-100',
-  };
-  const chip = type ? `<span class="eq-type ${typeColors[type]||'bg-slate-700 text-slate-200'}">${type}</span>` : '';
-
-  const d = document.createElement('div');
-  d.className = 'eq-item text-amber-200/90 fade-in';
-  d.innerHTML = chip ? `<div class="mb-1">${chip}</div><div>${str}</div>` : `<div>${str}</div>`;
-  el.insertBefore(d, el.firstChild);
-  while (el.children.length > 30) el.removeChild(el.lastChild);
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   REAGENT PANEL BUILD
-   ══════════════════════════════════════════════════════════════════════════ */
-function buildTabs(){
-  const wrap = document.getElementById('catTabs');
-  wrap.innerHTML = '';
-  CATS.forEach(c => {
-    const b = document.createElement('div');
-    b.className = 'cat-tab' + (c === ACTIVE_CAT ? ' active' : '');
-    b.textContent = c;
-    b.onclick = () => { ACTIVE_CAT = c; buildTabs(); buildShelf(); };
-    wrap.appendChild(b);
-  });
-}
-
-function buildShelf(){
-  const shelf = document.getElementById('shelf');
-  shelf.innerHTML = '';
-  const list = CHEMS.filter(c => ACTIVE_CAT === 'All' || c.c === ACTIVE_CAT);
-  document.getElementById('reagentCount').textContent = list.length + ' items';
-
-  list.forEach(c => {
-    if (QTY[c.id] === undefined) QTY[c.id] = c.def;
-    const unit = c.st === 's' ? 'g' : 'mL';
-    const row = document.createElement('div');
-    row.className = 'reagent-row';
-    row.innerHTML = `
-      <div class="flex-1 min-w-0">
-        <div class="text-[10.5px] font-semibold text-slate-100 truncate leading-tight">${c.n}</div>
-        <div class="text-[8.5px] text-slate-500 font-mono truncate leading-tight">${c.f}</div>
-      </div>
-      <input type="number" inputmode="decimal" min="0.1" max="${c.max}" step="0.1"
-             value="${QTY[c.id]}" data-qty="${c.id}"
-             class="w-[50px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1.5 py-[2px] text-[10px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
-      <span class="text-[8.5px] text-slate-500 w-[18px] shrink-0 font-mono">${unit}</span>
-      <button class="vl-add shrink-0" data-add="${c.id}">+ ADD</button>`;
-    shelf.appendChild(row);
-  });
-
-  shelf.querySelectorAll('[data-qty]').forEach(inp => {
-    inp.addEventListener('input', e => {
-      const id = e.target.dataset.qty;
-      const v = parseFloat(e.target.value);
-      QTY[id] = isNaN(v) ? 0 : v;
-    });
-    inp.addEventListener('keydown', e => {
-      if (e.key === 'Enter'){
-        const id = e.target.dataset.qty;
-        const chem = CHEMS.find(x => x.id === id);
-        if (QTY[id] > 0){ addChemical(chem, QTY[id]); LabAudio.click(); }
-      }
-    });
-  });
-
-  shelf.querySelectorAll('[data-add]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const id = e.target.dataset.add;
-      const chem = CHEMS.find(x => x.id === id);
-      const q = QTY[id];
-      if (!q || q <= 0){ log('Enter a valid quantity first', 'warn'); return; }
-      addChemical(chem, q);
-      LabAudio.click();
-    });
-  });
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   BURETTE SELECTOR
-   ══════════════════════════════════════════════════════════════════════════ */
-function buildBuretteSel(){
-  const sel = document.getElementById('buretteSel');
-  sel.innerHTML = '';
-  CHEMS.filter(c => c.st === 'l' && (c.ions || c.weakAcid || c.weakBase) && c.id !== 'h2o').forEach(c => {
-    const o = document.createElement('option');
-    o.value = c.id; o.textContent = `${c.n} (${c.M ? c.M.toFixed(2) + ' M' : '—'})`;
-    sel.appendChild(o);
-  });
-  sel.value = 'naoh';
-  sel.onchange = () => {
-    state.buretteChem = sel.value;
-    state.buretteFrac = 1;
-    log(`Burette charged with ${CHEMS.find(c => c.id === sel.value).n}`, 'info');
-  };
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   CHEMICAL INTRODUCTION
-   ══════════════════════════════════════════════════════════════════════════ */
-function addChemical(chem, qty, skipHazardCheck){
-  if (state.shattered) { log('Vessel compromised — flush before adding reagents.', 'danger'); return; }
-  if (qty <= 0) return;
-
-  if (!skipHazardCheck){
-    const hazards = detectHazard(chem, qty);
-    if (hazards){
-      pendingAddition = { chem, qty };
-      state.paused = true;
-      showHazardModal(chem, qty, hazards);
-      return;
-    }
-  }
-
-  let moles = computeMoles(chem, qty);
-
-  if (chem.ind){
-    state.ind[chem.ind] = (state.ind[chem.ind] || 0) + qty;
-    state.volume += qty; state.mass += qty;
-    log(`Added ${qty.toFixed(2)} mL ${chem.n}`, 'info');
-    return;
-  }
-
-  if (chem.fuel){
-    state.fuels[chem.id] = (state.fuels[chem.id] || 0) + moles;
-    state.volume += qty; state.mass += qty;
-    log(`Added ${qty.toFixed(1)} mL ${chem.n} (${moles.toFixed(4)} mol)`, 'info');
-    return;
-  }
-
-  if (chem.st === 'l'){ state.volume += qty; state.mass += qty; }
-  else { state.mass += qty; state.volume += qty * 0.35; }
-
-  let reacted = false;
-  if (chem.ions){ for (const [k, v] of Object.entries(chem.ions)) addIon(k, v * moles); reacted = true; }
-  if (chem.weakAcid) addIon('CH3COOH', moles);
-  if (chem.weakBase) addIon('NH3', moles);
-
-  if (!chem.soluble && chem.st === 's' && !chem.ions){
-    state.solids[chem.id] = (state.solids[chem.id] || 0) + moles;
-    reacted = true;
-  }
-
-  if (chem.dhSol && reacted){
-    addHeat(-chem.dhSol * moles * 1000);
-    state.dH += chem.dhSol * moles;
-  }
-
-  const unit = chem.st === 's' ? 'g' : 'mL';
-  log(`Added ${qty.toFixed(1)} ${unit} ${chem.n} → ${moles.toFixed(4)} mol`, 'info');
-
-  if (chem.alkali && moles > 0.055){
-    setTimeout(() => triggerExplosion(`${chem.n} + H₂O runaway`), 220);
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   THERMODYNAMIC KERNEL
-   ══════════════════════════════════════════════════════════════════════════ */
-function updateThermo(dt){
-  const s = state;
-  const flameTemp = (s.flame / 100) * 1500;
-  const flamePower = (s.flame / 100) * 4500;
-
-  let P = 0;
-  if (s.flame > 0 && s.temp < flameTemp){
-    P += flamePower * (1 - 0.45 * (s.temp / Math.max(1, flameTemp)));
-  }
-  P -= (s.temp - 25) * 0.95;
-
-  const C = heatCapacity();
-  s.temp += (P * dt) / C;
-
-  if (s.temp > 100 && s.volume > 0.01){
-    const excessJ = (s.temp - 100) * C;
-    s.temp = 100;
-    const evapG = excessJ / 700;
-    const evap = Math.min(evapG, s.volume);
-    s.volume -= evap;
-    s.mass   -= evap;
-    s.steamRate += evap * 4;
-  }
-
-  if (s.temp < 0) s.temp = 0;
-
-  if (s.temp > 1200 && !s.shattered){
-    triggerShatter('Thermal shock — borosilicate limit exceeded (T > 1200 °C)');
-  }
-
-  const boilLevel = s.temp >= 99.5 && s.volume > 0 ? clamp((s.temp - 99) / 3, 0, 1) : 0;
-  LabAudio.setBoil(boilLevel * 0.9);
-  LabAudio.setHiss(s.flame / 100 * 0.55);
-  LabAudio.setFizz(clamp(s.gasRate * 0.04, 0, 0.5));
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   REACTION KERNEL
-   ══════════════════════════════════════════════════════════════════════════ */
-function react(dt){
-  const s = state;
-  if (s.shattered) return;
-  const T = s.temp;
-  const V = Math.max(0.0005, s.volume / 1000);
-
-  /* 1. ACID-BASE NEUTRALISATION */
-  {
-    const h = getIon('H+'), oh = getIon('OH-');
-    const n = Math.min(h, oh);
-    if (n > 1e-12){
-      const amt = n * Math.min(1, dt * 25);
-      setIon('H+', h - amt);
-      setIon('OH-', oh - amt);
-      addHeat(57300 * amt);
-      s.dH -= 57.3 * amt;
-      s.lastDeltaH_kJmol = -57.3;
-      s.lastReactionType = 'NEUTRALIZATION';
-      s.lastReactionEq = 'H⁺(aq) + OH⁻(aq) → H₂O(l)';
-      eqAdd('H⁺(aq) + OH⁻(aq) → H₂O(l)      ΔH = −57.3 kJ·mol⁻¹', 'NEUTRALIZATION');
-      if (!s.eq.has('nlog')){ s.eq.add('nlog'); log('Neutralisation: H⁺ + OH⁻ → H₂O (exothermic)', 'react'); }
-    }
-  }
-
-  /* 2. ALKALI METAL + WATER */
-  for (const m of ['na','k','li']){
-    const mol = s.solids[m] || 0;
-    if (mol > 1e-9 && s.volume > 0.5){
-      const rate = 1.8 * kFactor(30, T) * dt;
-      const amt = Math.min(mol * rate, s.volume / 18.0 * 0.15);
-      if (amt > 1e-12){
-        s.solids[m] = mol - amt;
-        const ionKey = m === 'na' ? 'Na+' : (m === 'k' ? 'K+' : 'Li+');
-        addIon(ionKey, amt); addIon('OH-', amt);
-        addHeat(184000 * amt);
-        s.dH -= 184 * amt;
-        s.gasMoles.H2 += amt;
-        s.lastDeltaH_kJmol = -184;
-        s.lastReactionType = 'REDOX';
-        s.gasRate += amt * 900;
-        spawnBubbles(Math.min(14, amt * 900), [255,255,255]);
-        if (!s.eq.has('alk_' + m)){
-          s.eq.add('alk_' + m);
-          const sym = m === 'na' ? 'Na' : (m === 'k' ? 'K' : 'Li');
-          eqAdd(`2${sym}(s) + 2H₂O(l) → 2${sym}OH(aq) + H₂(g)↑    ΔH = −184 kJ·mol⁻¹`, 'REDOX');
-          log(`${sym} + H₂O → violent reaction, H₂ evolved`, 'danger');
-        }
-      }
-    }
-  }
-
-  /* 3. CALCIUM + WATER */
-  {
-    const mol = s.solids['ca'] || 0;
-    if (mol > 1e-9 && s.volume > 0.5){
-      const rate = 0.28 * kFactor(38, T) * dt;
-      const amt = Math.min(mol * rate, s.volume / 36.0 * 0.2);
-      if (amt > 1e-12){
-        s.solids['ca'] = mol - amt;
-        addIon('Ca2+', amt); addIon('OH-', 2 * amt);
-        addHeat(230000 * amt);
-        s.dH -= 230 * amt;
-        s.gasMoles.H2 += amt;
-        s.lastDeltaH_kJmol = -230;
-        s.lastReactionType = 'REDOX';
-        s.gasRate += amt * 500;
-        spawnBubbles(Math.min(8, amt * 600), [255,255,255]);
-        if (!s.eq.has('ca_w')){
-          s.eq.add('ca_w');
-          eqAdd('Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)↑      ΔH = −230 kJ·mol⁻¹', 'REDOX');
-          log('Calcium reacts steadily with water, H₂ evolved', 'react');
-        }
-      }
-    }
-  }
-
-  /* 4. METAL + ACID */
-  const hMol = getIon('H+');
-  const hConc = hMol / V;
-  for (const m of ['zn','fe','mg','al']){
-    const mol = s.solids[m] || 0;
-    if (mol > 1e-9 && hMol > 1e-9){
-      const k = 0.22 * kFactor(45, T) * clamp(hConc, 0, 2);
-      const amt = Math.min(mol * k * dt, hMol / 2, mol);
-      if (amt > 1e-12){
-        s.solids[m] = mol - amt;
-        const ionKey = m === 'zn' ? 'Zn2+' : (m === 'fe' ? 'Fe2+' : (m === 'mg' ? 'Mg2+' : 'Al3+'));
-        addIon(ionKey, amt);
-        setIon('H+', hMol - 2 * amt);
-        addHeat(150000 * amt);
-        s.dH -= 150 * amt;
-        s.gasMoles.H2 += amt;
-        s.lastDeltaH_kJmol = -150;
-        s.lastReactionType = 'SINGLE DISPL.';
-        s.gasRate += amt * 1200;
-        spawnBubbles(Math.min(18, amt * 1400), [230,245,255]);
-        if (!s.eq.has('m_' + m)){
-          s.eq.add('m_' + m);
-          const sym = m === 'zn' ? 'Zn' : (m === 'fe' ? 'Fe' : (m === 'mg' ? 'Mg' : 'Al'));
-          eqAdd(`${sym}(s) + 2HCl(aq) → ${sym}Cl₂(aq) + H₂(g)↑      ΔG < 0 · exothermic`, 'SINGLE DISPL.');
-          log(`${sym} dissolving in acid — H₂ effervescence`, 'react');
-        }
-      }
-    }
-  }
-
-  /* 5. CARBONATE + ACID */
-  {
-    const co3 = getIon('CO3^2-'), h = getIon('H+');
-    if (co3 > 1e-12 && h > 1e-12){
-      const amt = Math.min(co3, h / 2) * Math.min(1, dt * 6);
-      setIon('CO3^2-', co3 - amt);
-      setIon('H+', h - 2 * amt);
-      addHeat(20000 * amt);
-      s.dH -= 20 * amt;
-      s.gasMoles.CO2 += amt;
-      s.lastDeltaH_kJmol = -20;
-      s.lastReactionType = 'GAS EVOLUTION';
-      s.gasRate += amt * 1600;
-      spawnBubbles(Math.min(22, amt * 2000), [225,240,250]);
-      if (!s.eq.has('carb')){
-        s.eq.add('carb');
-        eqAdd('CO₃²⁻(aq) + 2H⁺(aq) → H₂O(l) + CO₂(g)↑      ΔH = −20 kJ·mol⁻¹', 'GAS EVOLUTION');
-        log('Carbonate + acid → CO₂ effervescence', 'react');
-      }
-    }
-    const sc = s.solids['caco3'] || 0;
-    const h2 = getIon('H+');
-    if (sc > 1e-9 && h2 > 1e-9){
-      const amt = Math.min(sc * 0.35 * kFactor(42, T) * dt, h2 / 2, sc);
-      if (amt > 1e-12){
-        s.solids['caco3'] = sc - amt;
-        setIon('H+', h2 - 2 * amt);
-        addIon('Ca2+', amt);
-        addHeat(15000 * amt);
-        s.gasMoles.CO2 += amt;
-        s.lastDeltaH_kJmol = -15;
-        s.lastReactionType = 'GAS EVOLUTION';
-        s.gasRate += amt * 1600;
-        spawnBubbles(Math.min(22, amt * 2200), [225,240,250]);
-        if (!s.eq.has('caco3')){
-          s.eq.add('caco3');
-          eqAdd('CaCO₃(s) + 2HCl(aq) → CaCl₂(aq) + H₂O(l) + CO₂(g)↑', 'GAS EVOLUTION');
-          log('Marble chips fizzing vigorously in acid', 'react');
-        }
-      }
-    }
-  }
-
-  /* 6. METAL OXIDE + ACID + CaO SLaking */
-  {
-    const cuo = s.solids['cuo'] || 0, h = getIon('H+');
-    if (cuo > 1e-9 && h > 1e-9){
-      const amt = Math.min(cuo * 0.4 * kFactor(50, T) * dt, h / 2, cuo);
-      if (amt > 1e-12){
-        s.solids['cuo'] = cuo - amt;
-        setIon('H+', h - 2 * amt);
-        addIon('Cu2+', amt);
-        addHeat(50000 * amt);
-        s.dH -= 50 * amt;
-        s.lastDeltaH_kJmol = -50;
-        s.lastReactionType = 'ACID-BASE';
-        if (!s.eq.has('cuo')){
-          s.eq.add('cuo');
-          eqAdd('CuO(s) + 2H⁺(aq) → Cu²⁺(aq) + H₂O(l)      ΔH = −50 kJ·mol⁻¹', 'ACID-BASE');
-          log('Black CuO dissolving → blue Cu²⁺ solution', 'react');
-        }
-      }
-    }
-    const cao = s.solids['cao'] || 0;
-    if (cao > 1e-9 && s.volume > 0.5){
-      const amt = Math.min(cao * 0.8 * dt, cao, s.volume / 18.0 * 0.3);
-      if (amt > 1e-12){
-        s.solids['cao'] = cao - amt;
-        addIon('Ca2+', amt); addIon('OH-', 2 * amt);
-        addHeat(350000 * amt);
-        s.dH -= 350 * amt;
-        s.lastDeltaH_kJmol = -350;
-        s.lastReactionType = 'HYDROLYSIS';
-        s.steamRate += amt * 260;
-        if (!s.eq.has('cao')){
-          s.eq.add('cao');
-          eqAdd('CaO(s) + H₂O(l) → Ca(OH)₂(aq)      ΔH = −350 kJ·mol⁻¹', 'HYDROLYSIS');
-          log('Lime slaking — intense exotherm, steam released', 'warn');
-        }
-      }
-    }
-  }
-
-  /* 7. PRECIPITATION */
-  for (const r of PRECIP_RULES){
-    const a = getIon(r.a), b = getIon(r.b);
-    if (a > 1e-12 && b > 1e-12){
-      const amt = Math.min(a / r.ra, b / r.rb);
-      const consumed = amt * Math.min(1, dt * 14);
-      if (consumed > 1e-13){
-        setIon(r.a, a - consumed * r.ra);
-        setIon(r.b, b - consumed * r.rb);
-        s.precip[r.prod] = (s.precip[r.prod] || 0) + consumed;
-        addHeat(-30000 * consumed);
-        s.dH += 30 * consumed;
-        s.lastDeltaH_kJmol = +30;
-        s.lastReactionType = 'PRECIPITATION';
-        spawnPrecip(Math.min(24, consumed * 4000), r.col);
-        if (!s.eq.has('p_' + r.prod)){
-          s.eq.add('p_' + r.prod);
-          eqAdd(`${r.a.replace('^','')} + ${r.b.replace('^','')} → ${r.prod}↓      ΔH = +30 kJ·mol⁻¹  (${r.name})`, 'PRECIPITATION');
-          log(`Precipitate formed: ${r.name} (${r.prod})`, 'good');
-        }
-      }
-    }
-  }
-
-  /* 8. COMBUSTION */
-  for (const [id, mol] of Object.entries(s.fuels)){
-    if (mol <= 1e-9) continue;
-    const fuel = CHEMS.find(c => c.id === id);
-    if (!fuel || !fuel.fuel) continue;
-    if (T > fuel.ign && s.flame > 0){
-      const amt = Math.min(mol, mol * 0.10 * kFactor(60, T) * dt);
-      if (amt > 1e-12){
-        s.fuels[id] = mol - amt;
-        addHeat(fuel.dhComb * 1000 * amt);
-        s.dH += fuel.dhComb * amt;
-        s.gasMoles.CO2 += amt * (fuel.co2 || 1);
-        s.lastDeltaH_kJmol = -fuel.dhComb;
-        s.lastReactionType = 'COMBUSTION';
-        s.volume = Math.max(0, s.volume - amt * 0.5);
-        spawnSmoke(Math.min(10, amt * 5000));
-        if (!s.eq.has('comb_' + id)){
-          s.eq.add('comb_' + id);
-          const eqn = id === 'ch4'  ? 'CH₄ + 2O₂ → CO₂ + 2H₂O'
-                    : id === 'etoh' ? 'C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O'
-                    : id === 'meoh' ? '2CH₃OH + 3O₂ → 2CO₂ + 4H₂O'
-                    : id === 'acetone' ? 'C₃H₆O + 4O₂ → 3CO₂ + 3H₂O'
-                    : '2C₆H₁₄ + 19O₂ → 12CO₂ + 14H₂O';
-          eqAdd(eqn + `      ΔH = −${fuel.dhComb} kJ·mol⁻¹`, 'COMBUSTION');
-          log(`🔥 ${fuel.n} ignited — combustion underway`, 'danger');
-        }
-      }
-    }
-  }
-
-  s.gasRate *= Math.pow(0.35, dt);
-  s.steamRate *= Math.pow(0.5, dt);
-
-  if (s.temp >= 99.5 && s.volume > 1){
-    const n = clamp((s.temp - 99) * 3, 0, 8) * dt * 60;
-    spawnBubbles(n * 0.35, [255, 255, 255]);
-    if (Math.random() < 0.14) LabAudio.pop();
-  }
-
-  if (s.gasRate > 5 && Math.random() < 0.5) LabAudio.pop();
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   pH COMPUTATION
-   ══════════════════════════════════════════════════════════════════════════ */
-function computePH(){
-  const s = state;
-  const V = Math.max(0.0005, s.volume / 1000);
-  const hM = getIon('H+'), ohM = getIon('OH-');
-  const net = hM - ohM;
-  let hConc;
-
-  const cw = getIon('CH3COOH') / V;
-  const cb = getIon('NH3') / V;
-  const Ka = 1.8e-5, Kb = 1.8e-5;
-
-  if (net > 1e-13){
-    hConc = net / V;
-    if (cw > 0){
-      const x = (-Ka + Math.sqrt(Ka * Ka + 4 * Ka * (cw + hConc))) / 2;
-      hConc += x;
-    }
-  } else if (net < -1e-13){
-    let ohConc = -net / V;
-    if (cb > 0){
-      const x = (-Kb + Math.sqrt(Kb * Kb + 4 * Kb * (cb + ohConc))) / 2;
-      ohConc += x;
-    }
-    hConc = 1e-14 / ohConc;
-  } else {
-    hConc = 1e-7;
-    if (cw > 0){
-      const x = (-Ka + Math.sqrt(Ka * Ka + 4 * Ka * cw)) / 2;
-      hConc = Math.max(hConc, x);
-    }
-    if (cb > 0){
-      const x = (-Kb + Math.sqrt(Kb * Kb + 4 * Kb * cb)) / 2;
-      hConc = Math.max(hConc, 1e-14 / x);
-    }
-  }
-  s.pH = clamp(-Math.log10(Math.max(hConc, 1e-14)), 0, 14);
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   FLUID COLOUR SYNTHESIS
-   ══════════════════════════════════════════════════════════════════════════ */
-function mix(a, b, t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
-
-function uiColor(pH){
-  const stops = [
-    [0, [215,30,40]], [2, [230,90,30]], [4, [240,200,40]],
-    [6, [200,220,60]], [7, [60,190,90]], [8, [40,190,170]],
-    [10, [50,110,220]], [12, [90,60,200]], [14, [130,30,160]],
-  ];
-  for (let i = 0; i < stops.length - 1; i++){
-    const [p0, c0] = stops[i], [p1, c1] = stops[i+1];
-    if (pH >= p0 && pH <= p1) return mix(c0, c1, (pH - p0) / (p1 - p0));
-  }
-  return stops[stops.length-1][1];
-}
-
-function computeFluidColor(){
-  const s = state;
-  const V = Math.max(0.0005, s.volume / 1000);
-  let col = [198, 224, 240];
-
-  for (const [ion, rgb] of Object.entries(ION_COLORS)){
-    const c = getIon(ion) / V;
-    if (c > 1e-6){
-      const alpha = 1 - Math.exp(-c * 9);
-      col = mix(col, rgb, clamp(alpha, 0, 0.95));
-    }
-  }
-
-  const totalPrecip = Object.values(s.precip).reduce((a,b)=>a+b, 0);
-  if (totalPrecip > 1e-6){
-    const turb = clamp(totalPrecip / V * 0.06, 0, 0.55);
-    col = mix(col, [235, 235, 232], turb);
-  }
-
-  const indStrength = k => clamp((s.ind[k] || 0) / 2.0, 0, 1);
-  const uiA = indStrength('ui');
-  if (uiA > 0.01) col = mix(col, uiColor(s.pH), clamp(uiA * 0.92, 0, 0.92));
-  const phA = indStrength('phph');
-  if (phA > 0.01){
-    let t = 0;
-    if (s.pH >= 8.2 && s.pH <= 10) t = (s.pH - 8.2) / 1.8;
-    else if (s.pH > 10) t = 1;
-    if (t > 0) col = mix(col, [230, 20, 130], clamp(t * phA * 0.95, 0, 0.95));
-  }
-  const btbA = indStrength('btb');
-  if (btbA > 0.01){
-    let c;
-    if (s.pH < 6) c = [230, 215, 45];
-    else if (s.pH > 7.6) c = [30, 90, 215];
-    else c = mix([230,215,45],[30,90,215], (s.pH - 6) / 1.6);
-    col = mix(col, c, clamp(btbA * 0.9, 0, 0.9));
-  }
-  const moA = indStrength('mor');
-  if (moA > 0.01){
-    let c;
-    if (s.pH < 3.1) c = [225, 55, 40];
-    else if (s.pH > 4.4) c = [240, 195, 60];
-    else c = mix([225,55,40],[240,195,60], (s.pH - 3.1) / 1.3);
-    col = mix(col, c, clamp(moA * 0.9, 0, 0.9));
-  }
-  const litA = indStrength('lit');
-  if (litA > 0.01){
-    const c = s.pH < 7 ? [210, 60, 70] : [60, 100, 210];
-    col = mix(col, c, clamp(litA * 0.75, 0, 0.75));
-  }
-  s.fluidColor = col;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   PARTICLE SYSTEMS
-   ══════════════════════════════════════════════════════════════════════════ */
-function liquidTop(){
-  const lh = Math.min(MAXLH, (state.volume / MAXVOL) * MAXLH);
-  return BOT - lh;
-}
-
-function spawnBubbles(n, col){
-  const top = liquidTop();
-  const count = Math.min(4, Math.floor(n));
-  for (let i = 0; i < count; i++){
-    if (state.bubbles.length > 260) break;
-    state.bubbles.push({
-      x: INX + 8 + Math.random() * (INW - 16),
-      y: BOT - 6 - Math.random() * 18,
-      r: 1.4 + Math.random() * 3.6,
-      vy: 0.5 + Math.random() * 1.4,
-      vx: (Math.random() - 0.5) * 0.5,
-      wob: Math.random() * Math.PI * 2,
-      col: col || [255,255,255], top
+function spawnBubbles(n, intensity = 1) {
+  const g = geo();
+  for (let i = 0; i < n; i++) {
+    pushParticle({
+      type: 'bubble',
+      x: g.left + 10 + Math.random() * (g.right - g.left - 20),
+      y: g.bottom - 6 - Math.random() * 30,
+      vy: 22 + Math.random() * 45 * intensity,
+      r: 1.2 + Math.random() * 2.6,
+      life: 4 + Math.random() * 2, max: 6,
+      surf: g.surface
     });
   }
 }
-
-function spawnPrecip(n, col){
-  const count = Math.min(10, Math.floor(n));
-  for (let i = 0; i < count; i++){
-    if (state.precipParticles.length > 700) break;
-    state.precipParticles.push({
-      x: INX + 10 + Math.random() * (INW - 20),
-      y: liquidTop() + 12 + Math.random() * Math.max(10, (BOT - liquidTop() - 20)),
-      r: 0.9 + Math.random() * 2.1,
-      vy: 0.15 + Math.random() * 0.4,
-      vx: (Math.random() - 0.5) * 0.3,
-      col: col || [240,240,240],
-      floor: BOT - 3 - Math.random() * 22
+function spawnPrecipitate(color, n) {
+  const g = geo();
+  for (let i = 0; i < n; i++) {
+    pushParticle({
+      type: 'precip',
+      x: g.left + 10 + Math.random() * (g.right - g.left - 20),
+      y: g.surface + Math.random() * (g.bottom - g.surface) * 0.7,
+      vx: (Math.random() - 0.5) * 14,
+      vy: 6 + Math.random() * 18,
+      r: 1 + Math.random() * 2.4,
+      color, life: 9999,
+      floor: g.bottom - 3 - Math.random() * 10,
+      settled: false
     });
   }
 }
-
-function spawnSteam(n){
-  for (let i = 0; i < Math.min(3, n); i++){
-    if (state.steam.length > 160) break;
-    state.steam.push({
-      x: INX + 16 + Math.random() * (INW - 32),
-      y: liquidTop() - 4,
-      r: 5 + Math.random() * 9,
-      vy: -(18 + Math.random() * 30) / 60,
-      vx: (Math.random() - 0.5) * 0.35,
-      life: 1
-    });
-  }
-}
-
-function spawnSmoke(n){
-  for (let i = 0; i < Math.min(3, n); i++){
-    if (state.smoke.length > 130) break;
-    state.smoke.push({
-      x: INX + 20 + Math.random() * (INW - 40),
-      y: liquidTop() - 8,
+function spawnSmoke(rgb, n, spread = 1) {
+  const g = geo();
+  for (let i = 0; i < n; i++) {
+    pushParticle({
+      type: 'smoke',
+      x: g.cx + (Math.random() - 0.5) * (g.bw * 0.9 * spread),
+      y: g.surface - Math.random() * 20,
+      vx: (Math.random() - 0.5) * 22,
+      vy: 24 + Math.random() * 40,
       r: 6 + Math.random() * 12,
-      vy: -(22 + Math.random() * 34) / 60,
-      vx: (Math.random() - 0.5) * 0.6,
-      life: 1
+      color: rgb, life: 1.6 + Math.random() * 1.8, max: 3.4,
+      alpha: 0.30 + Math.random() * 0.22
+    });
+  }
+}
+function spawnSparks(n) {
+  const g = geo();
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
+    const sp = 60 + Math.random() * 220;
+    pushParticle({
+      type: 'spark',
+      x: g.cx + (Math.random() - 0.5) * g.bw * 0.5,
+      y: g.surface + Math.random() * 20,
+      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      r: 1 + Math.random() * 2,
+      color: Math.random() > 0.5 ? '#fbbf24' : '#fb923c',
+      life: 0.5 + Math.random() * 0.8, max: 1.3
     });
   }
 }
 
-function updateParticles(dt){
-  const s = state;
-  const top = liquidTop();
-
-  for (let i = s.bubbles.length - 1; i >= 0; i--){
-    const b = s.bubbles[i];
-    b.wob += dt * 7;
-    b.vy += 0.06; b.vy *= 0.97;
-    b.y -= b.vy * dt * 60;
-    b.x += Math.sin(b.wob) * 0.5 + b.vx;
-    b.vx *= 0.98;
-    if (b.y - b.r < top + 4){
-      s.bubbles.splice(i, 1);
-      if (Math.random() < 0.28) LabAudio.pop();
-      continue;
+function updateParticles(dt) {
+  const g = geo();
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.life -= dt;
+    if (p.type === 'bubble') {
+      p.y -= p.vy * dt;
+      p.x += Math.sin(p.y * 0.07 + p.r) * 0.4;
+      if (p.y <= p.surf + 2 || p.life <= 0) {
+        if (Math.random() < 0.35) Audio2.bubble();
+        particles.splice(i, 1); continue;
+      }
+    } else if (p.type === 'precip') {
+      if (!p.settled) {
+        p.vy += 90 * dt;
+        p.y += p.vy * dt;
+        p.x += p.vx * dt;
+        if (p.y >= p.floor) { p.y = p.floor; p.settled = true; p.vy = 0; p.vx = 0; }
+        if (state.stir > 15 && Math.random() < 0.02) { p.settled = false; p.vy = -20; p.vx = (Math.random() - 0.5) * 40; }
+      } else if (state.stir > 25) {
+        p.settled = false; p.vy = -18 - Math.random() * 30; p.vx = (Math.random() - 0.5) * 50;
+      }
+    } else if (p.type === 'smoke') {
+      p.y -= p.vy * dt;
+      p.x += p.vx * dt;
+      p.vx *= 0.985;
+      p.r += 16 * dt;
+      if (p.y < -60 || p.life <= 0) { particles.splice(i, 1); continue; }
+    } else if (p.type === 'spark') {
+      p.vy += 320 * dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
     }
-    if (b.x < INX + 4) b.x = INX + 4;
-    if (b.x > INX + INW - 4) b.x = INX + INW - 4;
-  }
-
-  if (s.steamRate > 0.4) spawnSteam(s.steamRate * 0.35);
-  for (let i = s.steam.length - 1; i >= 0; i--){
-    const p = s.steam[i];
-    p.y += p.vy * dt * 60;
-    p.x += p.vx;
-    p.r += dt * 8;
-    p.life -= dt * 0.55;
-    if (p.life <= 0 || p.y < -30) s.steam.splice(i, 1);
-  }
-
-  for (let i = s.smoke.length - 1; i >= 0; i--){
-    const p = s.smoke[i];
-    p.y += p.vy * dt * 60;
-    p.x += p.vx;
-    p.r += dt * 11;
-    p.life -= dt * 0.36;
-    if (p.life <= 0 || p.y < -40) s.smoke.splice(i, 1);
-  }
-
-  const stirring = s.stir > 12;
-  for (const p of s.precipParticles){
-    if (stirring){
-      p.vx += (Math.random() - 0.5) * 0.55;
-      p.vy -= Math.random() * 0.5;
-      p.vx = clamp(p.vx, -2.4, 2.4);
-      p.vy = clamp(p.vy, -2.4, 2.0);
-    }
-    p.vy += 0.035; p.vy *= 0.94; p.vx *= 0.95;
-    p.y += p.vy; p.x += p.vx;
-    if (p.x < INX + 4) { p.x = INX + 4; p.vx *= -0.4; }
-    if (p.x > INX + INW - 4) { p.x = INX + INW - 4; p.vx *= -0.4; }
-    const lim = stirring ? BOT - 4 : p.floor;
-    if (p.y > lim){ p.y = lim; p.vy = 0; p.vx *= 0.85; }
-    if (p.y < top + 6) { p.y = top + 6; p.vy = Math.abs(p.vy) * 0.4; }
-  }
-
-  for (let i = s.drops.length - 1; i >= 0; i--){
-    const d = s.drops[i];
-    d.vy += 0.55;
-    d.y += d.vy;
-    if (d.y > top + 6){ s.drops.splice(i, 1); spawnRipple(d.x); }
-  }
-
-  for (let i = s.ripples.length - 1; i >= 0; i--){
-    const r = s.ripples[i];
-    r.r += dt * 42;
-    r.a -= dt * 1.8;
-    if (r.a <= 0) s.ripples.splice(i, 1);
-  }
-
-  s.flash = Math.max(0, s.flash - dt * 2.2);
-  s.shake = Math.max(0, s.shake - dt * 3.5);
-}
-
-function spawnRipple(x){
-  state.ripples.push({ x, r: 2, a: 0.7, y: liquidTop() + 4 });
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   TITRATION BURETTE
-   ══════════════════════════════════════════════════════════════════════════ */
-let dropAccumulator = 0;
-function updateBurette(dt){
-  const s = state;
-  if (s.shattered || s.drip <= 0) return;
-  if (s.buretteFrac <= 0){
-    if (Math.random() < 0.01) log('Burette empty — refill required.', 'warn');
-    return;
-  }
-
-  dropAccumulator += s.drip * dt;
-  while (dropAccumulator >= 1){
-    dropAccumulator -= 1;
-    if (s.buretteFrac <= 0) break;
-
-    const dropVol = 0.10;
-    const chem = CHEMS.find(c => c.id === s.buretteChem);
-    if (!chem) break;
-
-    s.buretteFrac = Math.max(0, s.buretteFrac - dropVol / 50);
-    s.drops.push({ x: CX + (Math.random() - 0.5) * 2, y: BURETTE_TIP_Y, vy: 0.6 });
-
-    const moles = (dropVol / 1000) * (chem.M || 1);
-    s.volume += dropVol;
-    s.mass += dropVol;
-    if (chem.ions) for (const [k, v] of Object.entries(chem.ions)) addIon(k, v * moles);
-    if (chem.weakAcid) addIon('CH3COOH', moles);
-    if (chem.weakBase) addIon('NH3', moles);
-
-    if (Math.random() < 0.08) LabAudio.click();
+    if (p.y > g.bottom + 60 && p.type !== 'smoke') { particles.splice(i, 1); }
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   HAZARD EVENTS
-   ══════════════════════════════════════════════════════════════════════════ */
-function triggerShatter(reason){
-  if (state.shattered) return;
-  state.shattered = true;
-  state.flame = 0; state.stir = 0; state.drip = 0;
-  document.getElementById('flameSlider').value = 0;
-  document.getElementById('stirSlider').value = 0;
-  document.getElementById('dripSlider').value = 0;
-  LabAudio.shatter();
-  LabAudio.setBoil(0); LabAudio.setFizz(0); LabAudio.setHiss(0);
-  state.flash = 1;
-  state.shake = 1;
-  log('⚠️ GLASS SHATTER — ' + reason, 'danger');
-  document.getElementById('hazardMsg').textContent = reason;
-  document.getElementById('hazard').classList.remove('hidden');
+/* ═══════════════════════════════════════════════════════════════
+   CANVAS RENDERING
+   ═══════════════════════════════════════════════════════════════ */
+const cv = $('stage');
+const ctx = cv.getContext('2d');
+let W = 300, H = 400, DPR = 1;
+
+function resize() {
+  const r = cv.getBoundingClientRect();
+  if (r.width < 2 || r.height < 2) return;
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.floor(r.width * DPR);
+  cv.height = Math.floor(r.height * DPR);
+  W = r.width; H = r.height;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+new ResizeObserver(resize).observe(cv);
+
+function geo() {
+  const cx = W / 2;
+  const bw = Math.min(W * 0.56, 200);
+  const left = cx - bw / 2, right = cx + bw / 2;
+  const top = H * 0.10, bottom = H * 0.62;
+  const fill = Math.min(1, state.volume / 250);
+  const surface = bottom - (bottom - top - 6) * fill;
+  return { cx, bw, left, right, top, bottom, surface, fill };
 }
 
-function triggerExplosion(reason){
-  if (state.shattered) return;
-  LabAudio.explode();
-  state.flash = 1;
-  state.shake = 1.4;
-  state.temp += 420;
-  state.steamRate += 60;
-  spawnSmoke(10);
-  spawnSteam(14);
-  log('💥 EXPLOSIVE REACTION — ' + reason, 'danger');
-  triggerShatter(reason);
+function rr(c, x, y, w, h, r) {
+  const rad = Array.isArray(r) ? r : [r, r, r, r];
+  const [tl, tr, br, bl] = rad;
+  c.beginPath();
+  c.moveTo(x + tl, y);
+  c.lineTo(x + w - tr, y); c.quadraticCurveTo(x + w, y, x + w, y + tr);
+  c.lineTo(x + w, y + h - br); c.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+  c.lineTo(x + bl, y + h); c.quadraticCurveTo(x, y + h, x, y + h - bl);
+  c.lineTo(x, y + tl); c.quadraticCurveTo(x, y, x + tl, y);
+  c.closePath();
 }
 
-function emergencyFlush(){
-  flushAll();
-  document.getElementById('hazard').classList.add('hidden');
+function hexToRgb(hex) {
+  if (!hex || hex[0] !== '#') return { r: 255, g: 255, b: 255 };
+  const n = parseInt(hex.slice(1), 16);
+  if (hex.length === 4) return { r: ((n >> 8) & 15) * 17, g: ((n >> 4) & 15) * 17, b: (n & 15) * 17 };
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   FLUSH / CLEAR
-   ══════════════════════════════════════════════════════════════════════════ */
-function flushAll(){
-  const s = state;
-  s.volume = 250; s.temp = 25; s.mass = 250;
-  s.ions = {}; s.solids = {}; s.fuels = {}; s.precip = {}; s.ind = {};
-  s.dH = 0; s.pH = 7; s.shattered = false; s.paused = false;
-  s.bubbles = []; s.steam = []; s.smoke = [];
-  s.precipParticles = []; s.drops = []; s.ripples = [];
-  s.gasRate = 0; s.steamRate = 0;
-  s.gasMoles = { H2:0, CO2:0, O2:0, SO2:0 };
-  s.lastDeltaH_kJmol = 0;
-  s.lastReactionType = '—';
-  s.lastReactionEq = '—';
-  s.eq.clear();
-  s.flame = 0; s.stir = 0; s.drip = 0;
-  s.buretteFrac = 1;
-
-  document.getElementById('flameSlider').value = 0;
-  document.getElementById('stirSlider').value = 0;
-  document.getElementById('dripSlider').value = 0;
-  document.getElementById('eqList').innerHTML = '<div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>';
-
-  LabAudio.setBoil(0); LabAudio.setFizz(0); LabAudio.setHiss(0);
-  log('⚗️ System purged. 250 mL distilled H₂O charged, 25 °C.', 'good');
-}
-
-function clearVessel(){
-  const s = state;
-  s.volume = 0;
-  s.mass = 0;
-  s.ions = {}; s.solids = {}; s.fuels = {}; s.precip = {}; s.ind = {};
-  s.dH = 0;
-  s.pH = 7;
-  s.bubbles = []; s.steam = []; s.smoke = [];
-  s.precipParticles = []; s.drops = []; s.ripples = [];
-  s.gasRate = 0; s.steamRate = 0;
-  s.gasMoles = { H2:0, CO2:0, O2:0, SO2:0 };
-  s.lastDeltaH_kJmol = 0;
-  s.lastReactionType = '—';
-  s.lastReactionEq = '—';
-  s.eq.clear();
-  s.fluidColor = [220, 232, 245];
-  document.getElementById('eqList').innerHTML = '<div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>';
-  log('🗑️ VESSEL CLEARED — 0 mL, pH reset to 7.00, ions purged.', 'good');
-  LabAudio.click();
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   RENDERING — CANVAS
-   ══════════════════════════════════════════════════════════════════════════ */
-function resizeCanvas(){
-  const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.max(1, rect.width * dpr);
-  canvas.height = Math.max(1, rect.height * dpr);
-
-  /* Crop to beaker region for tight vertical column */
-  const VX0 = 165, VY0 = 0, VX1 = 595, VY1 = 660;
-  const VW = VX1 - VX0, VH = VY1 - VY0;
-
-  const s = Math.min(rect.width / VW, rect.height / VH);
-  const ox = ((rect.width - VW * s) / 2 - VX0 * s) * dpr;
-  const oy = ((rect.height - VH * s) / 2 - VY0 * s) * dpr;
-
-  ctx.setTransform(dpr * s, 0, 0, dpr * s, ox, oy);
-}
-
-function beakerInnerPath(){
-  const x = INX, y = INY, w = INW, h = INH, r = 15;
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x, y + h - r);
-  ctx.quadraticCurveTo(x, y + h, x + r, y + h);
-  ctx.lineTo(x + w - r, y + h);
-  ctx.quadraticCurveTo(x + w, y + h, x + w, y + h - r);
-  ctx.lineTo(x + w, y);
-  ctx.closePath();
-}
-
-function roundRect(x, y, w, h, r){
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
-
-function drawBackdrop(){
-  const g = ctx.createRadialGradient(CX, 300, 40, CX, 300, 560);
-  g.addColorStop(0, '#0d1727');
-  g.addColorStop(1, '#050a14');
-  ctx.fillStyle = g;
-  ctx.fillRect(-1400, -1400, W + 2800, H + 2800);
-
-  const bg = ctx.createLinearGradient(0, 590, 0, H + 200);
-  bg.addColorStop(0, '#101a28');
-  bg.addColorStop(1, '#050a14');
+function render() {
+  ctx.clearRect(0, 0, W, H);
+  // background
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#0a1120');
+  bg.addColorStop(1, '#05080f');
   ctx.fillStyle = bg;
-  ctx.fillRect(-1400, 590, W + 2800, 1400);
-
-  ctx.strokeStyle = 'rgba(56,189,248,0.09)';
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(-1400, 590.5); ctx.lineTo(W + 1400, 590.5); ctx.stroke();
-
-  ctx.strokeStyle = 'rgba(56,189,248,0.035)';
-  for (let x = -1400; x < W + 1400; x += 38){
-    ctx.beginPath(); ctx.moveTo(x, -600); ctx.lineTo(x, 590); ctx.stroke();
-  }
-  for (let y = -600; y < 590; y += 38){
-    ctx.beginPath(); ctx.moveTo(-1400, y); ctx.lineTo(W + 1400, y); ctx.stroke();
-  }
-}
-
-function flameTint(){
-  if (state.temp < 250) return null;
-  if (getIon('Na+') > 1e-6 || (state.solids['na'] || 0) > 0 || (state.solids['na2o'] || 0) > 0) return [255, 190, 40];
-  if (getIon('K+')  > 1e-6 || (state.solids['k']  || 0) > 0) return [190, 130, 255];
-  if (getIon('Cu2+') > 1e-6 || (state.solids['cu'] || 0) > 0) return [70, 235, 160];
-  if (getIon('Ca2+') > 1e-6 || (state.solids['ca'] || 0) > 0) return [255, 110, 70];
-  if (getIon('Li+')  > 1e-6 || (state.solids['li'] || 0) > 0) return [255, 70, 100];
-  if (getIon('Ba2+') > 1e-6) return [180, 255, 150];
-  return null;
-}
-
-function drawBurner(){
-  ctx.fillStyle = '#1b2534';
-  roundRect(CX - 21, 602, 42, 52, 5); ctx.fill();
-  ctx.fillStyle = '#243044';
-  roundRect(CX - 21, 602, 42, 8, 3); ctx.fill();
-  ctx.fillStyle = '#334155';
-  roundRect(CX - 25, 592, 50, 14, 4); ctx.fill();
-  ctx.fillStyle = '#151e2b';
-  roundRect(CX - 52, 644, 104, 14, 5); ctx.fill();
-
-  if (state.flame <= 0 || state.shattered) return;
-
-  const inten = state.flame / 100;
-  const fh = 34 + inten * 92;
-  const fw = 13 + inten * 13;
-  const baseY = BURNER_BASE_Y;
-  const tipY = baseY - fh;
-  const tint = flameTint();
+  ctx.fillRect(0, 0, W, H);
 
   ctx.save();
-  ctx.globalCompositeOperation = 'lighter';
-
-  const og = ctx.createRadialGradient(CX, baseY - fh * 0.35, 4, CX, baseY - fh * 0.35, fw * 4.2 + 18);
-  og.addColorStop(0, 'rgba(255,150,40,0.35)');
-  og.addColorStop(0.5, 'rgba(255,110,20,0.12)');
-  og.addColorStop(1, 'rgba(255,80,0,0)');
-  ctx.fillStyle = og;
-  ctx.beginPath();
-  ctx.ellipse(CX, baseY - fh * 0.35, fw * 4.2 + 18, fh * 0.82, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  const og2 = ctx.createLinearGradient(0, baseY, 0, tipY);
-  if (tint){
-    og2.addColorStop(0, `rgba(${tint[0]},${tint[1]},${tint[2]},0.85)`);
-    og2.addColorStop(0.55, `rgba(${tint[0]*0.85|0},${tint[1]*0.55|0},${tint[2]*0.4|0},0.6)`);
-    og2.addColorStop(1, 'rgba(255,80,20,0.02)');
-  } else {
-    og2.addColorStop(0, 'rgba(255,170,60,0.85)');
-    og2.addColorStop(0.5, 'rgba(255,120,30,0.55)');
-    og2.addColorStop(1, 'rgba(255,60,10,0.02)');
+  if (state.shake > 0.4) {
+    ctx.translate((Math.random() - 0.5) * state.shake, (Math.random() - 0.5) * state.shake);
   }
-  ctx.fillStyle = og2;
-  ctx.beginPath();
-  ctx.moveTo(CX - fw, baseY);
-  ctx.quadraticCurveTo(CX - fw * 1.25, baseY - fh * 0.5, CX, tipY);
-  ctx.quadraticCurveTo(CX + fw * 1.25, baseY - fh * 0.5, CX + fw, baseY);
-  ctx.closePath();
-  ctx.fill();
 
-  const ig = ctx.createLinearGradient(0, baseY, 0, baseY - fh * 0.55);
-  ig.addColorStop(0, 'rgba(120,200,255,0.75)');
-  ig.addColorStop(0.6, 'rgba(90,160,255,0.32)');
-  ig.addColorStop(1, 'rgba(60,120,255,0)');
-  ctx.fillStyle = ig;
-  ctx.beginPath();
-  ctx.moveTo(CX - fw * 0.45, baseY);
-  ctx.quadraticCurveTo(CX - fw * 0.5, baseY - fh * 0.35, CX, baseY - fh * 0.58);
-  ctx.quadraticCurveTo(CX + fw * 0.5, baseY - fh * 0.35, CX + fw * 0.45, baseY);
-  ctx.closePath();
-  ctx.fill();
-
+  const g = geo();
+  drawBench(g);
+  drawBurner(g);
+  drawGlassBack(g);
+  drawLiquid(g);
+  drawParticles(g);
+  drawGlassFront(g);
   ctx.restore();
 }
 
-function drawBeakerBack(){
-  ctx.save();
-  const g = ctx.createLinearGradient(BX, 0, BX + BW, 0);
-  g.addColorStop(0, 'rgba(160,220,245,0.10)');
-  g.addColorStop(0.22, 'rgba(200,240,255,0.04)');
-  g.addColorStop(0.75, 'rgba(140,200,230,0.03)');
-  g.addColorStop(1, 'rgba(160,220,245,0.11)');
-  ctx.fillStyle = g;
-  beakerInnerPath();
-  ctx.fill();
-
-  ctx.strokeStyle = 'rgba(180,225,245,0.22)';
+function drawBench(g) {
+  const y = H * 0.94;
+  const grd = ctx.createLinearGradient(0, y - 8, 0, y + 12);
+  grd.addColorStop(0, 'rgba(30,41,59,0.9)');
+  grd.addColorStop(1, 'rgba(10,15,25,0.9)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, y - 6, W, 18);
+  ctx.strokeStyle = 'rgba(56,189,248,0.18)';
   ctx.lineWidth = 1;
-  for (let i = 1; i <= 5; i++){
-    const y = BOT - (i / 5) * MAXLH;
-    const len = i % 5 === 0 ? 26 : 15;
-    ctx.beginPath();
-    ctx.moveTo(INX + INW - len, y);
-    ctx.lineTo(INX + INW - 3, y);
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(190,230,250,0.30)';
-    ctx.font = '8px ui-monospace, monospace';
-    ctx.fillText(`${i * 100}`, INX + INW - len - 20, y + 3);
-  }
+  ctx.beginPath(); ctx.moveTo(0, y - 6); ctx.lineTo(W, y - 6); ctx.stroke();
+}
+
+function drawGlassBack(g) {
+  ctx.save();
+  rr(ctx, g.left, g.top, g.right - g.left, g.bottom - g.top, [4, 4, 16, 16]);
+  ctx.fillStyle = 'rgba(148,197,255,0.045)';
+  ctx.fill();
   ctx.restore();
 }
 
-function drawLiquid(){
-  const s = state;
-  if (s.volume <= 0.2) return;
-
-  const col = s.fluidColor.map(v => clamp(Math.round(v), 0, 255));
-  const base  = `rgb(${col[0]},${col[1]},${col[2]})`;
-  const light = `rgb(${clamp(col[0]+38,0,255)},${clamp(col[1]+34,0,255)},${clamp(col[2]+28,0,255)})`;
-  const dark  = `rgb(${(col[0]*0.42)|0},${(col[1]*0.44)|0},${(col[2]*0.5)|0})`;
-
-  const top = liquidTop();
-  const meniscusDepth = 6;
-
+function drawLiquid(g) {
+  if (state.volume <= 0.5) return;
   ctx.save();
-  beakerInnerPath();
+  rr(ctx, g.left + 1, g.top, g.right - g.left - 2, g.bottom - g.top - 1, [4, 4, 15, 15]);
   ctx.clip();
 
-  const g = ctx.createLinearGradient(0, top, 0, BOT);
-  g.addColorStop(0, light);
-  g.addColorStop(0.10, base);
-  g.addColorStop(0.72, base);
-  g.addColorStop(1, dark);
-  ctx.fillStyle = g;
+  const s = state.sol;
+  const grd = ctx.createLinearGradient(0, g.surface, 0, g.bottom);
+  grd.addColorStop(0, `rgba(${s.r | 0},${s.g | 0},${s.b | 0},${Math.min(0.95, s.a * 0.85)})`);
+  grd.addColorStop(1, `rgba(${(s.r * 0.7) | 0},${(s.g * 0.8) | 0},${(s.b * 0.95) | 0},${Math.min(0.98, s.a * 1.25)})`);
+  ctx.fillStyle = grd;
+  ctx.fillRect(g.left, g.surface, g.right - g.left, g.bottom - g.surface);
 
+  // swirl when stirring
+  if (state.stir > 5) {
+    const t = performance.now() / 500;
+    ctx.globalAlpha = 0.10 + state.stir / 500;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 4; i++) {
+      const yy = g.surface + ((g.bottom - g.surface) * (i / 4)) + Math.sin(t + i) * 3;
+      ctx.beginPath();
+      ctx.moveTo(g.left + 4, yy);
+      ctx.bezierCurveTo(g.cx - 20, yy - 5, g.cx + 20, yy + 5, g.right - 4, yy);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+
+  // meniscus (top face ellipse)
+  ctx.save();
   ctx.beginPath();
-  ctx.moveTo(INX - 4, top);
-  ctx.quadraticCurveTo(CX, top + meniscusDepth, INX + INW + 4, top);
-  ctx.lineTo(INX + INW + 4, BOT + 30);
-  ctx.lineTo(INX - 4, BOT + 30);
-  ctx.closePath();
+  ctx.ellipse(g.cx, g.surface, (g.right - g.left) / 2 - 1.5, 4.5, 0, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(${Math.min(255, s.r + 55) | 0},${Math.min(255, s.g + 45) | 0},${Math.min(255, s.b + 30) | 0},${Math.min(0.9, s.a + 0.20)})`;
   ctx.fill();
+  ctx.strokeStyle = `rgba(255,255,255,${0.35 + (state.stir / 400)})`;
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  ctx.restore();
 
-  const rf = ctx.createLinearGradient(INX, 0, INX + INW, 0);
-  rf.addColorStop(0, 'rgba(255,255,255,0.10)');
-  rf.addColorStop(0.12, 'rgba(255,255,255,0.02)');
-  rf.addColorStop(0.85, 'rgba(255,255,255,0.0)');
-  rf.addColorStop(1, 'rgba(255,255,255,0.09)');
-  ctx.fillStyle = rf;
-  ctx.fillRect(INX - 4, top, INW + 8, BOT - top + 20);
-
-  const shaft = ctx.createLinearGradient(INX + 18, 0, INX + 46, 0);
-  shaft.addColorStop(0, 'rgba(255,255,255,0)');
-  shaft.addColorStop(0.5, 'rgba(255,255,255,0.11)');
-  shaft.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = shaft;
-  ctx.fillRect(INX + 18, top, 30, BOT - top);
-
-  for (const r of state.ripples){
+  // bubbles / boiling surface shimmer
+  if (state.temp > 99 && state.volume > 1) {
+    ctx.save();
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = '#e0f2fe';
     ctx.beginPath();
-    ctx.ellipse(r.x, r.y, r.r, r.r * 0.22, 0, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(255,255,255,${r.a * 0.45})`;
-    ctx.lineWidth = 1.2;
+    ctx.ellipse(g.cx, g.surface, (g.right - g.left) / 2 - 6, 3, 0, 0, Math.PI * 2);
     ctx.stroke();
+    ctx.restore();
   }
+}
 
-  for (const p of state.precipParticles){
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${p.col[0]},${p.col[1]},${p.col[2]},0.85)`;
-    ctx.fill();
+function drawParticles(g) {
+  ctx.save();
+  rr(ctx, g.left + 1, g.top, g.right - g.left - 2, g.bottom - g.top - 1, [4, 4, 15, 15]);
+  ctx.clip();
+  for (const p of particles) {
+    if (p.type === 'bubble') {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(220,245,255,0.30)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+    } else if (p.type === 'precip') {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.9;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
   }
+  ctx.restore();
 
-  for (const b of state.bubbles){
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,0.28)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.75)';
-    ctx.lineWidth = 0.9;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(b.x - b.r * 0.3, b.y - b.r * 0.32, b.r * 0.32, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.fill();
+  // smoke & sparks outside the liquid clip
+  for (const p of particles) {
+    if (p.type === 'smoke') {
+      const a = Math.max(0, (p.life / p.max)) * p.alpha;
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      grd.addColorStop(0, `rgba(${p.color},${a})`);
+      grd.addColorStop(1, `rgba(${p.color},0)`);
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    } else if (p.type === 'spark') {
+      const a = Math.max(0, p.life / p.max);
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * a + 0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
   }
+}
 
-  ctx.beginPath();
-  ctx.moveTo(INX - 4, top);
-  ctx.quadraticCurveTo(CX, top + meniscusDepth, INX + INW + 4, top);
-  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+function drawGlassFront(g) {
+  ctx.save();
+  // glass body
+  rr(ctx, g.left, g.top, g.right - g.left, g.bottom - g.top, [4, 4, 16, 16]);
+  const gg = ctx.createLinearGradient(g.left, 0, g.right, 0);
+  gg.addColorStop(0, 'rgba(186,230,253,0.20)');
+  gg.addColorStop(0.15, 'rgba(186,230,253,0.04)');
+  gg.addColorStop(0.85, 'rgba(186,230,253,0.04)');
+  gg.addColorStop(1, 'rgba(186,230,253,0.20)');
+  ctx.fillStyle = gg;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(186,230,253,0.55)';
   ctx.lineWidth = 2;
   ctx.stroke();
 
+  // rim
   ctx.beginPath();
-  ctx.moveTo(INX - 4, top + 2.4);
-  ctx.quadraticCurveTo(CX, top + meniscusDepth + 2.4, INX + INW + 4, top + 2.4);
-  ctx.strokeStyle = 'rgba(255,255,255,0.14)';
-  ctx.lineWidth = 1.4;
+  ctx.ellipse(g.cx, g.top, (g.right - g.left) / 2, 5, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(186,230,253,0.65)';
+  ctx.lineWidth = 2;
   ctx.stroke();
 
-  if (s.stir > 8){
-    const amp = (s.stir / 100) * 7;
-    ctx.beginPath();
-    ctx.moveTo(INX + 6, top + 1);
-    for (let x = INX + 6; x <= INX + INW - 6; x += 6){
-      const y = top + 1 + Math.sin((x * 0.06) + s.stirPhase * 0.12) * amp;
-      ctx.lineTo(x, y);
-    }
-    ctx.strokeStyle = 'rgba(255,255,255,0.22)';
-    ctx.lineWidth = 1.6;
-    ctx.stroke();
-  }
-
-  ctx.restore();
-
-  if (s.stir > 2){
-    const spin = s.stirPhase * 0.16 * (s.stir / 100);
-    const barW = 62, barH = 8;
-    const squash = Math.abs(Math.cos(spin));
-    ctx.save();
-    ctx.translate(CX, BOT - 9);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, (barW / 2) * (0.35 + 0.65 * squash), barH / 2, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(30,41,59,0.92)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(148,163,184,0.6)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.restore();
-  }
-}
-
-function drawBeakerFront(){
-  ctx.save();
-
-  const x = BX, y = BY, w = BW, h = BH, r = 24;
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x, y + h - r);
-  ctx.quadraticCurveTo(x, y + h, x + r, y + h);
-  ctx.lineTo(x + w - r, y + h);
-  ctx.quadraticCurveTo(x + w, y + h, x + w, y + h - r);
-  ctx.lineTo(x + w, y);
-  ctx.strokeStyle = 'rgba(170,220,245,0.65)';
-  ctx.lineWidth = 2.6;
-  ctx.stroke();
-
-  beakerInnerPath();
-  ctx.strokeStyle = 'rgba(190,235,255,0.22)';
+  // graduation marks
+  ctx.strokeStyle = 'rgba(186,230,253,0.28)';
   ctx.lineWidth = 1;
-  ctx.stroke();
-
+  for (let i = 1; i <= 5; i++) {
+    const y = g.bottom - (g.bottom - g.top) * (i / 6);
+    ctx.beginPath();
+    ctx.moveTo(g.right - 16, y);
+    ctx.lineTo(g.right - 4, y);
+    ctx.stroke();
+  }
+  // highlight
   ctx.beginPath();
-  ctx.moveTo(x - 9, y);
-  ctx.lineTo(x + w + 9, y);
-  ctx.strokeStyle = 'rgba(200,240,255,0.85)';
-  ctx.lineWidth = 4;
-  ctx.lineCap = 'round';
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(x + w + 4, y - 3);
-  ctx.quadraticCurveTo(x + w + 16, y - 2, x + w + 18, y + 8);
-  ctx.strokeStyle = 'rgba(200,240,255,0.7)';
+  ctx.moveTo(g.left + 6, g.top + 14);
+  ctx.lineTo(g.left + 6, g.bottom - 22);
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
   ctx.lineWidth = 3;
   ctx.stroke();
-
-  const hl = ctx.createLinearGradient(x + 14, 0, x + 34, 0);
-  hl.addColorStop(0, 'rgba(255,255,255,0)');
-  hl.addColorStop(0.5, 'rgba(255,255,255,0.30)');
-  hl.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = hl;
-  ctx.fillRect(x + 14, y + 22, 20, h - 70);
-
-  const hl2 = ctx.createLinearGradient(x + 30, 0, x + 40, 0);
-  hl2.addColorStop(0, 'rgba(255,255,255,0)');
-  hl2.addColorStop(0.5, 'rgba(255,255,255,0.13)');
-  hl2.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = hl2;
-  ctx.fillRect(x + 30, y + 40, 10, h - 120);
-
-  if (state.shattered){
-    ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-    ctx.lineWidth = 1.4;
-    const cracks = [
-      [[CX, BOT-20],[CX-60, 320],[CX-30, 240]],
-      [[CX, BOT-20],[CX+70, 360],[CX+40, 250]],
-      [[CX-30, 240],[CX-95, 260]],
-      [[CX+40, 250],[CX+100, 300]],
-      [[CX-60, 320],[CX-110, 400]],
-      [[CX+70, 360],[CX+112, 430]],
-      [[CX-30,240],[CX+10,300],[CX+40,250]],
-    ];
-    cracks.forEach(path => {
-      ctx.beginPath();
-      path.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
-      ctx.stroke();
-    });
-  }
   ctx.restore();
 }
 
-function drawVapours(){
-  ctx.save();
-  ctx.globalCompositeOperation = 'screen';
-  for (const p of state.steam){
-    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-    g.addColorStop(0, `rgba(220,240,255,${0.24 * p.life})`);
-    g.addColorStop(1, 'rgba(180,220,255,0)');
-    ctx.fillStyle = g;
+function drawBurner(g) {
+  const cx = g.cx;
+  const nozzleY = H * 0.855;
+  const baseY = H * 0.935;
+
+  // flame
+  const intensity = state.flame / 100;
+  if (intensity > 0.01) {
+    const t = performance.now() / 1000;
+    const flick = 1 + 0.07 * Math.sin(t * 19) + 0.045 * Math.sin(t * 31 + 1.2);
+    const fh = (H * 0.235) * intensity * flick;
+    const tintHex = state.flameTint || null;
+    const baseCol = tintHex ? hexToRgb(tintHex) : { r: 96, g: 165, b: 250 };
+
+    // outer flame
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    const wob = 1 + 0.10 * Math.sin(t * 13);
+    ctx.moveTo(cx - (6 + 8 * intensity), nozzleY);
+    ctx.quadraticCurveTo(cx - 16 * wob, nozzleY - fh * 0.5, cx, nozzleY - fh);
+    ctx.quadraticCurveTo(cx + 16 * wob, nozzleY - fh * 0.5, cx + (6 + 8 * intensity), nozzleY);
+    ctx.closePath();
+    const og = ctx.createLinearGradient(0, nozzleY, 0, nozzleY - fh);
+    og.addColorStop(0, `rgba(${baseCol.r},${baseCol.g},${baseCol.b},0.85)`);
+    og.addColorStop(0.45, `rgba(${Math.min(255, baseCol.r + 90)},${Math.min(255, baseCol.g + 60)},${Math.min(255, baseCol.b + 20)},0.55)`);
+    og.addColorStop(1, 'rgba(255,255,255,0.04)');
+    ctx.fillStyle = og;
     ctx.fill();
-  }
-  ctx.restore();
 
-  ctx.save();
-  for (const p of state.smoke){
-    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-    g.addColorStop(0, `rgba(45,45,50,${0.55 * p.life})`);
-    g.addColorStop(1, 'rgba(20,20,25,0)');
-    ctx.fillStyle = g;
+    // inner core
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.moveTo(cx - 4, nozzleY);
+    ctx.quadraticCurveTo(cx - 7, nozzleY - fh * 0.42, cx, nozzleY - fh * 0.62);
+    ctx.quadraticCurveTo(cx + 7, nozzleY - fh * 0.42, cx + 4, nozzleY);
+    ctx.closePath();
+    const cg = ctx.createLinearGradient(0, nozzleY, 0, nozzleY - fh * 0.62);
+    cg.addColorStop(0, 'rgba(190,235,255,0.85)');
+    cg.addColorStop(1, 'rgba(255,255,255,0.12)');
+    ctx.fillStyle = cg;
     ctx.fill();
-  }
-  ctx.restore();
-}
 
-function drawBurette(){
-  const s = state;
-  const x = CX - 14, w = 28, top = BURETTE_TOP, bot = BURETTE_BOT;
-
-  ctx.save();
-  roundRect(x, top, w, bot - top, 7);
-  ctx.fillStyle = 'rgba(170,215,240,0.07)';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(180,225,250,0.60)';
-  ctx.lineWidth = 2.2;
-  ctx.stroke();
-  ctx.restore();
-
-  const chem = CHEMS.find(c => c.id === s.buretteChem);
-  const lvl = s.buretteFrac;
-  const ly = top + (1 - lvl) * (bot - top - 8);
-  if (lvl > 0.01){
-    let lc = [190, 235, 255];
-    if (chem && chem.rgb) lc = chem.rgb;
-    ctx.save();
-    roundRect(x + 3, ly, w - 6, bot - ly - 4, 5);
-    ctx.fillStyle = `rgba(${lc[0]},${lc[1]},${lc[2]},0.55)`;
-    ctx.fill();
-    ctx.restore();
-
-    ctx.beginPath();
-    ctx.moveTo(x + 3, ly + 3);
-    ctx.quadraticCurveTo(CX, ly + 9, x + w - 3, ly + 3);
-    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
-    ctx.lineWidth = 1.4;
-    ctx.stroke();
+    // glow
+    const gl = ctx.createRadialGradient(cx, nozzleY - fh * 0.35, 0, cx, nozzleY - fh * 0.35, fh * 0.9);
+    gl.addColorStop(0, `rgba(${baseCol.r},${baseCol.g},${baseCol.b},0.18)`);
+    gl.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gl;
+    ctx.fillRect(cx - fh, nozzleY - fh * 1.4, fh * 2, fh * 1.6);
   }
 
-  ctx.strokeStyle = 'rgba(190,230,250,0.25)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 10; i++){
-    const gy = top + 8 + (i / 10) * (bot - top - 16);
-    const len = i % 5 === 0 ? 12 : 7;
-    ctx.beginPath();
-    ctx.moveTo(x + w - 3, gy);
-    ctx.lineTo(x + w - 3 - len, gy);
-    ctx.stroke();
-  }
-
+  // barrel
   ctx.fillStyle = '#334155';
-  roundRect(CX - 9, bot, 18, 12, 3); ctx.fill();
-  ctx.fillStyle = '#475569';
-  ctx.beginPath(); ctx.arc(CX, bot + 6, 7, 0, Math.PI * 2); ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(CX - 5, bot + 12);
-  ctx.lineTo(CX + 5, bot + 12);
-  ctx.lineTo(CX + 1.6, bot + 30);
-  ctx.lineTo(CX - 1.6, bot + 30);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(170,215,240,0.30)';
+  ctx.fillRect(cx - 5, nozzleY, 10, baseY - nozzleY - 8);
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(cx - 8, nozzleY - 4, 16, 6);
+  // base
+  ctx.fillStyle = '#1e293b';
+  rr(ctx, cx - 32, baseY - 12, 64, 14, 4);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(180,225,250,0.65)';
-  ctx.lineWidth = 1.6;
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
   ctx.stroke();
-
-  for (const d of s.drops){
-    ctx.beginPath();
-    ctx.ellipse(d.x, d.y, 2.6, 3.6, 0, 0, Math.PI * 2);
-    const lc = chem && chem.rgb ? chem.rgb : [190,235,255];
-    ctx.fillStyle = `rgba(${lc[0]},${lc[1]},${lc[2]},0.9)`;
-    ctx.fill();
-  }
-
-  ctx.font = 'bold 9px ui-monospace, monospace';
-  ctx.fillStyle = 'rgba(148,163,184,0.85)';
-  ctx.textAlign = 'center';
-  ctx.fillText(chem ? chem.f : '—', CX, top - 8);
-  ctx.textAlign = 'left';
+  // gas tube
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(cx + 6, baseY - 6);
+  ctx.quadraticCurveTo(cx + 40, baseY - 4, cx + 46, baseY - 22);
+  ctx.stroke();
 }
 
-function drawOverlays(){
-  if (state.flash > 0){
-    ctx.fillStyle = `rgba(255,220,180,${state.flash * 0.45})`;
-    ctx.fillRect(-1400, -1400, W + 2800, H + 2800);
+/* ═══════════════════════════════════════════════════════════════
+   CHEMISTRY HELPERS
+   ═══════════════════════════════════════════════════════════════ */
+function getMoles(id) {
+  if (id === 'h2o') return state.volume > 0.01 ? state.volume / 18.02 : 0;
+  const c = state.contents.find(x => x.id === id);
+  return c ? c.moles : 0;
+}
+function consume(id, mol) {
+  if (id === 'h2o') {
+    state.volume = Math.max(0, state.volume - mol * 18.02);
+    return;
   }
-  if (state.temp > 250){
-    const a = clamp((state.temp - 250) / 950, 0, 0.45);
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    const g = ctx.createRadialGradient(CX, 340, 60, CX, 340, 300);
-    g.addColorStop(0, `rgba(255,110,40,${a * 0.5})`);
-    g.addColorStop(1, 'rgba(255,60,0,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(-1400, -1400, W + 2800, H + 2800);
-    ctx.restore();
+  const c = state.contents.find(x => x.id === id);
+  if (!c) return;
+  c.moles -= mol;
+  c.mass = Math.max(0, c.moles * (c.M || 1));
+  if (c.moles <= 1e-9) {
+    const i = state.contents.indexOf(c);
+    if (i >= 0) state.contents.splice(i, 1);
   }
 }
-
-function render(){
-  ctx.save();
-  ctx.fillStyle = '#050a14';
-  ctx.fillRect(-6000, -6000, 12000, 12000);
-  ctx.restore();
-
-  ctx.save();
-  if (state.shake > 0){
-    ctx.translate((Math.random() - 0.5) * state.shake * 12, (Math.random() - 0.5) * state.shake * 12);
-  }
-  drawBackdrop();
-  drawBurner();
-  drawBeakerBack();
-  drawLiquid();
-  drawBeakerFront();
-  drawVapours();
-  drawBurette();
-  drawOverlays();
-  ctx.restore();
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   HUD UPDATES + THERMODYNAMIC ANALYTICS
-   ══════════════════════════════════════════════════════════════════════════ */
-let hudTimer = 0;
-
-function fmtSci(v){
-  if (v <= 0) return '0';
-  return v.toExponential(2);
-}
-
-function updateHUD(dt){
-  hudTimer += dt;
-  if (hudTimer < 0.08) return;
-  hudTimer = 0;
-
-  const s = state;
-
-  document.getElementById('tempC').textContent = s.temp.toFixed(1);
-  document.getElementById('tempK') && (document.getElementById('tempK').textContent = (s.temp + 273.15).toFixed(2));
-
-  let stateName = 'AMBIENT', stateCls = 'border-cyan-800 bg-cyan-950/60 text-cyan-300';
-  if (s.paused)          { stateName = 'PAUSED — SAFETY'; stateCls = 'border-red-500 bg-red-900/60 text-red-200 hazard-blink'; }
-  else if (s.temp < 5)   { stateName = 'CRYOGENIC';   stateCls = 'border-blue-700 bg-blue-950/60 text-blue-300'; }
-  else if (s.temp < 18)  { stateName = 'COLD';        stateCls = 'border-sky-700 bg-sky-950/60 text-sky-300'; }
-  else if (s.temp < 40)  { stateName = 'AMBIENT';     stateCls = 'border-cyan-800 bg-cyan-950/60 text-cyan-300'; }
-  else if (s.temp < 65)  { stateName = 'WARM';        stateCls = 'border-amber-700 bg-amber-950/60 text-amber-300'; }
-  else if (s.temp < 99)  { stateName = 'HOT';         stateCls = 'border-orange-700 bg-orange-950/60 text-orange-300'; }
-  else if (s.temp < 110) { stateName = 'BOILING';     stateCls = 'border-red-700 bg-red-950/60 text-red-300'; }
-  else if (s.temp < 400) { stateName = 'VERY HOT';    stateCls = 'border-red-600 bg-red-900/60 text-red-200'; }
-  else                   { stateName = 'INCANDESCENT';stateCls = 'border-red-500 bg-red-800/70 text-red-100 hazard-blink'; }
-
-  const ts = document.getElementById('thermalState');
-  ts.textContent = stateName;
-  ts.className = `text-[8.5px] font-bold tracking-wider px-2 py-1 rounded-full border ${stateCls} backdrop-blur-sm`;
-
-  document.getElementById('hudFlame').textContent = s.flame.toFixed(0) + '%';
-  document.getElementById('hudStir').textContent = (s.stir * 12).toFixed(0);
-
-  /* pH display */
-  document.getElementById('phValue').textContent = s.pH.toFixed(2);
-  document.getElementById('phMarker').style.left = `calc(${(s.pH / 14) * 100}% - 1.25px)`;
-
-  let phTxt = 'NEUTRAL', phCol = 'text-emerald-400';
-  if (s.pH < 3)       { phTxt = 'STRONG ACID'; phCol = 'text-red-400'; }
-  else if (s.pH < 6)  { phTxt = 'ACIDIC';      phCol = 'text-orange-400'; }
-  else if (s.pH < 6.8){ phTxt = 'SLIGHT ACID'; phCol = 'text-amber-400'; }
-  else if (s.pH <= 7.2){ phTxt = 'NEUTRAL';    phCol = 'text-emerald-400'; }
-  else if (s.pH <= 8.5){ phTxt = 'SLIGHT BASE';phCol = 'text-teal-400'; }
-  else if (s.pH <= 11) { phTxt = 'BASIC';      phCol = 'text-blue-400'; }
-  else                 { phTxt = 'STRONG BASE';phCol = 'text-violet-400'; }
-  const pl = document.getElementById('phLabel');
-  pl.textContent = phTxt; pl.className = `text-[8.5px] font-bold tracking-wider ${phCol}`;
-
-  /* pH slider label sync */
-  const phSl = document.getElementById('phSliderLbl');
-  if (phSl) phSl.textContent = s.pH.toFixed(2);
-
-  /* ═══ THERMODYNAMIC ANALYTICS ═══ */
-  const V_L = Math.max(0.0005, s.volume / 1000);
-
-  const cWater = 4.184;
-  const dT = s.temp - 25;
-  const q = s.mass * cWater * dT;
-
-  const nGas = (s.gasMoles.H2 + s.gasMoles.CO2 + s.gasMoles.O2 + s.gasMoles.SO2);
-  const V_STP = nGas * 22.4;
-
-  const totalMoles = Object.values(s.ions).reduce((a,b)=>a+b,0)
-                   + Object.values(s.solids).reduce((a,b)=>a+b,0)
-                   + Object.values(s.precip).reduce((a,b)=>a+b,0);
-  const M = totalMoles / V_L;
-
-  document.getElementById('mMass').textContent = s.mass.toFixed(1);
-  document.getElementById('mVol').textContent = s.volume.toFixed(1);
-  document.getElementById('mMol').textContent = M.toFixed(3);
-  document.getElementById('mDH').textContent = s.lastDeltaH_kJmol.toFixed(1);
-  document.getElementById('mQ').textContent = q.toFixed(1);
-  document.getElementById('mVstp').textContent = V_STP.toFixed(3);
-  document.getElementById('mNgas').textContent = nGas.toFixed(4);
-  document.getElementById('mDT').textContent = dT.toFixed(1);
-
-  const dHBar = document.getElementById('dHBar');
-  const dHPct = clamp(Math.abs(s.dH) / 400 * 50, 0, 50);
-  if (s.dH < 0){
-    dHBar.style.right = '50%'; dHBar.style.left = 'auto';
-    dHBar.style.width = dHPct + '%';
-    dHBar.style.background = 'linear-gradient(90deg,#fb7185,#f43f5e)';
-  } else if (s.dH > 0){
-    dHBar.style.left = '50%'; dHBar.style.right = 'auto';
-    dHBar.style.width = dHPct + '%';
-    dHBar.style.background = 'linear-gradient(90deg,#34d399,#10b981)';
+function addSpecies(p, extent) {
+  const base = p.id ? RMAP[p.id] : null;
+  const spec = base ? Object.assign({}, base) : Object.assign({}, p);
+  const n = (p.n || 1) * extent;
+  const M = spec.M || 100;
+  const mass = n * M;
+  const key = spec.id || spec.formula;
+  const existing = state.contents.find(c => c.id === key);
+  if (existing) {
+    existing.moles += n;
+    existing.mass += mass;
   } else {
-    dHBar.style.width = '0%';
-  }
-  document.getElementById('mDHCumul').textContent = (s.dH >= 0 ? '+' : '') + s.dH.toFixed(2) + ' kJ';
-
-  const sp = document.getElementById('speciesList');
-  const entries = Object.entries(s.ions).filter(([k,v]) => v > 1e-9)
-    .sort((a,b) => b[1] - a[1]).slice(0, 16);
-  if (entries.length === 0){
-    sp.innerHTML = '<span class="text-[8.5px] text-slate-600 font-mono italic">no solutes in vessel</span>';
-  } else {
-    sp.innerHTML = entries.map(([k,v]) => {
-      const conc = v / V_L;
-      return `<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#131c2b] border border-slate-800 text-cyan-300">[${k}] = <span class="text-slate-400">${fmtSci(conc)}</span> M</span>`;
-    }).join('');
-  }
-
-  document.getElementById('fps').textContent = Math.round(1 / Math.max(dt, 1e-4));
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   MAIN LOOP
-   ══════════════════════════════════════════════════════════════════════════ */
-let lastT = performance.now();
-
-function loop(now){
-  requestAnimationFrame(loop);
-  let dt = (now - lastT) / 1000;
-  lastT = now;
-  if (dt > 0.1) dt = 0.1;
-
-  const s = state;
-  s.tick++;
-  s.stirPhase += dt * 60 * (s.stir / 100) * 3;
-
-  if (!s.shattered && !s.paused){
-    updateThermo(dt);
-    react(dt);
-    updateBurette(dt);
-
-    if (s.temp > 60 && s.temp < 100 && s.volume > 1){
-      if (Math.random() < (s.temp - 60) / 400) spawnSteam(1);
-    }
-  }
-
-  computePH();
-  computeFluidColor();
-  updateParticles(dt);
-  updateHUD(dt);
-  render();
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   CONTROL WIRING
-   ══════════════════════════════════════════════════════════════════════════ */
-function wireControls(){
-  const flame = document.getElementById('flameSlider');
-  const stir  = document.getElementById('stirSlider');
-  const drip  = document.getElementById('dripSlider');
-  const phSl  = document.getElementById('phSlider');
-
-  flame.addEventListener('input', e => {
-    state.flame = parseFloat(e.target.value);
-    document.getElementById('flameLbl').textContent = ((state.flame / 100) * 1500).toFixed(0) + ' °C';
-    LabAudio.init(); LabAudio.resume();
-  });
-
-  stir.addEventListener('input', e => {
-    state.stir = parseFloat(e.target.value);
-    document.getElementById('stirLbl').textContent = (state.stir * 12).toFixed(0) + ' rpm';
-    if (state.stir > 0 && Math.random() < 0.4) LabAudio.whirr();
-  });
-
-  drip.addEventListener('input', e => {
-    state.drip = parseFloat(e.target.value);
-    document.getElementById('dripLbl').textContent = state.drip.toFixed(1) + ' d/s';
-  });
-
-  /* pH slider — visual target; sets a strong pH marker overlay */
-  if (phSl){
-    phSl.addEventListener('input', e => {
-      document.getElementById('phSliderLbl').textContent = parseFloat(e.target.value).toFixed(2);
+    state.contents.push({
+      id: key, name: spec.name || p.name, formula: spec.formula,
+      M, moles: n, mass,
+      ions: spec.ions || [], color: spec.color || '#e2e8f0',
+      H: spec.H || 0, OH: spec.OH || 0,
+      solColor: spec.solColor || null, indicator: spec.indicator || null
     });
   }
-
-  document.getElementById('btnWater').onclick = () => {
-    const inp = document.getElementById('water-vol');
-    const qty = parseFloat(inp.value);
-    if (!qty || qty <= 0){ log('Enter a valid water volume.', 'warn'); return; }
-    state.volume += qty;
-    state.mass += qty;
-    log(`Added ${qty.toFixed(1)} mL distilled H₂O (dilution)`, 'info');
-    LabAudio.click();
-  };
-
-  document.getElementById('btnClearVessel').onclick = () => {
-    clearVessel();
-    document.getElementById('hazard').classList.add('hidden');
-  };
-
-  document.getElementById('btnRefill').onclick = () => {
-    state.buretteFrac = 1;
-    log('Burette refilled to 50.00 mL mark', 'good');
-    LabAudio.click();
-  };
-
-  document.getElementById('btnStirPulse').onclick = () => {
-    LabAudio.init(); LabAudio.resume();
-    LabAudio.whirr();
-    let t = 0;
-    const iv = setInterval(() => {
-      t += 0.05;
-      state.stirPhase += 14;
-      if (t > 0.55){ clearInterval(iv); }
-    }, 30);
-    log('Manual stir pulse applied', 'info');
-  };
-
-  document.getElementById('btnFlush').onclick = () => {
-    flushAll();
-    document.getElementById('hazard').classList.add('hidden');
-  };
-
-  document.getElementById('btnSound').onclick = () => {
-    LabAudio.init(); LabAudio.resume();
-    LabAudio.enabled = !LabAudio.enabled;
-    document.getElementById('soundLbl').textContent = 'SOUND: ' + (LabAudio.enabled ? 'ON' : 'OFF');
-    if (!LabAudio.enabled){
-      LabAudio.setFizz(0); LabAudio.setHiss(0); LabAudio.setBoil(0);
+}
+function computePH() {
+  let Hp = 0, OHm = 0;
+  for (const c of state.contents) {
+    Hp += (c.H || 0) * c.moles;
+    OHm += (c.OH || 0) * c.moles;
+  }
+  const V = Math.max(0.001, state.volume / 1000);
+  const net = (Hp - OHm) / V;
+  let ph;
+  if (Math.abs(net) < 1e-7) ph = 7;
+  else if (net > 0) ph = -Math.log10(net);
+  else ph = 14 + Math.log10(-net);
+  return Math.max(0, Math.min(14, ph));
+}
+function refreshSolutionColor() {
+  let r = 150, g = 205, b = 235, a = 0.30;
+  for (const c of state.contents) {
+    if (c.solColor) {
+      r = r * 0.30 + c.solColor[0] * 0.70;
+      g = g * 0.30 + c.solColor[1] * 0.70;
+      b = b * 0.30 + c.solColor[2] * 0.70;
+      a = Math.max(a, c.solColor[3]);
     }
-    log('Audio ' + (LabAudio.enabled ? 'enabled' : 'muted'), 'info');
-  };
-
-  document.getElementById('btnHazardAllow').onclick = () => {
-    const pending = pendingAddition;
-    hideHazardModal();
-    state.paused = false;
-    pendingAddition = null;
-    if (pending){
-      log('⚠️ SAFETY OVERRIDE — hazard procedure authorized by operator.', 'danger');
-      addChemical(pending.chem, pending.qty, true);
+  }
+  // cloudiness from precipitate
+  let cloud = 0;
+  for (const c of state.contents) if (c.isPrecip) cloud += c.moles;
+  if (cloud > 0) {
+    const f = Math.min(0.85, cloud * 3);
+    r = r * (1 - f) + 235 * f;
+    g = g * (1 - f) + 240 * f;
+    b = b * (1 - f) + 245 * f;
+    a = Math.min(0.92, a + f * 0.35);
+  }
+  // indicator
+  const ind = state.contents.find(c => c.indicator);
+  if (ind) {
+    const ph = state.ph;
+    let col = null;
+    if (ind.indicator === 'pth') {
+      if (ph < 8.2) col = [200, 220, 240, 0.26];
+      else if (ph <= 10) col = [244, 114, 182, 0.58];
+      else col = [219, 39, 119, 0.72];
+    } else if (ind.indicator === 'litmus') {
+      if (ph < 4.5) col = [239, 68, 68, 0.60];
+      else if (ph <= 8.3) col = [168, 85, 247, 0.48];
+      else col = [59, 130, 246, 0.60];
+    } else if (ind.indicator === 'mo') {
+      if (ph < 3.1) col = [239, 68, 68, 0.62];
+      else if (ph <= 4.4) col = [249, 115, 22, 0.62];
+      else col = [250, 204, 21, 0.58];
     }
-  };
-
-  document.getElementById('btnHazardCancel').onclick = () => {
-    hideHazardModal();
-    state.paused = false;
-    if (pendingAddition){
-      log(`🛑 ABORTED — ${pendingAddition.qty.toFixed(1)} ${pendingAddition.chem.st === 's' ? 'g' : 'mL'} of ${pendingAddition.chem.f} rejected. Vessel unchanged.`, 'warn');
-    }
-    pendingAddition = null;
-  };
-
-  document.addEventListener('keydown', e => {
-    if (state.paused){
-      if (e.key === 'Escape'){ document.getElementById('btnHazardCancel').click(); }
-      else if (e.key === 'Enter'){ document.getElementById('btnHazardAllow').click(); }
-    }
-  });
-
-  const unlock = () => { LabAudio.init(); LabAudio.resume(); document.removeEventListener('click', unlock); };
-  document.addEventListener('click', unlock);
-  document.addEventListener('keydown', unlock);
+    if (col) { r = col[0]; g = col[1]; b = col[2]; a = col[3]; }
+  }
+  state.sol = { r, g, b, a };
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   BOOT
-   ══════════════════════════════════════════════════════════════════════════ */
-function boot(){
-  buildTabs();
-  buildShelf();
-  buildBuretteSel();
-  wireControls();
-  resizeCanvas();
-
-  if (window.ResizeObserver){
-    try { new ResizeObserver(resizeCanvas).observe(canvas.parentElement); } catch(e){}
+/* ───────────── REACTION EXECUTION ───────────── */
+function findReaction(startId) {
+  for (const rx of REACTIONS) {
+    if (!rx.pair.includes(startId)) continue;
+    const other = rx.pair[0] === startId ? rx.pair[1] : rx.pair[0];
+    const sA = (rx.stoich && rx.stoich[startId]) || 1;
+    const sB = (rx.stoich && rx.stoich[other]) || 1;
+    const nA = getMoles(startId), nB = getMoles(other);
+    if (nA / sA > 1e-6 && nB / sB > 1e-6) return { rx, aId: startId, bId: other };
   }
-  window.addEventListener('resize', resizeCanvas);
-  setTimeout(resizeCanvas, 100);
+  return null;
+}
 
-  log('VirtuaLab Pro v4.0 initialised. 3-column viewport locked.', 'good');
-  log('Charged 250.0 mL distilled H₂O @ 25.0 °C', 'info');
-  log('Tip: CuSO₄ + NaOH → Cu(OH)₂↓ precipitation (ΔH = +30 kJ/mol)', 'info');
-  log('Tip: add Na metal → hazard interlock engages before violent reaction.', 'info');
+function applyReaction(rx, aId, bId) {
+  const s = rx.stoich || {};
+  const cA = s[aId] || 1, cB = s[bId] || 1;
+  const extent = Math.min(getMoles(aId) / cA, getMoles(bId) / cB);
+  if (extent <= 1e-9) return false;
 
+  consume(aId, extent * cA);
+  consume(bId, extent * cB);
+
+  // thermodynamics
+  const dH = rx.dH || 0;
+  const released = -dH * extent * 1000; // J
+  const mass = Math.max(20, state.volume || 20);
+  state.temp = Math.min(140, state.temp + released / (mass * 4.18));
+  state.heat += released / 1000;
+  state.enthalpy += dH * extent;
+
+  // products
+  (rx.prod || []).forEach(p => addSpecies(p, extent));
+
+  // gas
+  if (rx.gas) {
+    const gasMol = rx.gas.n * extent;
+    state.gasMoles += gasMol;
+    spawnBubbles(Math.min(60, Math.round(18 + gasMol * 400)), 1);
+    state.fizzLevel = Math.min(1, state.fizzLevel + 0.35);
+  }
+
+  // precipitate
+  if (rx.precip) {
+    const pm = rx.precip.M || 100;
+    state.precipMass += rx.precip.n ? 0 : pm * extent;
+    spawnPrecipitate(rx.precip.color, Math.min(70, Math.round(18 + extent * 900)));
+    log(`⬇ Precipitate formed: ${rx.precip.name} (${rx.precip.formula}) — insoluble solid settles.`, 'ok');
+  }
+
+  // fx
+  const fx = rx.fx || {};
+  if (fx.explode) {
+    state.shake = Math.min(26, 8 + fx.explode * 14);
+    flashScreen(0.55 + fx.explode * 0.35);
+    Audio2.explosion(Math.min(1.6, 0.8 + fx.explode * 0.5));
+    spawnSparks(fx.sparks || 20);
+  }
+  if (fx.sparks && !fx.explode) spawnSparks(fx.sparks);
+  if (fx.smoke) {
+    const parts = fx.smoke.c.split(',');
+    spawnSmoke(fx.smoke.c, fx.smoke.n || 16, 1);
+    if (parts.length === 3 && +parts[0] < 220) log(`💨 Dense ${fx.smoke.c === '190,220,150' ? 'yellow-green' : 'brown/white'} fumes evolved.`, 'warn');
+  }
+  if (fx.bubbles) spawnBubbles(fx.bubbles, 1);
+  if (fx.flame) state.flameTint = fx.flame;
+
+  // record
+  state.lastReaction = rx;
+  state.equations.unshift({ eq: rx.eq, name: rx.name });
+  if (state.equations.length > 12) state.equations.pop();
+
+  log(`⚗ REACTION: ${rx.name}`, 'ok');
+  log(`   ${rx.eq}`, 'info');
+  if (dH !== 0) {
+    log(`   ΔH = ${dH} kJ/mol · q released = ${(released / 1000).toFixed(2)} kJ · T → ${state.temp.toFixed(1)} °C`, dH < 0 ? 'warn' : 'info');
+  }
+  return true;
+}
+
+function processAll() {
+  let guard = 0;
+  while (guard++ < 10) {
+    let fired = false;
+    for (const c of [...state.contents]) {
+      const f = findReaction(c.id);
+      if (f) {
+        if (f.rx.hazard && !state.approved.has(f.rx.id)) {
+          state.paused = true;
+          state.pending = { rx: f.rx };
+          showSafety(f.rx);
+          return;
+        }
+        applyReaction(f.rx, f.aId, f.bId);
+        fired = true;
+        break;
+      }
+    }
+    if (!fired) break;
+  }
+  state.paused = false;
+  refreshSolutionColor();
+  computeFlameTint();
+  updateAnalytics();
+}
+
+/* ───────────── FLAME TEST ───────────── */
+function computeFlameTint() {
+  if (state.flame <= 2) { state.flameTint = null; return; }
+  const ions = new Set();
+  state.contents.forEach(c => (c.ions || []).forEach(i => ions.add(i)));
+  if (ions.has('Cu²⁺')) state.flameTint = '#22c55e';
+  else if (ions.has('K⁺')) state.flameTint = '#c084fc';
+  else if (ions.has('Na⁺')) state.flameTint = '#fbbf24';
+  else if (ions.has('Ca²⁺')) state.flameTint = '#fb923c';
+  else if (ions.has('Ba²⁺')) state.flameTint = '#a3e635';
+  else state.flameTint = null;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UI: LOGS
+   ═══════════════════════════════════════════════════════════════ */
+const logBox = $('logs');
+function log(msg, kind = 'info') {
+  const t = new Date();
+  const ts = `${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}:${String(t.getSeconds()).padStart(2, '0')}`;
+  const colors = {
+    info: 'text-slate-400',
+    ok: 'text-emerald-400',
+    warn: 'text-amber-400',
+    danger: 'text-rose-400',
+    sys: 'text-sky-400'
+  };
+  const div = document.createElement('div');
+  div.className = `log-line ${colors[kind] || colors.info}`;
+  div.textContent = `[${ts}] ${msg}`;
+  logBox.appendChild(div);
+  while (logBox.children.length > 220) logBox.removeChild(logBox.firstChild);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+$('clearLogs').addEventListener('click', () => { logBox.innerHTML = ''; Audio2.click(); log('Log buffer cleared.', 'sys'); });
+
+/* ═══════════════════════════════════════════════════════════════
+   UI: ANALYTICS
+   ═══════════════════════════════════════════════════════════════ */
+function updateAnalytics() {
+  const soluteMass = state.contents.reduce((s, c) => s + c.mass, 0);
+  const totalMass = state.volume + soluteMass;
+  const soluteMoles = state.contents.reduce((s, c) => s + c.moles, 0);
+  const V = state.volume / 1000;
+  const molarity = V > 0.0001 ? soluteMoles / V : 0;
+
+  $('mMass').textContent = totalMass.toFixed(2) + ' g';
+  $('mVolume').textContent = state.volume.toFixed(1) + ' mL';
+  $('mMolarity').textContent = molarity.toFixed(3) + ' M';
+  $('mTemp').textContent = state.temp.toFixed(1) + ' °C';
+  $('mHeat').textContent = state.heat.toFixed(2) + ' kJ';
+  $('mEnthalpy').textContent = state.enthalpy.toFixed(1) + ' kJ';
+  $('mGas').textContent = (state.gasMoles * 22.4).toFixed(3) + ' L';
+  $('mPrecip').textContent = state.precipMass.toFixed(2) + ' g';
+
+  // ions
+  const ionSet = new Set();
+  state.contents.forEach(c => (c.ions || []).forEach(i => ionSet.add(i)));
+  $('mIons').textContent = ionSet.size ? [...ionSet].join('  ·  ') : '— none —';
+
+  // equations
+  const eqBox = $('mEq');
+  if (!state.equations.length) {
+    eqBox.innerHTML = '— no reactions yet —';
+  } else {
+    eqBox.innerHTML = state.equations.map(e =>
+      `<div class="border-l-2 border-sky-700 pl-1.5">
+         <div class="text-[9px] text-slate-500 uppercase tracking-wide">${e.name}</div>
+         <div class="text-sky-200">${e.eq}</div>
+       </div>`).join('');
+  }
+
+  $('mTemp').className = 'text-[13px] font-mono ' + (state.temp > 90 ? 'text-rose-400' : state.temp > 60 ? 'text-amber-300' : 'text-orange-300');
+
+  // pH slider sync
+  if (!phDragging) $('phSlider').value = state.ph.toFixed(1);
+  $('phVal').textContent = state.ph.toFixed(2);
+  $('phVal').className = 'font-mono text-[11px] ' + (state.ph < 6.5 ? 'text-rose-400' : state.ph > 7.5 ? 'text-blue-400' : 'text-emerald-400');
+
+  // vessel badge
+  const badge = $('vesselBadge');
+  if (state.paused) { badge.textContent = 'PAUSED'; badge.className = 'absolute top-1.5 right-2.5 z-10 text-[10px] font-mono text-rose-400 animate-pulse'; }
+  else if (state.temp > 99) { badge.textContent = 'BOILING'; badge.className = 'absolute top-1.5 right-2.5 z-10 text-[10px] font-mono text-orange-400'; }
+  else if (state.contents.length) { badge.textContent = 'REACTING'; badge.className = 'absolute top-1.5 right-2.5 z-10 text-[10px] font-mono text-sky-400'; }
+  else { badge.textContent = 'IDLE'; badge.className = 'absolute top-1.5 right-2.5 z-10 text-[10px] font-mono text-emerald-400'; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UI: FLASH & SHAKE
+   ═══════════════════════════════════════════════════════════════ */
+let flashTimer = null;
+function flashScreen(intensity) {
+  const el = $('flash');
+  el.style.opacity = String(Math.min(1, intensity));
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => { el.style.opacity = '0'; }, 90);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UI: SAFETY MODAL
+   ═══════════════════════════════════════════════════════════════ */
+const modal = $('safetyModal');
+function showSafety(rx) {
+  $('safetyLevel').textContent = 'HAZARD LEVEL: ' + (rx.hazard.level || 'HIGH');
+  $('safetyName').textContent = '⚠ ' + rx.name;
+  $('safetyEq').textContent = rx.eq;
+  $('safetyMsg').textContent = rx.hazard.msg;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  Audio2.explosion(0.4);
+  log(`⛔ SAFETY INTERCEPT: ${rx.name} — engine paused pending authorisation.`, 'danger');
+  log(`   ${rx.hazard.msg}`, 'warn');
+  updateAnalytics();
+}
+function hideSafety() {
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+$('btnAllow').addEventListener('click', () => {
+  Audio2.glass();
+  const p = state.pending;
+  hideSafety();
+  if (!p) return;
+  state.approved.add(p.rx.id);
+  state.paused = false;
+  log(`✅ Operator authorised execution of: ${p.rx.name}`, 'warn');
+  state.pending = null;
+  processAll();
+});
+$('btnCancel').addEventListener('click', () => {
+  Audio2.click();
+  hideSafety();
+  const p = state.pending;
+  state.pending = null;
+  state.paused = false;
+  if (p && state.lastAddedId) {
+    const c = state.contents.find(x => x.id === state.lastAddedId);
+    if (c) {
+      const i = state.contents.indexOf(c);
+      state.contents.splice(i, 1);
+      log(`🛑 Operator ABORTED the reaction. Reagent "${c.name}" removed from vessel.`, 'danger');
+    }
+  }
+  refreshSolutionColor();
+  updateAnalytics();
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   UI: AI TUTOR
+   ═══════════════════════════════════════════════════════════════ */
+const tutor = $('tutor');
+function openTutor(rx) {
+  const body = $('tutorBody');
+  if (!rx) {
+    body.innerHTML = `<div class="text-slate-400">No reaction recorded yet. Add reagents to the vessel and the AI Tutor will explain exactly what happened and why.</div>`;
+  } else {
+    body.innerHTML = `
+      <div class="rounded-md bg-sky-950/40 border border-sky-900/60 p-2">
+        <div class="text-[10px] uppercase tracking-widest text-sky-500 mb-0.5">Reaction</div>
+        <div class="text-[12px] font-bold text-slate-100">${rx.name}</div>
+        <div class="text-[11px] font-mono text-amber-300 mt-1">${rx.eq}</div>
+      </div>
+      <div class="rounded-md bg-slate-950/60 border border-slate-800 p-2">
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Why did this happen?</div>
+        <div class="text-slate-300">${rx.explain}</div>
+      </div>
+      <div class="rounded-md bg-slate-950/60 border border-slate-800 p-2">
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Thermodynamics</div>
+        <div class="font-mono text-[11px] text-slate-300">
+          ΔH = ${rx.dH} kJ/mol<br>
+          ${rx.dH < 0 ? '→ Exothermic: energy is RELEASED to the surroundings.' : '→ Endothermic: energy is ABSORBED from the surroundings.'}
+        </div>
+      </div>
+      ${rx.hazard ? `<div class="rounded-md bg-red-950/40 border border-red-900/60 p-2">
+        <div class="text-[10px] uppercase tracking-widest text-red-400 mb-1">Safety Note</div>
+        <div class="text-red-200/90">${rx.hazard.msg}</div>
+      </div>` : ''}
+      <div class="rounded-md bg-slate-950/60 border border-slate-800 p-2">
+        <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Exam Tip</div>
+        <div class="text-slate-400">Balance the equation first, then use mole ratios (coefficients) to find limiting reagents. ΔH values are quoted per mole of reaction as written.</div>
+      </div>`;
+  }
+  tutor.classList.add('tutor-open');
+  Audio2.click();
+}
+$('btnTutor').addEventListener('click', () => openTutor(state.lastReaction));
+$('btnWhy').addEventListener('click', () => openTutor(state.lastReaction));
+$('tutorClose').addEventListener('click', () => { tutor.classList.remove('tutor-open'); Audio2.click(); });
+
+/* ═══════════════════════════════════════════════════════════════
+   UI: REAGENT LIBRARY
+   ═══════════════════════════════════════════════════════════════ */
+let activeCat = 'all';
+function renderTabs() {
+  $('catTabs').innerHTML = CATS.map(([id, label]) =>
+    `<button data-cat="${id}" class="text-[9px] px-1.5 py-0.5 rounded border transition ${
+      id === activeCat
+        ? 'bg-sky-600 border-sky-500 text-white font-bold'
+        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-sky-700 hover:text-sky-300'
+    }">${label}</button>`).join('');
+}
+function renderReagents() {
+  const q = ($('search').value || '').toLowerCase();
+  const list = REAGENTS.filter(r =>
+    (activeCat === 'all' || r.cats.includes(activeCat)) &&
+    (!q || r.name.toLowerCase().includes(q) || r.formula.toLowerCase().includes(q))
+  );
+  if (!list.length) {
+    $('reagentList').innerHTML = `<div class="text-[11px] text-slate-600 text-center py-6">No reagents match.</div>`;
+    return;
+  }
+  $('reagentList').innerHTML = list.map(r => `
+    <div class="rounded-md border border-slate-800 bg-slate-950/60 px-1.5 py-1 flex items-center gap-1 hover:border-sky-700/70 transition">
+      <div class="flex-1 min-w-0">
+        <div class="text-[11px] text-slate-200 truncate leading-tight">${r.name}</div>
+        <div class="text-[10px] text-sky-400 font-mono leading-tight">${r.formula}
+          <span class="text-slate-600">· ${r.M} g/mol</span></div>
+      </div>
+      <input data-amt="${r.id}" type="number" min="0.1" step="0.1" value="1"
+             class="w-11 bg-slate-900 border border-slate-700 rounded px-1 py-0.5 text-[10px] text-center text-slate-200 outline-none focus:border-sky-600">
+      <span class="text-[9px] text-slate-600">g/mL</span>
+      <button data-add="${r.id}"
+              class="text-[10px] px-1.5 py-1 rounded bg-sky-600 hover:bg-sky-500 text-white font-semibold transition">+ ADD</button>
+    </div>`).join('');
+}
+$('catTabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-cat]');
+  if (!b) return;
+  activeCat = b.dataset.cat;
+  renderTabs();
+  renderReagents();
+  Audio2.click();
+});
+$('search').addEventListener('input', renderReagents);
+$('reagentList').addEventListener('click', e => {
+  const b = e.target.closest('[data-add]');
+  if (!b) return;
+  const id = b.dataset.add;
+  const inp = $('reagentList').querySelector(`[data-amt="${id}"]`);
+  const amt = Math.max(0.1, parseFloat(inp ? inp.value : '1') || 1);
+  addReagent(id, amt);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   ADD REAGENT
+   ═══════════════════════════════════════════════════════════════ */
+function addReagent(id, amount) {
+  const R = RMAP[id];
+  if (!R) return;
+  Audio2.resume();
+
+  if (id === 'h2o') {
+    state.volume = Math.min(400, state.volume + amount);
+    Audio2.pour();
+    log(`💧 Added ${amount.toFixed(1)} mL distilled water. Total volume = ${state.volume.toFixed(1)} mL`, 'sys');
+    state.lastAddedId = null;
+    recomputePH();
+    refreshSolutionColor();
+    processAll();
+    updateAnalytics();
+    return;
+  }
+
+  const moles = amount / R.M;
+  const existing = state.contents.find(c => c.id === id);
+  if (existing) {
+    existing.moles += moles;
+    existing.mass += amount;
+  } else {
+    state.contents.push({
+      id: R.id, name: R.name, formula: R.formula, M: R.M,
+      moles, mass: amount,
+      ions: R.ions || [], color: R.color || '#e2e8f0',
+      H: R.H || 0, OH: R.OH || 0,
+      solColor: R.solColor || null, indicator: R.indicator || null
+    });
+  }
+  state.lastAddedId = id;
+
+  Audio2.glass();
+  log(`➕ Added ${amount.toFixed(2)} g/mL of ${R.name} (${R.formula}) = ${moles.toFixed(4)} mol`, 'sys');
+  if (R.ions && R.ions.length) log(`   Dissociates into: ${R.ions.join(' + ')}`, 'info');
+
+  if (state.volume < 0.5) {
+    log('⚠ Vessel is essentially dry — no solvent medium. Add water to enable reactions.', 'warn');
+    updateAnalytics();
+    return;
+  }
+
+  recomputePH();
+  refreshSolutionColor();
+  processAll();
+  updateAnalytics();
+}
+
+function recomputePH() {
+  state.ph = computePH();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTROLS
+   ═══════════════════════════════════════════════════════════════ */
+let phDragging = false;
+const phSlider = $('phSlider');
+phSlider.addEventListener('pointerdown', () => phDragging = true);
+phSlider.addEventListener('pointerup', () => setTimeout(() => phDragging = false, 300));
+phSlider.addEventListener('input', e => {
+  state.ph = parseFloat(e.target.value);
+  $('phVal').textContent = state.ph.toFixed(2);
+  refreshSolutionColor();
+  updateAnalytics();
+});
+phSlider.addEventListener('change', e => {
+  log(`🧪 Manual pH override applied → pH = ${parseFloat(e.target.value).toFixed(2)} (virtual buffer adjustment)`, 'warn');
+  Audio2.click();
+});
+
+$('flameSlider').addEventListener('input', e => {
+  state.flame = parseInt(e.target.value);
+  $('flameVal').textContent = state.flame + '%';
+  computeFlameTint();
+  if (state.flame > 0) Audio2.resume();
+  if (state.flame === 0) { Audio2.setHiss(0); log('🔥 Bunsen burner extinguished.', 'sys'); }
+});
+$('flameSlider').addEventListener('change', e => {
+  const v = parseInt(e.target.value);
+  log(v > 0 ? `🔥 Bunsen burner ignited at ${v}% intensity.` : '🔥 Burner off.', v > 0 ? 'warn' : 'sys');
+});
+
+$('stirSlider').addEventListener('input', e => {
+  state.stir = parseInt(e.target.value);
+  $('stirVal').textContent = Math.round(state.stir * 12) + ' rpm';
+});
+$('dripSlider').addEventListener('input', e => {
+  state.drip = parseInt(e.target.value);
+  $('dripVal').textContent = (state.drip * 0.04).toFixed(1) + ' mL/s';
+});
+
+$('btnClear').addEventListener('click', () => {
+  Audio2.pour();
+  state.contents = [];
+  state.volume = 0;
+  state.gasMoles = 0; state.heat = 0; state.enthalpy = 0; state.precipMass = 0;
+  state.temp = 25; state.equations = []; state.lastReaction = null;
+  state.flameTint = null;
+  particles.length = 0;
+  state.ph = 7; state.sol = { r:150, g:205, b:235, a:0.30 };
+  log('🗑️ Vessel cleared. All contents, precipitates and data reset.', 'danger');
+  updateAnalytics();
+});
+
+$('btnRefill').addEventListener('click', () => {
+  Audio2.pour();
+  state.volume = Math.min(400, state.volume + 50);
+  log(`🔄 Refill: +50.0 mL distilled water. Volume = ${state.volume.toFixed(1)} mL`, 'sys');
+  recomputePH(); refreshSolutionColor(); processAll(); updateAnalytics();
+});
+
+let stirPulseTimer = null;
+$('btnStirPulse').addEventListener('click', () => {
+  Audio2.resume(); Audio2.click();
+  state.stir = 100;
+  $('stirSlider').value = 100;
+  $('stirVal').textContent = '1200 rpm';
+  log('🌀 Stir pulse engaged — vortex mixing for 1.5 s.', 'sys');
+  clearTimeout(stirPulseTimer);
+  stirPulseTimer = setTimeout(() => {
+    state.stir = 0;
+    $('stirSlider').value = 0;
+    $('stirVal').textContent = '0 rpm';
+  }, 1500);
+});
+
+$('btnFlush').addEventListener('click', () => {
+  Audio2.pour();
+  particles.length = 0;
+  state.temp = 25;
+  state.fizzLevel = 0;
+  state.shake = 0;
+  log('🧹 Vessel flushed — particles cleared, thermal state reset to 25.0 °C.', 'sys');
+  updateAnalytics();
+});
+
+$('btnAddWater').addEventListener('click', () => {
+  const amt = Math.max(1, Math.min(300, parseFloat($('waterQty').value) || 50));
+  addReagent('h2o', amt);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN LOOP
+   ═══════════════════════════════════════════════════════════════ */
+let lastT = performance.now();
+let uiAccum = 0;
+let lastDripLog = 0;
+
+function update(dt) {
+  // Bunsen heating
+  if (state.flame > 0 && state.volume > 0.5) {
+    state.temp += (state.flame / 100) * 24 * dt;
+  }
+  // ambient cooling
+  state.temp += (25 - state.temp) * 0.10 * dt;
+  state.temp = Math.max(18, Math.min(140, state.temp));
+
+  // boiling
+  if (state.temp > 99.5 && state.volume > 1) {
+    state.boilingAccum += dt * (state.temp - 99) * 3.5;
+    while (state.boilingAccum > 1) {
+      state.boilingAccum -= 1;
+      spawnBubbles(1, 1.4);
+    }
+    if (Math.random() < dt * 4) {
+      spawnSmoke('230,240,250', 1, 0.7);
+      Audio2.bubble();
+    }
+    // slow evaporation
+    state.volume = Math.max(0, state.volume - dt * 0.35 * (state.temp - 99));
+  }
+
+  // titration drip
+  if (state.drip > 0) {
+    const rate = state.drip * 0.04; // mL/s
+    state.volume = Math.min(400, state.volume + rate * dt);
+    state.dripAccum += rate * dt;
+    if (state.dripAccum > 5) {
+      state.dripAccum = 0;
+      log(`💧 Titration drip: volume now ${state.volume.toFixed(1)} mL (diluting).`, 'sys');
+      recomputePH(); refreshSolutionColor(); updateAnalytics();
+    }
+    if (Math.random() < dt * 6) Audio2.bubble();
+  }
+
+  updateParticles(dt);
+
+  // shake decay
+  state.shake *= Math.pow(0.001, dt);
+
+  // audio ambient
+  const hissLevel = (state.flame / 100) * 0.9;
+  Audio2.setHiss(hissLevel);
+  const boilingFizz = state.temp > 99 ? 0.5 : 0;
+  state.fizzLevel = Math.max(0, state.fizzLevel - dt * 0.8);
+  Audio2.setFizz(Math.min(1, state.fizzLevel + boilingFizz));
+}
+
+function loop(now) {
+  const dt = Math.min(0.05, (now - lastT) / 1000);
+  lastT = now;
+  if (!state.paused) update(dt);
+  else updateParticles(dt * 0.3);
+  render();
+
+  uiAccum += dt;
+  if (uiAccum > 0.18) {
+    uiAccum = 0;
+    updateAnalytics();
+  }
   requestAnimationFrame(loop);
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-else boot();
+/* ═══════════════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════════════ */
+function boot() {
+  resize();
+  renderTabs();
+  renderReagents();
+  updateAnalytics();
+  log('VirtuaLab Pro v2.4 — simulation kernel online.', 'sys');
+  log('Safety protocols ARMED. Hazardous reactions will trigger an intercept modal.', 'warn');
+  log('Tip: add 50 mL H₂O first, then introduce reagents from the library.', 'info');
+  requestAnimationFrame(loop);
+}
+
+// Global audio unlock
+['click', 'keydown', 'touchstart'].forEach(ev =>
+  window.addEventListener(ev, () => Audio2.resume(), { once: true })
+);
+
+boot();
 </script>
 </body>
 </html>
