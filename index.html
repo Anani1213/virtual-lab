@@ -28,6 +28,18 @@ tailwind.config = {
   .horiz-tabs::-webkit-scrollbar-track{background:transparent;}
   .horiz-tabs::-webkit-scrollbar-thumb{background:#1e293b;border-radius:2px;}
 
+  /* ═══ HARD CAP: BEAKER CANVAS WRAPPER ═══ */
+  .beaker-locked {
+    height: 180px !important;
+    max-height: 180px !important;
+    min-height: 180px !important;
+    flex: none !important;
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+    flex-basis: auto !important;
+    overflow: hidden;
+  }
+
   .reagent-row{
     display:flex; align-items:center; gap:6px;
     padding:2px 6px;
@@ -117,19 +129,19 @@ tailwind.config = {
 </head>
 <body class="text-slate-200 font-sans">
 
-<!-- ═══════════════════════════════════════════════════════════════
-     SINGLE-VIEWPORT VERTICAL DASHBOARD
-     ═══════════════════════════════════════════════════════════════ -->
-<div class="h-screen w-screen flex flex-col gap-2 p-2 overflow-hidden">
+<!-- ═══════════════════════════════════════════════════════════
+     STRICT SINGLE-VIEWPORT DASHBOARD — zero gap, zero stretch
+     ═══════════════════════════════════════════════════════════ -->
+<div class="h-screen w-screen flex flex-col gap-1 p-2 overflow-hidden">
 
-  <!-- ═════ 1. TOP: REAGENT LIBRARY (~25%) ═════ -->
-  <aside class="h-[190px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
+  <!-- ═════ [1] REAGENT & ELEMENT LIBRARY (max-h 180px) ═════ -->
+  <aside class="shrink-0 max-h-[180px] bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
     <div class="px-3 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
       <div class="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
         <i class="fa-solid fa-flask text-[10px] text-white"></i>
       </div>
       <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT &amp; ELEMENT LIBRARY</div>
-      <div class="text-[8px] text-slate-500 font-mono tracking-wider leading-tight hidden md:block">VIRTUALAB PRO · v3.3</div>
+      <div class="text-[8px] text-slate-500 font-mono tracking-wider leading-tight hidden md:block">VIRTUALAB PRO · v3.4</div>
       <div class="flex-1"></div>
       <div class="text-[8px] font-mono text-slate-500" id="reagentCount">0 items</div>
       <div class="hidden md:flex items-center gap-1 text-[8px] font-mono text-slate-500">
@@ -143,22 +155,22 @@ tailwind.config = {
     <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1 pr-1 space-y-[2px]"></div>
   </aside>
 
-  <!-- ═════ 2. CENTER: APPARATUS + DOCK (~50%, canvas flexes) ═════ -->
-  <main class="flex-1 min-h-0 flex flex-col gap-1.5">
+  <!-- ═════ [2] APPARATUS: HUD + CANVAS (HARD 180px) + pH + DOCK ═════ -->
+  <div class="shrink-0 flex flex-col gap-1">
 
     <!-- TOP HUD -->
-    <div class="shrink-0 glass-panel rounded-xl h-[30px] flex items-center px-3 gap-3">
+    <div class="shrink-0 glass-panel rounded-xl h-[28px] flex items-center px-3 gap-3">
       <div class="flex items-baseline gap-1.5">
         <i class="fa-solid fa-temperature-half text-orange-400 text-[11px]"></i>
-        <span id="tempC" class="text-[16px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
+        <span id="tempC" class="text-[15px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
         <span class="text-[9px] text-slate-500">°C</span>
       </div>
-      <div class="w-px h-5 bg-slate-800"></div>
+      <div class="w-px h-4 bg-slate-800"></div>
       <div class="flex items-baseline gap-1">
-        <span id="tempK" class="text-[10.5px] font-mono text-slate-400 tabular-nums">298.15</span>
+        <span id="tempK" class="text-[10px] font-mono text-slate-400 tabular-nums">298.15</span>
         <span class="text-[8px] text-slate-600">K</span>
       </div>
-      <div class="w-px h-5 bg-slate-800"></div>
+      <div class="w-px h-4 bg-slate-800"></div>
       <div id="thermalState" class="px-2 py-0.5 rounded-full text-[8px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
         AMBIENT
       </div>
@@ -170,8 +182,8 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- CANVAS — flexible, min height ensures beaker visibility -->
-    <div class="flex-1 min-h-[140px] relative glass-panel rounded-xl overflow-hidden">
+    <!-- CANVAS — LOCKED 180px, no flex-grow -->
+    <div class="beaker-locked relative glass-panel rounded-xl overflow-hidden">
       <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
 
       <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
@@ -191,13 +203,13 @@ tailwind.config = {
       <div class="flex items-center gap-3">
         <div class="flex items-baseline gap-1 w-[78px]">
           <span class="text-[8px] font-bold tracking-widest text-slate-500">pH</span>
-          <span id="phValue" class="text-[15px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
+          <span id="phValue" class="text-[14px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
         </div>
         <div class="flex-1 relative">
-          <div class="h-[8px] rounded-full border border-slate-700 overflow-hidden"
+          <div class="h-[7px] rounded-full border border-slate-700 overflow-hidden"
                style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
           </div>
-          <div id="phMarker" class="absolute top-[-3px] w-[2.5px] h-[14px] bg-white rounded-full shadow-[0_0_8px_#fff] transition-all duration-150" style="left:50%"></div>
+          <div id="phMarker" class="absolute top-[-3px] w-[2.5px] h-[13px] bg-white rounded-full shadow-[0_0_8px_#fff] transition-all duration-150" style="left:50%"></div>
         </div>
         <div id="phLabel" class="w-[68px] text-right text-[8px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
       </div>
@@ -250,10 +262,10 @@ tailwind.config = {
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <!-- ═════ 3. BOTTOM: SIDE-BY-SIDE 2-COLUMN GRID (~25%, fixed 180px) ═════ -->
-  <section class="h-[180px] shrink-0 grid grid-cols-1 md:grid-cols-2 gap-2 min-h-0">
+  <!-- ═════ [3] BOTTOM: 2-COLUMN GRID (LOCKED 160px) ═════ -->
+  <section class="shrink-0 grid grid-cols-1 md:grid-cols-2 gap-2 h-[160px]">
 
     <!-- ═════ LEFT: THERMODYNAMIC & ANALYTICAL TELEMETRY ═════ -->
     <div class="bg-[#0b111c] border border-slate-800/80 rounded-xl overflow-hidden flex flex-col min-h-0">
@@ -264,7 +276,7 @@ tailwind.config = {
         <div class="text-[7px] font-mono text-slate-500 hidden lg:block tracking-wider">q = mcΔT · V<sub>STP</sub> = n×22.4 · ΔH<sub>rxn</sub> · M = n/V</div>
       </div>
 
-      <!-- Scrollable content -->
+      <!-- Scrollable analytics body -->
       <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-1.5 space-y-1.5">
 
         <!-- Metrics row 1 -->
@@ -326,7 +338,6 @@ tailwind.config = {
         <button onclick="clearLog()" class="text-[8px] text-slate-600 hover:text-slate-300 font-mono ml-2">clear</button>
       </div>
 
-      <!-- Scrollable log -->
       <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1 font-mono"></div>
     </div>
   </section>
@@ -362,7 +373,7 @@ tailwind.config = {
         </button>
       </div>
       <div class="text-center text-[9px] font-mono text-red-500/60 tracking-wider">
-        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v3.3 · ESC = ABORT · ENTER = ALLOW
+        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v3.4 · ESC = ABORT · ENTER = ALLOW
       </div>
     </div>
   </div>
@@ -370,7 +381,7 @@ tailwind.config = {
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
-   VIRTUALAB PRO v3.3  ·  Core Kernel + Thermodynamic Analytics
+   VIRTUALAB PRO v3.4  ·  Core Kernel + Thermodynamic Analytics
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ───────────────────────── GEOMETRY CONSTANTS ───────────────────────── */
@@ -1668,7 +1679,7 @@ function clearVessel(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   RENDERING — CANVAS (UNCHANGED, but crop-aware for compact wrapper)
+   RENDERING — CANVAS (UNCHANGED)
    ══════════════════════════════════════════════════════════════════════════ */
 function resizeCanvas(){
   const rect = canvas.getBoundingClientRect();
@@ -2434,7 +2445,7 @@ function boot(){
   window.addEventListener('resize', resizeCanvas);
   setTimeout(resizeCanvas, 100);
 
-  log('VirtuaLab Pro v3.3 initialised. Split-panel viewport ready.', 'good');
+  log('VirtuaLab Pro v3.4 initialised. Strict viewport lock enabled.', 'good');
   log('Charged 250.0 mL distilled H₂O @ 25.0 °C', 'info');
   log('Tip: CuSO₄ + NaOH → Cu(OH)₂↓ (precipitation, ΔH = +30 kJ/mol)', 'info');
 
