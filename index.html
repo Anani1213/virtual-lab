@@ -19,7 +19,7 @@ tailwind.config = {
   ::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px;}
   ::-webkit-scrollbar-thumb:hover{background:#334155;}
 
-  .custom-scrollbar::-webkit-scrollbar{width:6px;height:6px;}
+  .custom-scrollbar::-webkit-scrollbar{width:5px;height:5px;}
   .custom-scrollbar::-webkit-scrollbar-track{background:transparent;}
   .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
   .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
@@ -82,7 +82,7 @@ tailwind.config = {
   .dock-btn.danger{ border-color:#7f1d1d; color:#fca5a5; }
   .dock-btn.danger:hover{ background:#7f1d1d; color:#fee2e2; border-color:#991b1b; }
 
-  .log-line{ font-size:9px; line-height:1.4; padding:1px 0; border-bottom:1px dashed #16202f; }
+  .log-line{ font-size:9px; line-height:1.35; padding:1px 0; border-bottom:1px dashed #16202f; }
   .glass-panel{
     background:linear-gradient(180deg,rgba(15,23,37,.9),rgba(9,14,24,.9));
     border:1px solid #1b2537;backdrop-filter:blur(6px);
@@ -97,20 +97,20 @@ tailwind.config = {
   .hazard-icon{ display:inline-block; filter:drop-shadow(0 0 12px rgba(255,80,40,.85)); }
 
   .metric-card{
-    background:#0f1725; border:1px solid #1b2537; border-radius:6px; padding:3px 6px;
+    background:#0f1725; border:1px solid #1b2537; border-radius:6px; padding:2px 5px;
     display:flex; flex-direction:column; gap:0;
   }
-  .metric-lbl{ font-size:7px; font-weight:700; letter-spacing:.05em; color:#64748b; }
-  .metric-val{ font-size:12.5px; font-family:ui-monospace, monospace; line-height:1.1; }
-  .metric-unit{ font-size:6.5px; color:#475569; font-family:ui-monospace, monospace; }
+  .metric-lbl{ font-size:6.5px; font-weight:700; letter-spacing:.05em; color:#64748b; }
+  .metric-val{ font-size:11px; font-family:ui-monospace, monospace; line-height:1.1; }
+  .metric-unit{ font-size:6px; color:#475569; font-family:ui-monospace, monospace; }
 
   .eq-item{
-    font-size:9px; font-family:ui-monospace, monospace;
+    font-size:8.5px; font-family:ui-monospace, monospace;
     background:#0f1725; border:1px solid #1b2537; border-radius:5px;
-    padding:3px 6px; line-height:1.3;
+    padding:2px 5px; line-height:1.25;
   }
   .eq-type{
-    font-size:6.5px; padding:1px 4px; border-radius:3px; font-weight:800; letter-spacing:.05em;
+    font-size:6px; padding:1px 4px; border-radius:3px; font-weight:800; letter-spacing:.05em;
     display:inline-block;
   }
 </style>
@@ -118,18 +118,18 @@ tailwind.config = {
 <body class="text-slate-200 font-sans">
 
 <!-- ═══════════════════════════════════════════════════════════════
-     COMPACT VERTICAL DASHBOARD — tightly stacked, no dead space
+     SINGLE-VIEWPORT VERTICAL DASHBOARD
      ═══════════════════════════════════════════════════════════════ -->
-<div class="h-screen w-screen flex flex-col gap-1.5 p-2 overflow-hidden">
+<div class="h-screen w-screen flex flex-col gap-2 p-2 overflow-hidden">
 
-  <!-- ═════ 1. REAGENT & ELEMENT LIBRARY (compact) ═════ -->
-  <aside class="h-[160px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
+  <!-- ═════ 1. TOP: REAGENT LIBRARY (~25%) ═════ -->
+  <aside class="h-[190px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
     <div class="px-3 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
       <div class="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
         <i class="fa-solid fa-flask text-[10px] text-white"></i>
       </div>
       <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT &amp; ELEMENT LIBRARY</div>
-      <div class="text-[8px] text-slate-500 font-mono tracking-wider leading-tight hidden md:block">VIRTUALAB PRO · v3.2</div>
+      <div class="text-[8px] text-slate-500 font-mono tracking-wider leading-tight hidden md:block">VIRTUALAB PRO · v3.3</div>
       <div class="flex-1"></div>
       <div class="text-[8px] font-mono text-slate-500" id="reagentCount">0 items</div>
       <div class="hidden md:flex items-center gap-1 text-[8px] font-mono text-slate-500">
@@ -143,35 +143,35 @@ tailwind.config = {
     <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1 pr-1 space-y-[2px]"></div>
   </aside>
 
-  <!-- ═════ 2. COMPACT APPARATUS STACK (HUD · CANVAS · pH · DOCK) ═════ -->
-  <div class="shrink-0 flex flex-col gap-1.5">
+  <!-- ═════ 2. CENTER: APPARATUS + DOCK (~50%, canvas flexes) ═════ -->
+  <main class="flex-1 min-h-0 flex flex-col gap-1.5">
 
     <!-- TOP HUD -->
-    <div class="shrink-0 glass-panel rounded-xl h-[32px] flex items-center px-3 gap-3">
+    <div class="shrink-0 glass-panel rounded-xl h-[30px] flex items-center px-3 gap-3">
       <div class="flex items-baseline gap-1.5">
         <i class="fa-solid fa-temperature-half text-orange-400 text-[11px]"></i>
-        <span id="tempC" class="text-[17px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
-        <span class="text-[9.5px] text-slate-500">°C</span>
+        <span id="tempC" class="text-[16px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
+        <span class="text-[9px] text-slate-500">°C</span>
       </div>
       <div class="w-px h-5 bg-slate-800"></div>
       <div class="flex items-baseline gap-1">
-        <span id="tempK" class="text-[11px] font-mono text-slate-400 tabular-nums">298.15</span>
-        <span class="text-[8.5px] text-slate-600">K</span>
+        <span id="tempK" class="text-[10.5px] font-mono text-slate-400 tabular-nums">298.15</span>
+        <span class="text-[8px] text-slate-600">K</span>
       </div>
       <div class="w-px h-5 bg-slate-800"></div>
-      <div id="thermalState" class="px-2 py-0.5 rounded-full text-[8.5px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
+      <div id="thermalState" class="px-2 py-0.5 rounded-full text-[8px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
         AMBIENT
       </div>
       <div class="flex-1"></div>
-      <div class="hidden md:flex items-center gap-2.5 text-[8.5px] font-mono text-slate-500">
+      <div class="hidden md:flex items-center gap-2.5 text-[8px] font-mono text-slate-500">
         <div><i class="fa-solid fa-fire-flame-simple text-orange-500 mr-1"></i><span id="hudFlame">0%</span></div>
         <div><i class="fa-solid fa-arrows-spin text-violet-400 mr-1"></i><span id="hudStir">0 rpm</span></div>
         <div><i class="fa-solid fa-droplet text-emerald-400 mr-1"></i><span id="hudDrip">0.0 d/s</span></div>
       </div>
     </div>
 
-    <!-- CANVAS STAGE — fixed 200px compact beaker view -->
-    <div class="h-[200px] shrink-0 relative glass-panel rounded-xl overflow-hidden">
+    <!-- CANVAS — flexible, min height ensures beaker visibility -->
+    <div class="flex-1 min-h-[140px] relative glass-panel rounded-xl overflow-hidden">
       <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
 
       <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
@@ -186,12 +186,12 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- pH SPECTRUM — 6px below burner -->
+    <!-- pH SPECTRUM -->
     <div class="shrink-0 glass-panel rounded-xl px-3 py-0.5">
       <div class="flex items-center gap-3">
-        <div class="flex items-baseline gap-1 w-[80px]">
-          <span class="text-[8.5px] font-bold tracking-widest text-slate-500">pH</span>
-          <span id="phValue" class="text-[16px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
+        <div class="flex items-baseline gap-1 w-[78px]">
+          <span class="text-[8px] font-bold tracking-widest text-slate-500">pH</span>
+          <span id="phValue" class="text-[15px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
         </div>
         <div class="flex-1 relative">
           <div class="h-[8px] rounded-full border border-slate-700 overflow-hidden"
@@ -199,7 +199,7 @@ tailwind.config = {
           </div>
           <div id="phMarker" class="absolute top-[-3px] w-[2.5px] h-[14px] bg-white rounded-full shadow-[0_0_8px_#fff] transition-all duration-150" style="left:50%"></div>
         </div>
-        <div id="phLabel" class="w-[70px] text-right text-[8.5px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
+        <div id="phLabel" class="w-[68px] text-right text-[8px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
       </div>
     </div>
 
@@ -208,36 +208,36 @@ tailwind.config = {
       <div class="grid grid-cols-12 gap-2 items-end">
         <div class="col-span-6 md:col-span-3">
           <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[7.5px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN</label>
-            <span id="flameLbl" class="text-[7.5px] font-mono text-orange-300">0 °C</span>
+            <label class="text-[7px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN</label>
+            <span id="flameLbl" class="text-[7px] font-mono text-orange-300">0 °C</span>
           </div>
           <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
         </div>
         <div class="col-span-6 md:col-span-3">
           <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[7.5px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
-            <span id="stirLbl" class="text-[7.5px] font-mono text-violet-300">0 rpm</span>
+            <label class="text-[7px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
+            <span id="stirLbl" class="text-[7px] font-mono text-violet-300">0 rpm</span>
           </div>
           <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
         </div>
         <div class="col-span-6 md:col-span-3">
           <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[7.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>VALVE</label>
-            <span id="dripLbl" class="text-[7.5px] font-mono text-emerald-300">0.0 d/s</span>
+            <label class="text-[7px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>VALVE</label>
+            <span id="dripLbl" class="text-[7px] font-mono text-emerald-300">0.0 d/s</span>
           </div>
           <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
         </div>
         <div class="col-span-6 md:col-span-3">
-          <label class="text-[7.5px] font-bold tracking-widest text-cyan-400 block mb-0.5"><i class="fa-solid fa-vial mr-1"></i>BURETTE</label>
-          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[8.5px] px-1.5 py-[2px] text-slate-200 outline-none focus:border-cyan-600"></select>
+          <label class="text-[7px] font-bold tracking-widest text-cyan-400 block mb-0.5"><i class="fa-solid fa-vial mr-1"></i>BURETTE</label>
+          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[8px] px-1.5 py-[2px] text-slate-200 outline-none focus:border-cyan-600"></select>
         </div>
 
         <div class="col-span-12 flex flex-wrap gap-1 items-center pt-1 border-t border-slate-800/60">
-          <div class="flex items-center gap-1 bg-[#0a111e] border border-slate-800 rounded-md px-1.5 py-[1.5px]">
-            <i class="fa-solid fa-droplet text-blue-400 text-[9px]"></i>
+          <div class="flex items-center gap-1 bg-[#0a111e] border border-slate-800 rounded-md px-1.5 py-[1px]">
+            <i class="fa-solid fa-droplet text-blue-400 text-[8.5px]"></i>
             <input id="water-vol" type="number" min="0.1" max="500" step="1" value="50"
-                   class="w-[42px] bg-transparent border-0 text-[9.5px] font-mono text-blue-300 outline-none text-right">
-            <span class="text-[8px] text-slate-500 font-mono">mL H₂O</span>
+                   class="w-[40px] bg-transparent border-0 text-[9px] font-mono text-blue-300 outline-none text-right">
+            <span class="text-[7.5px] text-slate-500 font-mono">mL H₂O</span>
             <button id="btnWater" class="vl-add">+ WATER</button>
           </div>
           <button id="btnClearVessel" class="dock-btn danger"><i class="fa-solid fa-trash-can mr-1"></i>CLEAR VESSEL</button>
@@ -246,33 +246,36 @@ tailwind.config = {
           <button id="btnFlush" class="dock-btn warn"><i class="fa-solid fa-broom mr-1"></i>FLUSH</button>
           <button id="btnSound" class="dock-btn"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">ON</span></button>
           <div class="flex-1"></div>
-          <div class="text-[7.5px] font-mono text-slate-600"><span id="fps">60</span> fps · <span id="tickCount">0</span> t</div>
+          <div class="text-[7px] font-mono text-slate-600"><span id="fps">60</span> fps · <span id="tickCount">0</span> t</div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- ═════ 3. THERMODYNAMIC & ANALYTICAL TELEMETRY (fills remaining) ═════ -->
-  <section class="flex-1 min-h-0 bg-[#0b111c] border border-slate-800/80 rounded-xl overflow-hidden flex flex-col">
-    <div class="px-3 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
-      <i class="fa-solid fa-square-root-variable text-cyan-400 text-[10px]"></i>
-      <div class="text-[10.5px] font-bold tracking-wide text-slate-100 leading-tight">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
-      <div class="text-[7.5px] font-mono text-slate-500 hidden md:block tracking-wider">q = mcΔT · V<sub>STP</sub> = n×22.4 · ΔH<sub>rxn</sub> · M = n/V</div>
-      <div class="flex-1"></div>
-      <button onclick="clearLog()" class="text-[8px] text-slate-600 hover:text-slate-300 font-mono">clear log</button>
-    </div>
+  <!-- ═════ 3. BOTTOM: SIDE-BY-SIDE 2-COLUMN GRID (~25%, fixed 180px) ═════ -->
+  <section class="h-[180px] shrink-0 grid grid-cols-1 md:grid-cols-2 gap-2 min-h-0">
 
-    <div class="flex-1 min-h-0 grid grid-cols-12 gap-1.5 p-1.5">
+    <!-- ═════ LEFT: THERMODYNAMIC & ANALYTICAL TELEMETRY ═════ -->
+    <div class="bg-[#0b111c] border border-slate-800/80 rounded-xl overflow-hidden flex flex-col min-h-0">
+      <div class="px-2.5 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
+        <i class="fa-solid fa-square-root-variable text-cyan-400 text-[10px]"></i>
+        <div class="text-[10px] font-bold tracking-wide text-slate-100 leading-tight">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
+        <div class="flex-1"></div>
+        <div class="text-[7px] font-mono text-slate-500 hidden lg:block tracking-wider">q = mcΔT · V<sub>STP</sub> = n×22.4 · ΔH<sub>rxn</sub> · M = n/V</div>
+      </div>
 
-      <!-- LEFT: Metrics + thermo + ions -->
-      <div class="col-span-12 lg:col-span-5 flex flex-col gap-1 min-h-0">
+      <!-- Scrollable content -->
+      <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-1.5 space-y-1.5">
+
+        <!-- Metrics row 1 -->
         <div class="grid grid-cols-4 gap-1 shrink-0">
           <div class="metric-card"><div class="metric-lbl">MASS</div><div class="metric-val text-cyan-300" id="mMass">250.0</div><div class="metric-unit">g</div></div>
-          <div class="metric-card"><div class="metric-lbl">VOL</div><div class="metric-val text-blue-300" id="mVol">250.0</div><div class="metric-unit">mL</div></div>
+          <div class="metric-card"><div class="metric-lbl">VOLUME</div><div class="metric-val text-blue-300" id="mVol">250.0</div><div class="metric-unit">mL</div></div>
           <div class="metric-card"><div class="metric-lbl">M = n/V</div><div class="metric-val text-violet-300" id="mMol">0.000</div><div class="metric-unit">mol·L⁻¹</div></div>
           <div class="metric-card"><div class="metric-lbl">ΔH<sub>rxn</sub></div><div class="metric-val text-rose-300" id="mDH">0.0</div><div class="metric-unit">kJ·mol⁻¹</div></div>
         </div>
 
+        <!-- Metrics row 2 -->
         <div class="grid grid-cols-4 gap-1 shrink-0">
           <div class="metric-card"><div class="metric-lbl">q = mcΔT</div><div class="metric-val text-amber-300" id="mQ">0.0</div><div class="metric-unit">J</div></div>
           <div class="metric-card"><div class="metric-lbl">V<sub>STP</sub></div><div class="metric-val text-emerald-300" id="mVstp">0.00</div><div class="metric-unit">L · 22.4/mol</div></div>
@@ -280,43 +283,51 @@ tailwind.config = {
           <div class="metric-card"><div class="metric-lbl">ΔT</div><div class="metric-val text-orange-300" id="mDT">0.0</div><div class="metric-unit">K vs 25 °C</div></div>
         </div>
 
-        <div class="flex-1 min-h-0 bg-[#0f1725] border border-slate-800 rounded-lg p-1 flex flex-col">
-          <div class="text-[7.5px] font-bold tracking-widest text-slate-500 mb-0.5 shrink-0">
-            <i class="fa-solid fa-atom mr-1 text-cyan-500"></i>ACTIVE IONIC SPECIES
-          </div>
-          <div id="speciesList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex flex-wrap gap-1 content-start pr-1">
-            <span class="text-[8px] text-slate-600 font-mono italic">no solutes in vessel</span>
-          </div>
-        </div>
-
-        <div class="shrink-0 bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-0.5 flex items-center gap-1.5">
+        <!-- Enthalpy cumulative bar -->
+        <div class="bg-[#0f1725] border border-slate-800 rounded-md px-2 py-0.5 flex items-center gap-1.5 shrink-0">
           <i class="fa-solid fa-fire-flame-curved text-rose-400 text-[9px]"></i>
-          <div class="text-[7.5px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
+          <div class="text-[7px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
           <div class="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden relative">
             <div id="dHBar" class="absolute inset-y-0 left-1/2 bg-gradient-to-r from-rose-500 to-orange-400 transition-all" style="width:0%"></div>
             <div class="absolute inset-y-0 left-1/2 w-px bg-slate-500"></div>
           </div>
           <div class="text-[9px] font-mono text-rose-300 tabular-nums min-w-[62px] text-right" id="mDHCumul">0.00 kJ</div>
         </div>
+
+        <!-- Active ionic species -->
+        <div class="bg-[#0f1725] border border-slate-800 rounded-md p-1.5 shrink-0">
+          <div class="text-[7px] font-bold tracking-widest text-slate-500 mb-1">
+            <i class="fa-solid fa-atom mr-1 text-cyan-500"></i>ACTIVE IONIC SPECIES
+          </div>
+          <div id="speciesList" class="flex flex-wrap gap-1">
+            <span class="text-[8px] text-slate-600 font-mono italic">no solutes in vessel</span>
+          </div>
+        </div>
+
+        <!-- Balanced equations -->
+        <div class="shrink-0">
+          <div class="text-[7px] font-bold tracking-widest text-slate-500 mb-1">
+            <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS &amp; REACTION TYPES
+          </div>
+          <div id="eqList" class="space-y-1">
+            <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════ RIGHT: REACTION LOG TERMINAL ═════ -->
+    <div class="bg-[#0b111c] border border-slate-800/80 rounded-xl overflow-hidden flex flex-col min-h-0">
+      <div class="px-2.5 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
+        <i class="fa-solid fa-terminal text-emerald-500 text-[10px]"></i>
+        <div class="text-[10px] font-bold tracking-wide text-slate-100 leading-tight">REACTION LOG TERMINAL</div>
+        <div class="flex-1"></div>
+        <div class="text-[7px] font-mono text-slate-500 hidden lg:block" id="logCount">0 entries</div>
+        <button onclick="clearLog()" class="text-[8px] text-slate-600 hover:text-slate-300 font-mono ml-2">clear</button>
       </div>
 
-      <!-- MIDDLE: Equations -->
-      <div class="col-span-12 lg:col-span-4 flex flex-col min-h-0">
-        <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-0.5 shrink-0">
-          <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS &amp; REACTION TYPES
-        </div>
-        <div id="eqList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1">
-          <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
-        </div>
-      </div>
-
-      <!-- RIGHT: Log -->
-      <div class="col-span-12 lg:col-span-3 flex flex-col min-h-0">
-        <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-0.5 shrink-0">
-          <i class="fa-solid fa-terminal mr-1 text-emerald-500"></i>REACTION LOG
-        </div>
-        <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 font-mono"></div>
-      </div>
+      <!-- Scrollable log -->
+      <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1 font-mono"></div>
     </div>
   </section>
 </div>
@@ -351,7 +362,7 @@ tailwind.config = {
         </button>
       </div>
       <div class="text-center text-[9px] font-mono text-red-500/60 tracking-wider">
-        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v3.2 · ESC = ABORT · ENTER = ALLOW
+        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v3.3 · ESC = ABORT · ENTER = ALLOW
       </div>
     </div>
   </div>
@@ -359,7 +370,7 @@ tailwind.config = {
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
-   VIRTUALAB PRO v3.2  ·  Core Kernel + Thermodynamic Analytics
+   VIRTUALAB PRO v3.3  ·  Core Kernel + Thermodynamic Analytics
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ───────────────────────── GEOMETRY CONSTANTS ───────────────────────── */
@@ -798,8 +809,14 @@ function log(msg, type){
   div.innerHTML = `<span class="text-slate-600">[${nowStamp()}]</span> <span style="color:${colors[type]||'#94a3b8'}">${msg}</span>`;
   el.insertBefore(div, el.firstChild);
   while (el.children.length > 200) el.removeChild(el.lastChild);
+  const lc = document.getElementById('logCount');
+  if (lc) lc.textContent = el.children.length + ' entries';
 }
-function clearLog(){ document.getElementById('log').innerHTML = ''; }
+function clearLog(){
+  document.getElementById('log').innerHTML = '';
+  const lc = document.getElementById('logCount');
+  if (lc) lc.textContent = '0 entries';
+}
 
 function eqAdd(str, type){
   const key = str + '|' + (type||'');
@@ -1602,7 +1619,7 @@ function emergencyFlush(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FLUSH / CLEAR
+   FLUSH / CLEAR (UNCHANGED)
    ══════════════════════════════════════════════════════════════════════════ */
 function flushAll(){
   const s = state;
@@ -1651,7 +1668,7 @@ function clearVessel(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   RENDERING — CANVAS (UNCHANGED, but scale-aware for compact 200px height)
+   RENDERING — CANVAS (UNCHANGED, but crop-aware for compact wrapper)
    ══════════════════════════════════════════════════════════════════════════ */
 function resizeCanvas(){
   const rect = canvas.getBoundingClientRect();
@@ -1659,9 +1676,6 @@ function resizeCanvas(){
   canvas.width = Math.max(1, rect.width * dpr);
   canvas.height = Math.max(1, rect.height * dpr);
 
-  /* Focus the view on the beaker region so the apparatus stays legible
-     even in a compact 200px wrapper: crop the coordinate space to the
-     horizontal span of the beaker + burette + burner. */
   const VX0 = 165, VY0 = 0, VX1 = 595, VY1 = 660;
   const VW = VX1 - VX0, VH = VY1 - VY0;
 
@@ -2192,7 +2206,7 @@ function updateHUD(dt){
 
   const ts = document.getElementById('thermalState');
   ts.textContent = stateName;
-  ts.className = `px-2 py-0.5 rounded-full text-[8.5px] font-bold tracking-wider border ${stateCls}`;
+  ts.className = `px-2 py-0.5 rounded-full text-[8px] font-bold tracking-wider border ${stateCls}`;
 
   document.getElementById('hudFlame').textContent = s.flame.toFixed(0) + '%';
   document.getElementById('hudStir').textContent = (s.stir * 12).toFixed(0) + ' rpm';
@@ -2210,7 +2224,7 @@ function updateHUD(dt){
   else if (s.pH <= 11) { phTxt = 'BASIC';      phCol = 'text-blue-400'; }
   else                 { phTxt = 'STRONG BASE';phCol = 'text-violet-400'; }
   const pl = document.getElementById('phLabel');
-  pl.textContent = phTxt; pl.className = `w-[70px] text-right text-[8.5px] font-bold tracking-wider ${phCol}`;
+  pl.textContent = phTxt; pl.className = `w-[68px] text-right text-[8px] font-bold tracking-wider ${phCol}`;
 
   /* ═══════════ THERMODYNAMIC ANALYTICS ═══════════ */
   const V_L = Math.max(0.0005, s.volume / 1000);
@@ -2420,7 +2434,7 @@ function boot(){
   window.addEventListener('resize', resizeCanvas);
   setTimeout(resizeCanvas, 100);
 
-  log('VirtuaLab Pro v3.2 initialised. Compact viewport ready.', 'good');
+  log('VirtuaLab Pro v3.3 initialised. Split-panel viewport ready.', 'good');
   log('Charged 250.0 mL distilled H₂O @ 25.0 °C', 'info');
   log('Tip: CuSO₄ + NaOH → Cu(OH)₂↓ (precipitation, ΔH = +30 kJ/mol)', 'info');
 
