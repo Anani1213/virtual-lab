@@ -24,12 +24,8 @@ tailwind.config = {
   .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
   .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
 
-  .horiz-tabs::-webkit-scrollbar{height:3px;}
-  .horiz-tabs::-webkit-scrollbar-track{background:transparent;}
-  .horiz-tabs::-webkit-scrollbar-thumb{background:#1e293b;border-radius:2px;}
-
   .reagent-row{
-    display:flex; align-items:center; gap:6px;
+    display:flex; align-items:center; gap:5px;
     padding:3px 6px;
     background:#0f172a; border:1px solid #1e293b; border-radius:6px; transition:.15s;
   }
@@ -57,26 +53,26 @@ tailwind.config = {
   input[type=range].drip{background:linear-gradient(90deg,#1e293b,#34d399,#06b6d4);}
   input[type=range].drip::-webkit-slider-thumb{background:#34d399;box-shadow:0 0 8px rgba(52,211,153,.8);}
   input[type=range].phslider{background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%);}
-  input[type=range].phslider::-webkit-slider-thumb{background:#fff;box-shadow:0 0 10px #fff;}
+  input[type=range].phslider::-webkit-slider-thumb{background:#fff;box-shadow:0 0 8px #fff;}
   input[type=range].phslider::-moz-range-thumb{background:#fff;}
 
   .vl-add{
-    font-size:8.5px;font-weight:800;letter-spacing:.05em;padding:2px 6px;border-radius:4px;
+    font-size:8.5px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:4px;
     background:linear-gradient(180deg,#0e7490,#155e75);color:#a5f3fc;border:1px solid #164e63;
-    transition:.15s;cursor:pointer;line-height:1.4;
+    transition:.15s;cursor:pointer;line-height:1.4;white-space:nowrap;
   }
   .vl-add:hover{background:linear-gradient(180deg,#0891b2,#0e7490);color:#ecfeff;box-shadow:0 0 8px rgba(34,211,238,.5);}
   .vl-add:active{transform:scale(.94);}
 
   .cat-tab{
-    font-size:8.5px;font-weight:600;padding:2px 7px;border-radius:5px;cursor:pointer;
+    font-size:8px;font-weight:600;padding:2px 6px;border-radius:5px;cursor:pointer;
     background:#131c2b;color:#7c8ba1;border:1px solid #1e293b;transition:.15s;white-space:nowrap;flex-shrink:0;
   }
   .cat-tab:hover{color:#a5f3fc;border-color:#164e63;}
   .cat-tab.active{background:linear-gradient(180deg,#0e7490,#155e75);color:#ecfeff;border-color:#22d3ee;box-shadow:0 0 8px rgba(34,211,238,.35);}
 
   .dock-btn{
-    font-size:9px;font-weight:700;letter-spacing:.04em;padding:5px 8px;border-radius:6px;
+    font-size:9px;font-weight:700;letter-spacing:.03em;padding:6px 8px;border-radius:6px;
     border:1px solid #1e293b;background:#131c2b;color:#94a3b8;cursor:pointer;transition:.15s;
   }
   .dock-btn:hover{color:#67e8f9;border-color:#164e63;background:#16202f;}
@@ -89,11 +85,6 @@ tailwind.config = {
 
   .log-line{ font-size:9px; line-height:1.4; padding:2px 0; border-bottom:1px dashed #16202f; }
 
-  .glass-panel{
-    background:linear-gradient(180deg,rgba(15,23,42,.9),rgba(2,6,23,.95));
-    border:1px solid #1e293b;
-  }
-
   @keyframes pulseWarn{0%,100%{opacity:1}50%{opacity:.35}}
   .hazard-blink{animation:pulseWarn 1s infinite;}
   .fade-in{animation:fi .35s ease-out;}
@@ -103,17 +94,17 @@ tailwind.config = {
   .hazard-icon{ display:inline-block; filter:drop-shadow(0 0 14px rgba(255,80,40,.9)); }
 
   .metric-card{
-    background:#0f172a; border:1px solid #1e293b; border-radius:7px; padding:5px 7px;
+    background:#0f172a; border:1px solid #1e293b; border-radius:7px; padding:6px 8px;
     display:flex; flex-direction:column; gap:1px;
   }
   .metric-lbl{ font-size:7px; font-weight:700; letter-spacing:.06em; color:#64748b; }
-  .metric-val{ font-size:12px; font-family:ui-monospace, monospace; line-height:1.1; }
+  .metric-val{ font-size:14px; font-family:ui-monospace, monospace; line-height:1.1; }
   .metric-unit{ font-size:6.5px; color:#475569; font-family:ui-monospace, monospace; }
 
   .eq-item{
-    font-size:9px; font-family:ui-monospace, monospace;
+    font-size:9.5px; font-family:ui-monospace, monospace;
     background:#0f172a; border:1px solid #1e293b; border-radius:6px;
-    padding:4px 7px; line-height:1.35;
+    padding:5px 8px; line-height:1.35;
   }
   .eq-type{
     font-size:6.5px; padding:1px 5px; border-radius:3px; font-weight:800; letter-spacing:.06em;
@@ -121,26 +112,26 @@ tailwind.config = {
   }
 </style>
 </head>
-<body class="text-slate-200 font-sans h-screen max-h-screen overflow-hidden">
+<body class="text-slate-200 font-sans">
 
 <!-- ═══════════════════════════════════════════════════════════════
-     STRICT 100vh 3-COLUMN LAYOUT — 25 / 48 / 27
+     STRICT 100vh 3-COLUMN LAYOUT — 32 / 48 / 20
      ═══════════════════════════════════════════════════════════════ -->
 <div class="h-screen max-h-screen w-screen overflow-hidden p-2 bg-slate-950">
   <div class="flex gap-2 h-full w-full">
 
-    <!-- ═══════════════════ LEFT COLUMN (25%) — VESSEL + LOG ═══════════════════ -->
-    <div class="flex-[25] min-w-0 flex flex-col gap-2 h-full">
+    <!-- ══════════════ LEFT COLUMN (32%) — APPARATUS + LOG ══════════════ -->
+    <div class="w-[32%] flex flex-col gap-2 h-full min-h-0">
 
-      <!-- APPARATUS CANVAS — FIXED 220px -->
-      <div class="h-[220px] max-h-[220px] flex-none relative glass-panel rounded-lg overflow-hidden">
+      <!-- APPARATUS CANVAS — FIXED 280px -->
+      <div class="h-[280px] max-h-[280px] flex-none relative bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
         <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
 
         <!-- HUD overlays -->
-        <div class="absolute top-1.5 left-1.5 right-1.5 flex items-center gap-1.5 pointer-events-none">
+        <div class="absolute top-2 left-2 right-2 flex items-center gap-1.5 pointer-events-none">
           <div class="flex items-baseline gap-1 bg-slate-950/80 border border-slate-800 rounded-md px-1.5 py-0.5 backdrop-blur-sm">
             <i class="fa-solid fa-temperature-half text-orange-400 text-[9px]"></i>
-            <span id="tempC" class="text-[11px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
+            <span id="tempC" class="text-[11.5px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
             <span class="text-[7.5px] text-slate-500">°C</span>
           </div>
           <div id="thermalState" class="text-[7.5px] font-bold tracking-wider px-1.5 py-0.5 rounded-full border border-cyan-800 bg-cyan-950/70 text-cyan-300 backdrop-blur-sm">
@@ -153,12 +144,12 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- pH readout overlay -->
-        <div class="absolute bottom-1.5 left-1.5 right-1.5 pointer-events-none">
-          <div class="bg-slate-950/80 border border-slate-800 rounded-md px-1.5 py-0.5 backdrop-blur-sm">
+        <!-- pH overlay -->
+        <div class="absolute bottom-2 left-2 right-2 pointer-events-none">
+          <div class="bg-slate-950/85 border border-slate-800 rounded-md px-2 py-1 backdrop-blur-sm">
             <div class="flex items-center gap-1.5">
               <span class="text-[7.5px] font-bold tracking-widest text-slate-500">pH</span>
-              <span id="phValue" class="text-[13px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
+              <span id="phValue" class="text-[14px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
               <div class="flex-1 h-[6px] rounded-full overflow-hidden border border-slate-700 relative"
                    style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
                 <div id="phMarker" class="absolute top-[-3px] w-[2px] h-[12px] bg-white rounded-full shadow-[0_0_8px_#fff] transition-all duration-150" style="left:50%"></div>
@@ -171,17 +162,17 @@ tailwind.config = {
         <!-- Hazard overlay -->
         <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/85 backdrop-blur-sm flex flex-col items-center justify-center gap-1.5 px-2 text-center">
           <i class="fa-solid fa-triangle-exclamation text-2xl text-red-400 hazard-blink"></i>
-          <div class="text-[12px] font-black tracking-wider text-red-200">CONTAINMENT BREACH</div>
-          <div id="hazardMsg" class="text-[8.5px] text-red-300/90 font-mono"></div>
-          <button onclick="emergencyFlush()" class="mt-1 px-2.5 py-1 rounded-md bg-red-600 hover:bg-red-500 text-white font-bold text-[8.5px] tracking-wider shadow-lg shadow-red-900/50 transition">
+          <div class="text-[13px] font-black tracking-wider text-red-200">CONTAINMENT BREACH</div>
+          <div id="hazardMsg" class="text-[9px] text-red-300/90 font-mono"></div>
+          <button onclick="emergencyFlush()" class="mt-1 px-2.5 py-1 rounded-md bg-red-600 hover:bg-red-500 text-white font-bold text-[9px] tracking-wider shadow-lg shadow-red-900/50 transition">
             <i class="fa-solid fa-broom mr-1"></i>EMERGENCY FLUSH
           </button>
         </div>
       </div>
 
-      <!-- LOG TERMINAL — flex-1 fills remaining -->
-      <div class="flex-1 h-0 bg-slate-900/90 border border-slate-800/80 rounded-lg flex flex-col overflow-hidden">
-        <div class="px-2.5 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-1.5">
+      <!-- SYSTEM REACTION LOG — fills remaining to red line -->
+      <div class="flex-1 h-0 bg-slate-900/90 border border-slate-800 rounded-lg flex flex-col overflow-hidden">
+        <div class="px-2.5 py-1.5 border-b border-slate-800 shrink-0 flex items-center gap-1.5">
           <i class="fa-solid fa-terminal text-emerald-500 text-[10px]"></i>
           <div class="text-[10.5px] font-bold tracking-wide text-slate-100 leading-tight">REACTION LOG</div>
           <div class="flex-1"></div>
@@ -191,96 +182,97 @@ tailwind.config = {
           </button>
           <button onclick="clearLog()" class="text-[8px] text-slate-600 hover:text-slate-300 font-mono ml-1">clear</button>
         </div>
-        <div id="log" class="flex-1 h-0 overflow-y-auto custom-scrollbar px-2 py-1 font-mono"></div>
+        <div id="log" class="flex-1 h-0 overflow-y-auto custom-scrollbar px-2.5 py-1 font-mono"></div>
       </div>
     </div>
 
-    <!-- ═══════════════════ MIDDLE COLUMN (48%) — CONTROLS + ANALYTICS ═══════════════════ -->
-    <div class="flex-[48] min-w-0 flex flex-col gap-2 h-full">
+    <!-- ══════════════ MIDDLE COLUMN (48%) — CONTROLS + ANALYTICS ══════════════ -->
+    <div class="w-[48%] flex flex-col gap-2 h-full min-h-0">
 
-      <!-- CONTROLS — flex-none, compact -->
-      <div class="flex-none bg-slate-900/90 border border-slate-800/80 rounded-lg p-2.5">
-
-        <div class="flex items-center gap-1.5 mb-2">
+      <!-- APPARATUS CONTROLS — flex-none -->
+      <div class="flex-none bg-slate-900/90 border border-slate-800 rounded-lg p-3">
+        <div class="flex items-center gap-1.5 mb-2.5">
           <i class="fa-solid fa-sliders text-cyan-400 text-[10px]"></i>
-          <div class="text-[10.5px] font-bold tracking-wide text-slate-100">APPARATUS CONTROL DASHBOARD</div>
+          <div class="text-[11px] font-bold tracking-wide text-slate-100">APPARATUS CONTROLS</div>
           <div class="flex-1"></div>
           <div class="text-[7.5px] font-mono text-slate-500"><span id="fps">60</span> fps</div>
         </div>
 
-        <!-- Compact 2×2 slider grid -->
-        <div class="grid grid-cols-2 gap-2.5 mb-2">
+        <!-- 2×2 slider grid -->
+        <div class="grid grid-cols-2 gap-3 mb-2.5">
           <div>
-            <div class="flex justify-between items-center mb-0.5">
-              <label class="text-[8px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-flask-vial mr-0.5"></i>pH SPECTRUM</label>
-              <span id="phSliderLbl" class="text-[9px] font-mono text-emerald-300 tabular-nums">7.00</span>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-flask-vial mr-0.5"></i>pH SPECTRUM</label>
+              <span id="phSliderLbl" class="text-[9.5px] font-mono text-emerald-300 tabular-nums">7.00</span>
             </div>
             <input id="phSlider" type="range" class="phslider w-full" min="0" max="14" step="0.01" value="7">
+            <div class="flex justify-between text-[6.5px] font-mono text-slate-600 mt-0.5 px-0.5">
+              <span>0</span><span>2</span><span>4</span><span>6</span><span>7</span><span>8</span><span>10</span><span>12</span><span>14</span>
+            </div>
           </div>
           <div>
-            <div class="flex justify-between items-center mb-0.5">
-              <label class="text-[8px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-0.5"></i>BUNSEN FLAME</label>
-              <span id="flameLbl" class="text-[9px] font-mono text-orange-300 tabular-nums">0 °C</span>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-0.5"></i>BUNSEN FLAME</label>
+              <span id="flameLbl" class="text-[9.5px] font-mono text-orange-300 tabular-nums">0 °C</span>
             </div>
             <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
           </div>
           <div>
-            <div class="flex justify-between items-center mb-0.5">
-              <label class="text-[8px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-0.5"></i>STIRRER</label>
-              <span id="stirLbl" class="text-[9px] font-mono text-violet-300 tabular-nums">0 rpm</span>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-0.5"></i>MAGNETIC STIRRER</label>
+              <span id="stirLbl" class="text-[9.5px] font-mono text-violet-300 tabular-nums">0 rpm</span>
             </div>
             <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
           </div>
           <div>
-            <div class="flex justify-between items-center mb-0.5">
-              <label class="text-[8px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-0.5"></i>DRIP VALVE</label>
-              <span id="dripLbl" class="text-[9px] font-mono text-emerald-300 tabular-nums">0.0 d/s</span>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[8.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-0.5"></i>DRIP VALVE</label>
+              <span id="dripLbl" class="text-[9.5px] font-mono text-emerald-300 tabular-nums">0.0 d/s</span>
             </div>
             <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
           </div>
         </div>
 
         <!-- Burette + Water row -->
-        <div class="grid grid-cols-2 gap-2.5 mb-2">
+        <div class="grid grid-cols-2 gap-3 mb-2.5">
           <div>
-            <label class="text-[8px] font-bold tracking-widest text-cyan-400 block mb-0.5"><i class="fa-solid fa-vial mr-0.5"></i>BURETTE REAGENT</label>
-            <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[9.5px] px-2 py-[3px] text-slate-200 outline-none focus:border-cyan-600"></select>
+            <label class="text-[8.5px] font-bold tracking-widest text-cyan-400 block mb-1"><i class="fa-solid fa-vial mr-0.5"></i>BURETTE REAGENT</label>
+            <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[10px] px-2 py-[4px] text-slate-200 outline-none focus:border-cyan-600"></select>
           </div>
           <div>
-            <label class="text-[8px] font-bold tracking-widest text-blue-400 block mb-0.5"><i class="fa-solid fa-droplet mr-0.5"></i>WATER DILUTION</label>
-            <div class="flex items-center gap-1">
+            <label class="text-[8.5px] font-bold tracking-widest text-blue-400 block mb-1"><i class="fa-solid fa-droplet mr-0.5"></i>MEASURED WATER DILUTION</label>
+            <div class="flex items-center gap-1.5">
               <input id="water-vol" type="number" min="0.1" max="500" step="1" value="50"
-                     class="w-[60px] bg-[#0a111e] border border-slate-700 rounded-md text-[10px] font-mono text-blue-300 outline-none px-1.5 py-[3px] text-right focus:border-cyan-500">
-              <span class="text-[8.5px] text-slate-500 font-mono">mL</span>
-              <button id="btnWater" class="vl-add ml-auto">+ ADD</button>
+                     class="w-[62px] bg-[#0a111e] border border-slate-700 rounded-md text-[10.5px] font-mono text-blue-300 outline-none px-1.5 py-[3px] text-right focus:border-cyan-500">
+              <span class="text-[9px] text-slate-500 font-mono">mL H₂O</span>
+              <button id="btnWater" class="vl-add ml-auto">+ ADD WATER</button>
             </div>
           </div>
         </div>
 
-        <!-- Action buttons row -->
-        <div class="grid grid-cols-4 gap-1.5">
-          <button id="btnClearVessel" class="dock-btn danger justify-center"><i class="fa-solid fa-trash-can mr-1"></i>CLEAR</button>
+        <!-- Action buttons -->
+        <div class="grid grid-cols-4 gap-1.5 mb-1.5">
+          <button id="btnClearVessel" class="dock-btn danger justify-center"><i class="fa-solid fa-trash-can mr-1"></i>CLEAR VESSEL</button>
           <button id="btnRefill" class="dock-btn go justify-center"><i class="fa-solid fa-arrows-rotate mr-1"></i>REFILL</button>
-          <button id="btnStirPulse" class="dock-btn pulse justify-center"><i class="fa-solid fa-water mr-1"></i>STIR</button>
+          <button id="btnStirPulse" class="dock-btn pulse justify-center"><i class="fa-solid fa-water mr-1"></i>STIR PULSE</button>
           <button id="btnFlush" class="dock-btn warn justify-center"><i class="fa-solid fa-broom mr-1"></i>FLUSH</button>
         </div>
-
-        <button id="btnSound" class="dock-btn w-full justify-center mt-1.5"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">SOUND: ON</span></button>
+        <button id="btnSound" class="dock-btn w-full justify-center"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">SOUND: ON</span></button>
       </div>
 
-      <!-- ANALYTICS — flex-1 fills remaining space, scrollable -->
-      <div class="flex-1 h-0 bg-slate-900/90 border border-slate-800/80 rounded-lg flex flex-col overflow-hidden">
-        <div class="px-2.5 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-1.5">
+      <!-- THERMODYNAMIC & ANALYTICAL TELEMETRY — fills remaining to red line -->
+      <div class="flex-1 h-0 bg-slate-900/90 border border-slate-800 rounded-lg flex flex-col overflow-hidden">
+        <div class="px-3 py-1.5 border-b border-slate-800 shrink-0 flex items-center gap-1.5">
           <i class="fa-solid fa-square-root-variable text-cyan-400 text-[10px]"></i>
-          <div class="text-[10.5px] font-bold tracking-wide text-slate-100">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
+          <div class="text-[11px] font-bold tracking-wide text-slate-100">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
           <div class="flex-1"></div>
-          <div class="text-[7px] font-mono text-slate-500 hidden xl:block">q=mcΔT · V<sub>STP</sub>=n×22.4 · M=n/V</div>
+          <div class="text-[7px] font-mono text-slate-500 hidden lg:block">q=mcΔT · V<sub>STP</sub>=n×22.4 · M=n/V</div>
         </div>
 
-        <div class="flex-1 h-0 overflow-y-auto custom-scrollbar p-2 space-y-2">
+        <div class="flex-1 h-0 overflow-y-auto custom-scrollbar p-3 space-y-2.5">
 
           <!-- Metrics row 1 -->
-          <div class="grid grid-cols-4 gap-1.5">
+          <div class="grid grid-cols-4 gap-2">
             <div class="metric-card"><div class="metric-lbl">MASS</div><div class="metric-val text-cyan-300" id="mMass">250.0</div><div class="metric-unit">g</div></div>
             <div class="metric-card"><div class="metric-lbl">VOLUME</div><div class="metric-val text-blue-300" id="mVol">250.0</div><div class="metric-unit">mL</div></div>
             <div class="metric-card"><div class="metric-lbl">M = n/V</div><div class="metric-val text-violet-300" id="mMol">0.000</div><div class="metric-unit">mol·L⁻¹</div></div>
@@ -288,27 +280,27 @@ tailwind.config = {
           </div>
 
           <!-- Metrics row 2 -->
-          <div class="grid grid-cols-4 gap-1.5">
+          <div class="grid grid-cols-4 gap-2">
             <div class="metric-card"><div class="metric-lbl">q = mcΔT</div><div class="metric-val text-amber-300" id="mQ">0.0</div><div class="metric-unit">J</div></div>
             <div class="metric-card"><div class="metric-lbl">V<sub>STP</sub> GAS</div><div class="metric-val text-emerald-300" id="mVstp">0.00</div><div class="metric-unit">L · 22.4/mol</div></div>
             <div class="metric-card"><div class="metric-lbl">Σ n<sub>gas</sub></div><div class="metric-val text-teal-300" id="mNgas">0.000</div><div class="metric-unit">mol</div></div>
             <div class="metric-card"><div class="metric-lbl">ΔT</div><div class="metric-val text-orange-300" id="mDT">0.0</div><div class="metric-unit">K vs 25°C</div></div>
           </div>
 
-          <!-- Enthalpy bar -->
-          <div class="bg-slate-950/60 border border-slate-800 rounded-lg px-2.5 py-1.5 flex items-center gap-2">
-            <i class="fa-solid fa-fire-flame-curved text-rose-400 text-[10px]"></i>
-            <div class="text-[8px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
+          <!-- Enthalpy cumulative bar -->
+          <div class="bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-2 flex items-center gap-2">
+            <i class="fa-solid fa-fire-flame-curved text-rose-400 text-[11px]"></i>
+            <div class="text-[8.5px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
             <div class="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden relative">
               <div id="dHBar" class="absolute inset-y-0 left-1/2 bg-gradient-to-r from-rose-500 to-orange-400 transition-all" style="width:0%"></div>
               <div class="absolute inset-y-0 left-1/2 w-px bg-slate-500"></div>
             </div>
-            <div class="text-[10px] font-mono text-rose-300 tabular-nums min-w-[68px] text-right" id="mDHCumul">0.00 kJ</div>
+            <div class="text-[10.5px] font-mono text-rose-300 tabular-nums min-w-[68px] text-right" id="mDHCumul">0.00 kJ</div>
           </div>
 
-          <!-- Active ions -->
-          <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-            <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-1.5">
+          <!-- Active ionic species -->
+          <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2.5">
+            <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1.5">
               <i class="fa-solid fa-atom mr-1 text-cyan-500"></i>ACTIVE IONIC SPECIES · M = n/V
             </div>
             <div id="speciesList" class="flex flex-wrap gap-1">
@@ -317,8 +309,8 @@ tailwind.config = {
           </div>
 
           <!-- Balanced equations -->
-          <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2">
-            <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-1.5">
+          <div class="bg-slate-950/60 border border-slate-800 rounded-lg p-2.5">
+            <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1.5">
               <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED STOICHIOMETRIC EQUATIONS
             </div>
             <div id="eqList" class="space-y-1">
@@ -329,34 +321,34 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- ═══════════════════ RIGHT COLUMN (27%) — REAGENT LIBRARY ═══════════════════ -->
-    <div class="flex-[27] min-w-0 h-full bg-slate-900 border border-slate-800 rounded-lg flex flex-col overflow-hidden">
+    <!-- ══════════════ RIGHT COLUMN (20%) — REAGENT LIBRARY ══════════════ -->
+    <div class="w-[20%] h-full flex flex-col bg-slate-900/90 border border-slate-800 rounded-lg overflow-hidden">
 
-      <div class="px-2.5 py-2 border-b border-slate-800 shrink-0 flex items-center gap-2">
-        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
-          <i class="fa-solid fa-flask text-[11px] text-white"></i>
+      <div class="px-2 py-1.5 border-b border-slate-800 shrink-0 flex items-center gap-1.5">
+        <div class="w-5 h-5 rounded bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shrink-0">
+          <i class="fa-solid fa-flask text-[9px] text-white"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight truncate">REAGENT LIBRARY</div>
-          <div class="text-[7.5px] text-slate-500 font-mono tracking-wider leading-tight">VIRTUALAB · v5.0</div>
+          <div class="text-[10px] font-bold tracking-wide text-slate-100 leading-tight truncate">REAGENTS</div>
+          <div class="text-[7px] text-slate-500 font-mono leading-tight">v6.0 · 65 species</div>
         </div>
-        <div class="text-[8px] font-mono text-slate-500 shrink-0" id="reagentCount">0</div>
+        <div class="text-[7.5px] font-mono text-slate-500 shrink-0" id="reagentCount">0</div>
       </div>
 
-      <div id="catTabs" class="px-1.5 py-1.5 flex flex-wrap gap-1 border-b border-slate-800 shrink-0"></div>
+      <div id="catTabs" class="px-1.5 py-1 flex flex-wrap gap-1 border-b border-slate-800 shrink-0"></div>
 
       <div id="shelf" class="flex-1 h-0 overflow-y-auto custom-scrollbar px-1.5 py-1.5 space-y-1"></div>
 
-      <div class="px-2.5 py-1 border-t border-slate-800 shrink-0 text-[7.5px] text-slate-600 font-mono leading-tight flex items-center gap-1">
-        <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-        <span class="truncate">Hazard-aware interlock active.</span>
+      <div class="px-2 py-1 border-t border-slate-800 shrink-0 text-[7px] text-slate-600 font-mono leading-tight flex items-center gap-1">
+        <i class="fa-solid fa-shield-halved text-amber-600"></i>
+        <span class="truncate">Hazard interlock active</span>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ AI TUTOR DRAWER ═══════════ -->
-<div id="tutorDrawer" class="fixed top-0 right-0 h-full w-[420px] max-w-[92vw] bg-slate-900 border-l-2 border-cyan-700 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+<div id="tutorDrawer" class="fixed top-0 right-0 h-full w-[440px] max-w-[95vw] bg-slate-900 border-l-2 border-cyan-700 shadow-2xl transform translate-x-full transition-transform duration-300 z-40 flex flex-col">
   <div class="px-4 py-3 border-b border-slate-800 flex items-center gap-2 shrink-0 bg-gradient-to-r from-cyan-950/40 to-slate-900">
     <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-lg shadow-cyan-900/50">
       <i class="fa-solid fa-graduation-cap text-white text-[13px]"></i>
@@ -374,7 +366,7 @@ tailwind.config = {
 
   <div class="px-4 py-2 border-t border-slate-800 bg-slate-950/50 text-[8.5px] text-slate-500 font-mono flex items-center gap-1.5 shrink-0">
     <i class="fa-solid fa-circle-info"></i>
-    <span>Explanations update automatically as reactions occur.</span>
+    <span>Explanations update as reactions occur.</span>
   </div>
 </div>
 
@@ -408,7 +400,7 @@ tailwind.config = {
         </button>
       </div>
       <div class="text-center text-[9px] font-mono text-red-500/60 tracking-wider">
-        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v5.0 · ESC = ABORT · ENTER = ALLOW
+        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v6.0 · ESC = ABORT · ENTER = ALLOW
       </div>
     </div>
   </div>
@@ -416,126 +408,143 @@ tailwind.config = {
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
-   VIRTUALAB PRO v5.0 · Core Simulation Kernel
+   VIRTUALAB PRO v6.0 · Core Simulation Kernel
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* ── GEOMETRY (proportional wide beaker ~1.07:1) ── */
+/* ── GEOMETRY ── proportional wide-mouth beaker + burette + burner ── */
 const W = 760, H = 680;
-const BX = 240, BY = 190, BW = 280, BH = 300;
+const BX = 290, BY = 140, BW = 180, BH = 200;
 const INX = BX + 9, INY = BY + 8, INW = BW - 18, INH = BH - 16;
-const BOT = INY + INH;                    // 482
+const BOT = INY + INH;                    // 332
 const CX  = BX + BW / 2;                  // 380
 const MAXVOL = 500;
-const MAXLH  = 245;
+const MAXLH  = 172;
 
-const BURETTE_TOP = 40;
-const BURETTE_BOT = 150;
-const BURETTE_TIP_Y = BURETTE_BOT + 30;   // 180
-const BURNER_BASE_Y = 490;
+const BURETTE_TOP = 30;
+const BURETTE_BOT = 108;
+const BURETTE_TIP_Y = BURETTE_BOT + 30;   // 138
+const BURNER_BASE_Y = 375;
 
 /* ── CATEGORIES ── */
 const CATS = [
-  'All','Elements','Metals','Non-Metals',
-  'Basic Oxides','Acidic Oxides','Amphoteric Oxides','Neutral Oxides',
-  'Strong Acids','Weak Acids','Bases','Salts','Solvents','Indicators'
+  'All','Metals','Non-Metals','Basic Oxides','Acidic Oxides',
+  'Amphoteric Oxides','Neutral Oxides','Strong Acids','Weak Acids',
+  'Strong Bases','Weak Bases','Salts','Solvents','Indicators'
 ];
 
-/* ── REAGENT DATABASE ── */
+/* ── COMPREHENSIVE REAGENT DATABASE (65 species) ── */
 const CHEMS = [
-  {id:'na',  n:'Sodium',           f:'Na',       c:'Metals', st:'s', mm:22.99, max:5, def:1,   rgb:[205,210,220], alkali:true, dhSol:-184},
-  {id:'k',   n:'Potassium',        f:'K',        c:'Metals', st:'s', mm:39.10, max:5, def:1,   rgb:[205,210,220], alkali:true, dhSol:-196},
-  {id:'li',  n:'Lithium',          f:'Li',       c:'Metals', st:'s', mm:6.94,  max:5, def:0.5, rgb:[200,205,215], alkali:true, dhSol:-190},
-  {id:'ca',  n:'Calcium',          f:'Ca',       c:'Metals', st:'s', mm:40.08, max:10, def:2, rgb:[190,190,185], dhSol:-230},
-  {id:'mg',  n:'Magnesium',        f:'Mg',       c:'Metals', st:'s', mm:24.31, max:10, def:1, rgb:[200,200,205]},
-  {id:'zn',  n:'Zinc',             f:'Zn',       c:'Metals', st:'s', mm:65.38, max:20, def:3, rgb:[170,175,185]},
-  {id:'fe',  n:'Iron',             f:'Fe',       c:'Metals', st:'s', mm:55.85, max:20, def:3, rgb:[90,90,95]},
-  {id:'cu',  n:'Copper',           f:'Cu',       c:'Metals', st:'s', mm:63.55, max:20, def:3, rgb:[190,110,60]},
-  {id:'al',  n:'Aluminium',        f:'Al',       c:'Metals', st:'s', mm:26.98, max:20, def:2, rgb:[210,210,215]},
-  {id:'ag',  n:'Silver',           f:'Ag',       c:'Metals', st:'s', mm:107.87,max:10, def:1, rgb:[230,230,235]},
+  /* METALS (10) */
+  {id:'na', n:'Sodium',         f:'Na',  c:'Metals', st:'s', mm:22.99, max:5, def:1, rgb:[205,210,220], alkali:true, dhSol:-184},
+  {id:'k',  n:'Potassium',      f:'K',   c:'Metals', st:'s', mm:39.10, max:5, def:1, rgb:[205,210,220], alkali:true, dhSol:-196},
+  {id:'li', n:'Lithium',        f:'Li',  c:'Metals', st:'s', mm:6.94,  max:5, def:0.5,rgb:[200,205,215], alkali:true, dhSol:-190},
+  {id:'ca', n:'Calcium',        f:'Ca',  c:'Metals', st:'s', mm:40.08, max:10,def:2, rgb:[190,190,185], dhSol:-230},
+  {id:'mg', n:'Magnesium',      f:'Mg',  c:'Metals', st:'s', mm:24.31, max:10,def:1, rgb:[200,200,205]},
+  {id:'zn', n:'Zinc',           f:'Zn',  c:'Metals', st:'s', mm:65.38, max:20,def:3, rgb:[170,175,185]},
+  {id:'fe', n:'Iron',           f:'Fe',  c:'Metals', st:'s', mm:55.85, max:20,def:3, rgb:[90,90,95]},
+  {id:'cu', n:'Copper',         f:'Cu',  c:'Metals', st:'s', mm:63.55, max:20,def:3, rgb:[190,110,60]},
+  {id:'al', n:'Aluminium',      f:'Al',  c:'Metals', st:'s', mm:26.98, max:20,def:2, rgb:[210,210,215]},
+  {id:'ag', n:'Silver',         f:'Ag',  c:'Metals', st:'s', mm:107.87,max:10,def:1, rgb:[230,230,235]},
 
-  {id:'s', n:'Sulfur',             f:'S',  c:'Non-Metals', st:'s', mm:32.06, max:10, def:1, rgb:[230,220,60]},
-  {id:'c', n:'Carbon',             f:'C',  c:'Non-Metals', st:'s', mm:12.01, max:10, def:1, rgb:[35,35,40]},
-  {id:'p', n:'Phosphorus (Red)',   f:'P',  c:'Non-Metals', st:'s', mm:30.97, max:10, def:1, rgb:[205,80,60]},
-  {id:'i2',n:'Iodine',             f:'I₂', c:'Non-Metals', st:'s', mm:253.8, max:10, def:1, rgb:[90,40,120]},
+  /* NON-METALS (4) */
+  {id:'s', n:'Sulfur',           f:'S',  c:'Non-Metals', st:'s', mm:32.06, max:10,def:1, rgb:[230,220,60]},
+  {id:'c', n:'Carbon',           f:'C',  c:'Non-Metals', st:'s', mm:12.01, max:10,def:1, rgb:[35,35,40]},
+  {id:'p', n:'Phosphorus (Red)', f:'P',  c:'Non-Metals', st:'s', mm:30.97, max:10,def:1, rgb:[205,80,60]},
+  {id:'i2',n:'Iodine',           f:'I₂', c:'Non-Metals', st:'s', mm:253.8, max:10,def:1, rgb:[90,40,120]},
 
-  {id:'na2o', n:'Sodium Oxide',    f:'Na₂O', c:'Basic Oxides', st:'s', mm:61.98, max:20, def:2, rgb:[245,240,235], basicOxide:true, ions:{'Na+':2,'OH-':2}},
-  {id:'cao',  n:'Calcium Oxide',   f:'CaO',  c:'Basic Oxides', st:'s', mm:56.08, max:20, def:5, rgb:[235,235,230], basicOxide:true},
-  {id:'mgo',  n:'Magnesium Oxide', f:'MgO',  c:'Basic Oxides', st:'s', mm:40.30, max:20, def:2, rgb:[245,245,245], basicOxide:true, ions:{'Mg2+':1,'OH-':2}},
+  /* BASIC OXIDES (4) */
+  {id:'na2o',n:'Sodium Oxide',      f:'Na₂O', c:'Basic Oxides', st:'s', mm:61.98, max:20,def:2, rgb:[245,240,235], basicOxide:true, ions:{'Na+':2,'OH-':2}},
+  {id:'cao', n:'Calcium Oxide',     f:'CaO',  c:'Basic Oxides', st:'s', mm:56.08, max:20,def:5, rgb:[235,235,230], basicOxide:true},
+  {id:'mgo', n:'Magnesium Oxide',   f:'MgO',  c:'Basic Oxides', st:'s', mm:40.30, max:20,def:2, rgb:[245,245,245], basicOxide:true, ions:{'Mg2+':1,'OH-':2}},
+  {id:'k2o', n:'Potassium Oxide',   f:'K₂O',  c:'Basic Oxides', st:'s', mm:94.20, max:20,def:2, rgb:[245,240,235], basicOxide:true, ions:{'K+':2,'OH-':2}},
 
-  {id:'so2',   n:'Sulfur Dioxide',       f:'SO₂',   c:'Acidic Oxides', st:'s', mm:64.07, max:20, def:2, rgb:[240,250,240], acidicOxide:true, toxic:true, ions:{'H+':2,'SO3^2-':1}},
-  {id:'co2',   n:'Carbon Dioxide',       f:'CO₂',   c:'Acidic Oxides', st:'s', mm:44.01, max:20, def:2, rgb:[240,250,245], acidicOxide:true, ions:{'H+':1,'HCO3-':1}},
-  {id:'p4o10', n:'Phosphorus Pentoxide', f:'P₄O₁₀', c:'Acidic Oxides', st:'s', mm:283.89,max:10, def:1, rgb:[245,245,240], acidicOxide:true, ions:{'H+':12,'PO4^3-':4}},
+  /* ACIDIC OXIDES (4) */
+  {id:'so2',  n:'Sulfur Dioxide',       f:'SO₂',   c:'Acidic Oxides', st:'s', mm:64.07, max:20,def:2, rgb:[240,250,240], acidicOxide:true, toxic:true, ions:{'H+':2,'SO3^2-':1}},
+  {id:'so3',  n:'Sulfur Trioxide',      f:'SO₃',   c:'Acidic Oxides', st:'s', mm:80.07, max:20,def:2, rgb:[240,250,240], acidicOxide:true, toxic:true, ions:{'H+':2,'SO4^2-':1}},
+  {id:'co2',  n:'Carbon Dioxide',       f:'CO₂',   c:'Acidic Oxides', st:'s', mm:44.01, max:20,def:2, rgb:[240,250,245], acidicOxide:true, ions:{'H+':1,'HCO3-':1}},
+  {id:'p4o10',n:'Phosphorus Pentoxide', f:'P₄O₁₀', c:'Acidic Oxides', st:'s', mm:283.89,max:10,def:1, rgb:[245,245,240], acidicOxide:true, ions:{'H+':12,'PO4^3-':4}},
 
-  {id:'al2o3', n:'Aluminium Oxide', f:'Al₂O₃', c:'Amphoteric Oxides', st:'s', mm:101.96, max:20, def:2, rgb:[240,240,245], amphoteric:true},
-  {id:'zno',   n:'Zinc Oxide',      f:'ZnO',   c:'Amphoteric Oxides', st:'s', mm:81.38,  max:20, def:2, rgb:[245,245,240], amphoteric:true},
+  /* AMPHOTERIC OXIDES (3) */
+  {id:'al2o3',n:'Aluminium Oxide',f:'Al₂O₃',c:'Amphoteric Oxides', st:'s', mm:101.96,max:20,def:2, rgb:[240,240,245], amphoteric:true},
+  {id:'zno',  n:'Zinc Oxide',     f:'ZnO',  c:'Amphoteric Oxides', st:'s', mm:81.38, max:20,def:2, rgb:[245,245,240], amphoteric:true},
+  {id:'pbo',  n:'Lead(II) Oxide', f:'PbO',  c:'Amphoteric Oxides', st:'s', mm:223.2, max:20,def:2, rgb:[240,235,60], amphoteric:true},
 
-  {id:'co', n:'Carbon Monoxide', f:'CO',  c:'Neutral Oxides', st:'s', mm:28.01, max:20, def:2, rgb:[240,245,245], neutral:true, toxic:true},
-  {id:'no', n:'Nitric Oxide',    f:'NO',  c:'Neutral Oxides', st:'s', mm:30.01, max:20, def:2, rgb:[240,245,245], neutral:true, toxic:true},
-  {id:'n2o',n:'Nitrous Oxide',   f:'N₂O', c:'Neutral Oxides', st:'s', mm:44.01, max:20, def:2, rgb:[240,245,245], neutral:true},
+  /* NEUTRAL OXIDES (3) */
+  {id:'co', n:'Carbon Monoxide',f:'CO', c:'Neutral Oxides', st:'s', mm:28.01, max:20,def:2, rgb:[240,245,245], neutral:true, toxic:true},
+  {id:'no', n:'Nitric Oxide',   f:'NO', c:'Neutral Oxides', st:'s', mm:30.01, max:20,def:2, rgb:[240,245,245], neutral:true, toxic:true},
+  {id:'n2o',n:'Nitrous Oxide',  f:'N₂O',c:'Neutral Oxides', st:'s', mm:44.01, max:20,def:2, rgb:[240,245,245], neutral:true},
 
-  {id:'hcl',   n:'Hydrochloric Acid', f:'HCl',   c:'Strong Acids', st:'l', M:1.0, max:100, def:20, rgb:[235,245,255], ions:{'H+':1,'Cl-':1},  dhSol:-75},
-  {id:'h2so4', n:'Sulfuric Acid',     f:'H₂SO₄', c:'Strong Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':2,'SO4^2-':1},dhSol:-88},
-  {id:'hno3',  n:'Nitric Acid',       f:'HNO₃',  c:'Strong Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':1,'NO3-':1},  dhSol:-80},
+  /* STRONG ACIDS (3) */
+  {id:'hcl',  n:'Hydrochloric Acid',f:'HCl',   c:'Strong Acids', st:'l', M:1.0, max:100,def:20, rgb:[235,245,255], ions:{'H+':1,'Cl-':1},   dhSol:-75},
+  {id:'h2so4',n:'Sulfuric Acid',    f:'H₂SO₄', c:'Strong Acids', st:'l', M:1.0, max:100,def:20, rgb:[240,245,255], ions:{'H+':2,'SO4^2-':1},dhSol:-88},
+  {id:'hno3', n:'Nitric Acid',      f:'HNO₃',  c:'Strong Acids', st:'l', M:1.0, max:100,def:20, rgb:[240,245,255], ions:{'H+':1,'NO3-':1},  dhSol:-80},
 
-  {id:'ch3cooh',n:'Acetic Acid',   f:'CH₃COOH', c:'Weak Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,250], weakAcid:true, dhSol:-10},
-  {id:'h2co3',  n:'Carbonic Acid', f:'H₂CO₃',   c:'Weak Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true, dhSol:-20},
-  {id:'h3po4',  n:'Phosphoric Acid',f:'H₃PO₄',  c:'Weak Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true, dhSol:-40},
+  /* WEAK ACIDS (3) */
+  {id:'ch3cooh',n:'Acetic Acid',   f:'CH₃COOH',c:'Weak Acids', st:'l', M:1.0, max:100,def:20, rgb:[240,245,250], weakAcid:true, dhSol:-10},
+  {id:'h2co3',  n:'Carbonic Acid', f:'H₂CO₃',  c:'Weak Acids', st:'l', M:1.0, max:100,def:20, rgb:[240,245,255], weakAcid:true, dhSol:-20},
+  {id:'h3po4',  n:'Phosphoric Acid',f:'H₃PO₄', c:'Weak Acids', st:'l', M:1.0, max:100,def:20, rgb:[240,245,255], weakAcid:true, dhSol:-40},
 
-  {id:'naoh', n:'Sodium Hydroxide',    f:'NaOH',    c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'Na+':1,'OH-':1}, dhSol:-44},
-  {id:'koh',  n:'Potassium Hydroxide', f:'KOH',     c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'K+':1,'OH-':1},  dhSol:-57},
-  {id:'nh3',  n:'Ammonia',             f:'NH₃(aq)', c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[235,245,250], weakBase:true,          dhSol:-30},
-  {id:'caoh2',n:'Limewater',           f:'Ca(OH)₂', c:'Bases', st:'l', M:0.02, max:100, def:30, rgb:[240,250,250], ions:{'Ca2+':1,'OH-':2}},
-  {id:'mgoh2',n:'Magnesium Hydroxide', f:'Mg(OH)₂', c:'Bases', st:'s', mm:58.32, max:20, def:3, rgb:[245,245,245], ions:{'Mg2+':1,'OH-':2}},
-  {id:'baoh2',n:'Barium Hydroxide',    f:'Ba(OH)₂', c:'Bases', st:'l', M:0.1,  max:100, def:30, rgb:[240,250,255], ions:{'Ba2+':1,'OH-':2}},
+  /* STRONG BASES (4) */
+  {id:'naoh', n:'Sodium Hydroxide',    f:'NaOH',    c:'Strong Bases', st:'l', M:1.0, max:100,def:20, rgb:[240,250,255], ions:{'Na+':1,'OH-':1}, dhSol:-44},
+  {id:'koh',  n:'Potassium Hydroxide', f:'KOH',     c:'Strong Bases', st:'l', M:1.0, max:100,def:20, rgb:[240,250,255], ions:{'K+':1,'OH-':1},  dhSol:-57},
+  {id:'caoh2',n:'Limewater',           f:'Ca(OH)₂', c:'Strong Bases', st:'l', M:0.02,max:100,def:30, rgb:[240,250,250], ions:{'Ca2+':1,'OH-':2}},
+  {id:'baoh2',n:'Barium Hydroxide',    f:'Ba(OH)₂', c:'Strong Bases', st:'l', M:0.1, max:100,def:30, rgb:[240,250,255], ions:{'Ba2+':1,'OH-':2}},
 
-  {id:'nacl',  n:'Sodium Chloride',  f:'NaCl',  c:'Salts', st:'s', mm:58.44,  max:50, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':1,'Cl-':1}},
-  {id:'ki',    n:'Potassium Iodide', f:'KI',    c:'Salts', st:'s', mm:166.0,  max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'K+':1,'I-':1}},
-  {id:'bacl2', n:'Barium Chloride',  f:'BaCl₂', c:'Salts', st:'s', mm:208.23, max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'Ba2+':1,'Cl-':2}},
-  {id:'na2co3',n:'Sodium Carbonate', f:'Na₂CO₃',c:'Salts', st:'s', mm:105.99, max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':2,'CO3^2-':1}},
-  {id:'caco3', n:'Calcium Carbonate',f:'CaCO₃', c:'Salts', st:'s', mm:100.09, max:30, def:5, rgb:[240,240,235]},
-  {id:'kno3',  n:'Potassium Nitrate',f:'KNO₃',  c:'Salts', st:'s', mm:101.1,  max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'K+':1,'NO3-':1}},
-  {id:'cuso4', n:'Copper(II) Sulfate',f:'CuSO₄',c:'Salts', st:'s', mm:159.6,  max:30, def:5, rgb:[40,110,220], soluble:true, ions:{'Cu2+':1,'SO4^2-':1}},
-  {id:'agno3', n:'Silver Nitrate',    f:'AgNO₃',c:'Salts', st:'s', mm:169.87, max:20, def:2, rgb:[240,240,245], soluble:true, ions:{'Ag+':1,'NO3-':1}},
-  {id:'pbno3', n:'Lead(II) Nitrate',  f:'Pb(NO₃)₂',c:'Salts',st:'s', mm:331.2,  max:20, def:2, rgb:[240,240,245], soluble:true, ions:{'Pb2+':1,'NO3-':2}},
-  {id:'kmno4', n:'Potassium Permanganate',f:'KMnO₄',c:'Salts',st:'s', mm:158.03,max:10, def:1, rgb:[130,10,90], soluble:true, ions:{'K+':1,'MnO4-':1}},
-  {id:'fecl3', n:'Iron(III) Chloride',f:'FeCl₃',c:'Salts', st:'s', mm:162.2,  max:20, def:2, rgb:[200,140,60], soluble:true, ions:{'Fe3+':1,'Cl-':3}},
-  {id:'cuo',   n:'Copper(II) Oxide',  f:'CuO',  c:'Salts', st:'s', mm:79.55,  max:20, def:2, rgb:[25,25,30]},
+  /* WEAK BASES (2) */
+  {id:'nh3',  n:'Ammonia',             f:'NH₃(aq)', c:'Weak Bases', st:'l', M:1.0, max:100,def:20, rgb:[235,245,250], weakBase:true, dhSol:-30},
+  {id:'mgoh2',n:'Magnesium Hydroxide', f:'Mg(OH)₂', c:'Weak Bases', st:'s', mm:58.32,max:20,def:3,  rgb:[245,245,245], ions:{'Mg2+':1,'OH-':2}},
 
-  {id:'h2o',   n:'Distilled Water', f:'H₂O',    c:'Solvents', st:'l', M:0.0, max:500, def:50, rgb:[230,240,250]},
-  {id:'etoh',  n:'Ethanol',         f:'C₂H₅OH', c:'Solvents', st:'l', mm:46.07, dens:0.789, max:100, def:20, rgb:[245,250,255], fuel:true, ign:300, dhComb:1367, co2:2},
-  {id:'meoh',  n:'Methanol',        f:'CH₃OH',  c:'Solvents', st:'l', mm:32.04, dens:0.792, max:100, def:20, rgb:[245,250,255], fuel:true, ign:280, dhComb:726,  co2:1},
-  {id:'acetone',n:'Acetone',        f:'C₃H₆O',  c:'Solvents', st:'l', mm:58.08, dens:0.784, max:100, def:20, rgb:[245,250,255], fuel:true, ign:290, dhComb:1790, co2:3},
-  {id:'hexane',n:'Hexane',          f:'C₆H₁₄',  c:'Solvents', st:'l', mm:86.18, dens:0.659, max:100, def:20, rgb:[245,248,255], fuel:true, ign:225, dhComb:4163, co2:6},
-  {id:'ch4',   n:'Methane',         f:'CH₄',    c:'Solvents', st:'l', mm:16.04, dens:0.4226, max:100, def:20, rgb:[245,250,255], fuel:true, ign:537, dhComb:890, co2:1},
+  /* SALTS (12) */
+  {id:'nacl', n:'Sodium Chloride',  f:'NaCl',    c:'Salts', st:'s', mm:58.44, max:50,def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':1,'Cl-':1}},
+  {id:'ki',   n:'Potassium Iodide', f:'KI',      c:'Salts', st:'s', mm:166.0, max:20,def:3, rgb:[245,245,245], soluble:true, ions:{'K+':1,'I-':1}},
+  {id:'bacl2',n:'Barium Chloride',  f:'BaCl₂',   c:'Salts', st:'s', mm:208.23,max:20,def:3, rgb:[245,245,245], soluble:true, ions:{'Ba2+':1,'Cl-':2}},
+  {id:'na2co3',n:'Sodium Carbonate',f:'Na₂CO₃',  c:'Salts', st:'s', mm:105.99,max:30,def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':2,'CO3^2-':1}},
+  {id:'caco3',n:'Calcium Carbonate',f:'CaCO₃',   c:'Salts', st:'s', mm:100.09,max:30,def:5, rgb:[240,240,235]},
+  {id:'kno3', n:'Potassium Nitrate',f:'KNO₃',    c:'Salts', st:'s', mm:101.1, max:30,def:5, rgb:[245,245,245], soluble:true, ions:{'K+':1,'NO3-':1}},
+  {id:'cuso4',n:'Copper(II) Sulfate',f:'CuSO₄',  c:'Salts', st:'s', mm:159.6, max:30,def:5, rgb:[40,110,220], soluble:true, ions:{'Cu2+':1,'SO4^2-':1}},
+  {id:'agno3',n:'Silver Nitrate',   f:'AgNO₃',   c:'Salts', st:'s', mm:169.87,max:20,def:2, rgb:[240,240,245], soluble:true, ions:{'Ag+':1,'NO3-':1}},
+  {id:'pbno3',n:'Lead(II) Nitrate', f:'Pb(NO₃)₂',c:'Salts', st:'s', mm:331.2, max:20,def:2, rgb:[240,240,245], soluble:true, ions:{'Pb2+':1,'NO3-':2}},
+  {id:'kmno4',n:'Potassium Permanganate',f:'KMnO₄',c:'Salts',st:'s', mm:158.03,max:10,def:1, rgb:[130,10,90], soluble:true, ions:{'K+':1,'MnO4-':1}},
+  {id:'fecl3',n:'Iron(III) Chloride',f:'FeCl₃',  c:'Salts', st:'s', mm:162.2, max:20,def:2, rgb:[200,140,60], soluble:true, ions:{'Fe3+':1,'Cl-':3}},
+  {id:'cuo',  n:'Copper(II) Oxide',  f:'CuO',    c:'Salts', st:'s', mm:79.55, max:20,def:2, rgb:[25,25,30]},
 
-  {id:'ui',   n:'Universal Indicator', f:'UI', c:'Indicators', st:'l', ind:'ui',  max:10, def:1, rgb:[180,200,120]},
-  {id:'phph', n:'Phenolphthalein', f:'C₂₀H₁₄O₄', c:'Indicators', st:'l', ind:'phph', max:10, def:1, rgb:[250,240,250]},
-  {id:'btb',  n:'Bromothymol Blue',f:'BTB', c:'Indicators', st:'l', ind:'btb',  max:10, def:1, rgb:[220,200,90]},
-  {id:'mor',  n:'Methyl Orange',   f:'MO',  c:'Indicators', st:'l', ind:'mor',  max:10, def:1, rgb:[240,170,60]},
-  {id:'litmus',n:'Litmus Solution',f:'Lit', c:'Indicators', st:'l', ind:'lit',  max:10, def:1, rgb:[150,110,190]},
+  /* SOLVENTS (6) */
+  {id:'h2o',   n:'Distilled Water',f:'H₂O',    c:'Solvents', st:'l', M:0.0, max:500,def:50, rgb:[230,240,250]},
+  {id:'etoh',  n:'Ethanol',        f:'C₂H₅OH', c:'Solvents', st:'l', mm:46.07,dens:0.789,max:100,def:20, rgb:[245,250,255], fuel:true, ign:300, dhComb:1367, co2:2},
+  {id:'meoh',  n:'Methanol',       f:'CH₃OH',  c:'Solvents', st:'l', mm:32.04,dens:0.792,max:100,def:20, rgb:[245,250,255], fuel:true, ign:280, dhComb:726,  co2:1},
+  {id:'acetone',n:'Acetone',       f:'C₃H₆O',  c:'Solvents', st:'l', mm:58.08,dens:0.784,max:100,def:20, rgb:[245,250,255], fuel:true, ign:290, dhComb:1790, co2:3},
+  {id:'hexane',n:'Hexane',         f:'C₆H₁₄',  c:'Solvents', st:'l', mm:86.18,dens:0.659,max:100,def:20, rgb:[245,248,255], fuel:true, ign:225, dhComb:4163, co2:6},
+  {id:'ch4',   n:'Methane',        f:'CH₄',    c:'Solvents', st:'l', mm:16.04,dens:0.4226,max:100,def:20, rgb:[245,250,255], fuel:true, ign:537, dhComb:890,  co2:1},
+
+  /* INDICATORS (5) */
+  {id:'ui',    n:'Universal Indicator',f:'UI', c:'Indicators', st:'l', ind:'ui',  max:10,def:1, rgb:[180,200,120]},
+  {id:'phph',  n:'Phenolphthalein',f:'C₂₀H₁₄O₄',c:'Indicators',st:'l', ind:'phph',max:10,def:1, rgb:[250,240,250]},
+  {id:'btb',   n:'Bromothymol Blue',f:'BTB', c:'Indicators', st:'l', ind:'btb',  max:10,def:1, rgb:[220,200,90]},
+  {id:'mor',   n:'Methyl Orange',  f:'MO',   c:'Indicators', st:'l', ind:'mor',  max:10,def:1, rgb:[240,170,60]},
+  {id:'litmus',n:'Litmus Solution',f:'Lit',  c:'Indicators', st:'l', ind:'lit',  max:10,def:1, rgb:[150,110,190]},
 ];
 
 const ION_COLORS = {
-  'Cu2+': [ 34,118,225], 'Fe2+': [110,165,120], 'Fe3+': [190,125, 45],
-  'MnO4-':[150, 15,115], 'I2':   [165,115, 35], 'I-':   [225,225,205],
-  'Ni2+': [ 60,180,120], 'Co2+': [220,110,170],
+  'Cu2+': [ 34,118,225],'Fe2+': [110,165,120],'Fe3+': [190,125, 45],
+  'MnO4-':[150, 15,115],'I2':   [165,115, 35],'I-':   [225,225,205],
+  'Ni2+': [ 60,180,120],'Co2+': [220,110,170],'Cr3+': [ 90,140, 70],
 };
 
 const PRECIP_RULES = [
-  { a:'Ag+',  b:'Cl-',    ra:1, rb:1, prod:'AgCl',   col:[248,248,250], name:'Silver Chloride' },
-  { a:'Pb2+', b:'I-',     ra:1, rb:2, prod:'PbI2',   col:[250,208, 40], name:'Lead(II) Iodide' },
-  { a:'Ba2+', b:'SO4^2-', ra:1, rb:1, prod:'BaSO4',  col:[250,250,250], name:'Barium Sulfate' },
-  { a:'Cu2+', b:'OH-',    ra:1, rb:2, prod:'Cu(OH)2',col:[120,190,240], name:'Copper(II) Hydroxide' },
-  { a:'Fe3+', b:'OH-',    ra:1, rb:3, prod:'Fe(OH)3',col:[150, 80, 40], name:'Iron(III) Hydroxide' },
-  { a:'Fe2+', b:'OH-',    ra:1, rb:2, prod:'Fe(OH)2',col:[110,160,110], name:'Iron(II) Hydroxide' },
-  { a:'Ca2+', b:'CO3^2-', ra:1, rb:1, prod:'CaCO3',  col:[245,245,240], name:'Calcium Carbonate' },
-  { a:'Pb2+', b:'SO4^2-', ra:1, rb:1, prod:'PbSO4',  col:[250,250,250], name:'Lead(II) Sulfate' },
-  { a:'Ag+',  b:'OH-',    ra:1, rb:1, prod:'AgOH',   col:[230,225,215], name:'Silver Hydroxide' },
-  { a:'Mg2+', b:'OH-',    ra:1, rb:2, prod:'Mg(OH)2',col:[248,248,248], name:'Magnesium Hydroxide' },
+  { a:'Ag+', b:'Cl-',    ra:1,rb:1,prod:'AgCl',   col:[248,248,250], name:'Silver Chloride' },
+  { a:'Pb2+',b:'I-',     ra:1,rb:2,prod:'PbI2',   col:[250,208, 40], name:'Lead(II) Iodide' },
+  { a:'Ba2+',b:'SO4^2-', ra:1,rb:1,prod:'BaSO4',  col:[250,250,250], name:'Barium Sulfate' },
+  { a:'Cu2+',b:'OH-',    ra:1,rb:2,prod:'Cu(OH)2',col:[120,190,240], name:'Copper(II) Hydroxide' },
+  { a:'Fe3+',b:'OH-',    ra:1,rb:3,prod:'Fe(OH)3',col:[150, 80, 40], name:'Iron(III) Hydroxide' },
+  { a:'Fe2+',b:'OH-',    ra:1,rb:2,prod:'Fe(OH)2',col:[110,160,110], name:'Iron(II) Hydroxide' },
+  { a:'Ca2+',b:'CO3^2-', ra:1,rb:1,prod:'CaCO3',  col:[245,245,240], name:'Calcium Carbonate' },
+  { a:'Pb2+',b:'SO4^2-', ra:1,rb:1,prod:'PbSO4',  col:[250,250,250], name:'Lead(II) Sulfate' },
+  { a:'Ag+', b:'OH-',    ra:1,rb:1,prod:'AgOH',   col:[230,225,215], name:'Silver Hydroxide' },
+  { a:'Mg2+',b:'OH-',    ra:1,rb:2,prod:'Mg(OH)2',col:[248,248,248], name:'Magnesium Hydroxide' },
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
-   AUDIO ENGINE — Web Audio API synthesis (no external files)
+   AUDIO ENGINE
    ══════════════════════════════════════════════════════════════════════════ */
 const LabAudio = {
   ctx:null, master:null, ready:false, enabled:true,
@@ -704,7 +713,7 @@ const state = {
   flash: 0, shake: 0, gasRate: 0, steamRate: 0, stirPhase: 0, tick: 0,
   gasMoles: { H2:0, CO2:0, O2:0, SO2:0 },
   lastDeltaH_kJmol: 0,
-  lastReactionType: '—',
+  lastReactionType: 'READY',
   lastReactionEq: '—',
 };
 
@@ -859,12 +868,12 @@ function log(msg, type){
   el.insertBefore(div, el.firstChild);
   while (el.children.length > 200) el.removeChild(el.lastChild);
   const lc = document.getElementById('logCount');
-  if (lc) lc.textContent = el.children.length + ' entries';
+  if (lc) lc.textContent = el.children.length;
 }
 function clearLog(){
   document.getElementById('log').innerHTML = '';
   const lc = document.getElementById('logCount');
-  if (lc) lc.textContent = '0 entries';
+  if (lc) lc.textContent = '0';
 }
 
 function eqAdd(str, type){
@@ -890,7 +899,7 @@ function eqAdd(str, type){
 
   const d = document.createElement('div');
   d.className = 'eq-item text-amber-200/90 fade-in';
-  d.innerHTML = chip ? `<div class="mb-0.5">${chip}</div><div>${str}</div>` : `<div>${str}</div>`;
+  d.innerHTML = chip ? `<div class="mb-1">${chip}</div><div>${str}</div>` : `<div>${str}</div>`;
   el.insertBefore(d, el.firstChild);
   while (el.children.length > 30) el.removeChild(el.lastChild);
 }
@@ -914,7 +923,7 @@ function buildShelf(){
   const shelf = document.getElementById('shelf');
   shelf.innerHTML = '';
   const list = CHEMS.filter(c => ACTIVE_CAT === 'All' || c.c === ACTIVE_CAT);
-  document.getElementById('reagentCount').textContent = list.length + ' items';
+  document.getElementById('reagentCount').textContent = list.length;
 
   list.forEach(c => {
     if (QTY[c.id] === undefined) QTY[c.id] = c.def;
@@ -928,9 +937,9 @@ function buildShelf(){
       </div>
       <input type="number" inputmode="decimal" min="0.1" max="${c.max}" step="0.1"
              value="${QTY[c.id]}" data-qty="${c.id}"
-             class="w-[46px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1 py-[1px] text-[9.5px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
-      <span class="text-[8px] text-slate-500 w-[15px] shrink-0 font-mono">${unit}</span>
-      <button class="vl-add shrink-0" data-add="${c.id}">+ADD</button>`;
+             class="w-[42px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1 py-[1px] text-[9.5px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
+      <span class="text-[8px] text-slate-500 w-[13px] shrink-0 font-mono">${unit}</span>
+      <button class="vl-add shrink-0" data-add="${c.id}">+</button>`;
     shelf.appendChild(row);
   });
 
@@ -1003,6 +1012,7 @@ function addChemical(chem, qty, skipHazardCheck){
     state.ind[chem.ind] = (state.ind[chem.ind] || 0) + qty;
     state.volume += qty; state.mass += qty;
     log(`Added ${qty.toFixed(2)} mL ${chem.n}`, 'info');
+    updateTutor();
     return;
   }
 
@@ -1010,6 +1020,7 @@ function addChemical(chem, qty, skipHazardCheck){
     state.fuels[chem.id] = (state.fuels[chem.id] || 0) + moles;
     state.volume += qty; state.mass += qty;
     log(`Added ${qty.toFixed(1)} mL ${chem.n} (${moles.toFixed(4)} mol)`, 'info');
+    updateTutor();
     return;
   }
 
@@ -1087,7 +1098,7 @@ function react(dt){
   const T = s.temp;
   const V = Math.max(0.0005, s.volume / 1000);
 
-  /* 1. ACID-BASE NEUTRALISATION */
+  /* 1. ACID-BASE NEUTRALIZATION */
   {
     const h = getIon('H+'), oh = getIon('OH-');
     const n = Math.min(h, oh);
@@ -1180,7 +1191,7 @@ function react(dt){
         if (!s.eq.has('m_' + m)){
           s.eq.add('m_' + m);
           const sym = m === 'zn' ? 'Zn' : (m === 'fe' ? 'Fe' : (m === 'mg' ? 'Mg' : 'Al'));
-          eqAdd(`${sym}(s) + 2HCl(aq) → ${sym}Cl₂(aq) + H₂(g)↑`, 'SINGLE DISPL.');
+          eqAdd(`${sym}(s) + 2HCl(aq) → ${sym}Cl₂(aq) + H₂(g)↑      ΔH = −150 kJ·mol⁻¹`, 'SINGLE DISPL.');
           log(`${sym} dissolving in acid — H₂ effervescence`, 'react');
         }
       }
@@ -1680,7 +1691,7 @@ function flushAll(){
   s.gasRate = 0; s.steamRate = 0;
   s.gasMoles = { H2:0, CO2:0, O2:0, SO2:0 };
   s.lastDeltaH_kJmol = 0;
-  s.lastReactionType = '—';
+  s.lastReactionType = 'READY';
   s.lastReactionEq = '—';
   s.eq.clear();
   s.flame = 0; s.stir = 0; s.drip = 0;
@@ -1708,7 +1719,7 @@ function clearVessel(){
   s.gasRate = 0; s.steamRate = 0;
   s.gasMoles = { H2:0, CO2:0, O2:0, SO2:0 };
   s.lastDeltaH_kJmol = 0;
-  s.lastReactionType = '—';
+  s.lastReactionType = 'READY';
   s.lastReactionEq = '—';
   s.eq.clear();
   s.fluidColor = [220, 232, 245];
@@ -1727,8 +1738,8 @@ function resizeCanvas(){
   canvas.width = Math.max(1, rect.width * dpr);
   canvas.height = Math.max(1, rect.height * dpr);
 
-  /* Crop window showing burette tip → beaker → burner base */
-  const VX0 = 195, VY0 = 90, VX1 = 565, VY1 = 565;
+  /* Crop window sized to encompass burette tip + beaker + burner base */
+  const VX0 = 210, VY0 = 110, VX1 = 550, VY1 = 390;
   const VW = VX1 - VX0, VH = VY1 - VY0;
 
   const s = Math.min(rect.width / VW, rect.height / VH);
@@ -1739,7 +1750,7 @@ function resizeCanvas(){
 }
 
 function beakerInnerPath(){
-  const x = INX, y = INY, w = INW, h = INH, r = 15;
+  const x = INX, y = INY, w = INW, h = INH, r = 14;
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(x, y + h - r);
@@ -1765,27 +1776,29 @@ function roundRect(x, y, w, h, r){
 }
 
 function drawBackdrop(){
-  const g = ctx.createRadialGradient(CX, 300, 40, CX, 300, 560);
+  const g = ctx.createRadialGradient(CX, 250, 30, CX, 250, 400);
   g.addColorStop(0, '#0d1727');
   g.addColorStop(1, '#050a14');
   ctx.fillStyle = g;
   ctx.fillRect(-1400, -1400, W + 2800, H + 2800);
 
-  const bg = ctx.createLinearGradient(0, 480, 0, H + 200);
+  /* Benchtop */
+  const bg = ctx.createLinearGradient(0, 370, 0, 500);
   bg.addColorStop(0, '#101a28');
   bg.addColorStop(1, '#050a14');
   ctx.fillStyle = bg;
-  ctx.fillRect(-1400, 480, W + 2800, 1400);
+  ctx.fillRect(-1400, 370, W + 2800, 200);
 
   ctx.strokeStyle = 'rgba(56,189,248,0.09)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(-1400, 480.5); ctx.lineTo(W + 1400, 480.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-1400, 370.5); ctx.lineTo(W + 1400, 370.5); ctx.stroke();
 
-  ctx.strokeStyle = 'rgba(56,189,248,0.035)';
-  for (let x = -1400; x < W + 1400; x += 38){
-    ctx.beginPath(); ctx.moveTo(x, -600); ctx.lineTo(x, 480); ctx.stroke();
+  /* Grid */
+  ctx.strokeStyle = 'rgba(56,189,248,0.03)';
+  for (let x = -1400; x < W + 1400; x += 34){
+    ctx.beginPath(); ctx.moveTo(x, -400); ctx.lineTo(x, 370); ctx.stroke();
   }
-  for (let y = -600; y < 480; y += 38){
+  for (let y = -400; y < 370; y += 34){
     ctx.beginPath(); ctx.moveTo(-1400, y); ctx.lineTo(W + 1400, y); ctx.stroke();
   }
 }
@@ -1803,19 +1816,19 @@ function flameTint(){
 
 function drawBurner(){
   ctx.fillStyle = '#1b2534';
-  roundRect(CX - 21, 498, 42, 52, 5); ctx.fill();
+  roundRect(CX - 18, 372, 36, 46, 5); ctx.fill();
   ctx.fillStyle = '#243044';
-  roundRect(CX - 21, 498, 42, 8, 3); ctx.fill();
+  roundRect(CX - 18, 372, 36, 7, 3); ctx.fill();
   ctx.fillStyle = '#334155';
-  roundRect(CX - 25, 488, 50, 14, 4); ctx.fill();
+  roundRect(CX - 22, 364, 44, 12, 4); ctx.fill();
   ctx.fillStyle = '#151e2b';
-  roundRect(CX - 52, 550, 104, 14, 5); ctx.fill();
+  roundRect(CX - 48, 414, 96, 12, 5); ctx.fill();
 
   if (state.flame <= 0 || state.shattered) return;
 
   const inten = state.flame / 100;
-  const fh = 34 + inten * 92;
-  const fw = 13 + inten * 13;
+  const fh = 30 + inten * 80;
+  const fw = 11 + inten * 12;
   const baseY = BURNER_BASE_Y;
   const tipY = baseY - fh;
   const tint = flameTint();
@@ -1823,13 +1836,13 @@ function drawBurner(){
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
 
-  const og = ctx.createRadialGradient(CX, baseY - fh * 0.35, 4, CX, baseY - fh * 0.35, fw * 4.2 + 18);
+  const og = ctx.createRadialGradient(CX, baseY - fh * 0.35, 4, CX, baseY - fh * 0.35, fw * 4 + 16);
   og.addColorStop(0, 'rgba(255,150,40,0.35)');
   og.addColorStop(0.5, 'rgba(255,110,20,0.12)');
   og.addColorStop(1, 'rgba(255,80,0,0)');
   ctx.fillStyle = og;
   ctx.beginPath();
-  ctx.ellipse(CX, baseY - fh * 0.35, fw * 4.2 + 18, fh * 0.82, 0, 0, Math.PI * 2);
+  ctx.ellipse(CX, baseY - fh * 0.35, fw * 4 + 16, fh * 0.82, 0, 0, Math.PI * 2);
   ctx.fill();
 
   const og2 = ctx.createLinearGradient(0, baseY, 0, tipY);
@@ -1868,28 +1881,31 @@ function drawBurner(){
 function drawBeakerBack(){
   ctx.save();
   const g = ctx.createLinearGradient(BX, 0, BX + BW, 0);
-  g.addColorStop(0, 'rgba(160,220,245,0.10)');
-  g.addColorStop(0.22, 'rgba(200,240,255,0.04)');
-  g.addColorStop(0.75, 'rgba(140,200,230,0.03)');
-  g.addColorStop(1, 'rgba(160,220,245,0.11)');
+  g.addColorStop(0, 'rgba(160,220,245,0.12)');
+  g.addColorStop(0.22, 'rgba(200,240,255,0.05)');
+  g.addColorStop(0.75, 'rgba(140,200,230,0.04)');
+  g.addColorStop(1, 'rgba(160,220,245,0.13)');
   ctx.fillStyle = g;
   beakerInnerPath();
   ctx.fill();
 
-  /* Graduation marks 100 – 500 mL */
-  ctx.strokeStyle = 'rgba(180,225,245,0.32)';
+  /* Graduation marks 100–500 mL */
+  ctx.strokeStyle = 'rgba(180,225,245,0.35)';
   ctx.lineWidth = 1;
   for (let i = 1; i <= 5; i++){
     const y = BOT - (i / 5) * MAXLH;
-    const len = i % 5 === 0 ? 30 : 18;
+    const len = i % 5 === 0 ? 26 : 16;
     ctx.beginPath();
     ctx.moveTo(INX + INW - len, y);
     ctx.lineTo(INX + INW - 3, y);
     ctx.stroke();
-    ctx.fillStyle = 'rgba(190,230,250,0.5)';
-    ctx.font = 'bold 8px ui-monospace, monospace';
-    ctx.fillText(`${i * 100}mL`, INX + INW - len - 28, y + 3);
+    ctx.fillStyle = 'rgba(190,230,250,0.55)';
+    ctx.font = 'bold 7px ui-monospace, monospace';
+    ctx.fillText(`${i * 100}`, INX + INW - len - 22, y + 2.5);
   }
+  ctx.fillStyle = 'rgba(190,230,250,0.5)';
+  ctx.font = 'bold 7px ui-monospace, monospace';
+  ctx.fillText('mL', INX + INW - 32, BY + 14);
   ctx.restore();
 }
 
@@ -1968,6 +1984,7 @@ function drawLiquid(){
     ctx.fill();
   }
 
+  /* Meniscus */
   ctx.beginPath();
   ctx.moveTo(INX - 4, top);
   ctx.quadraticCurveTo(CX, top + meniscusDepth, INX + INW + 4, top);
@@ -1983,15 +2000,15 @@ function drawLiquid(){
   ctx.stroke();
 
   if (s.stir > 8){
-    const amp = (s.stir / 100) * 7;
+    const amp = (s.stir / 100) * 6;
     ctx.beginPath();
     ctx.moveTo(INX + 6, top + 1);
-    for (let x = INX + 6; x <= INX + INW - 6; x += 6){
+    for (let x = INX + 6; x <= INX + INW - 6; x += 5){
       const y = top + 1 + Math.sin((x * 0.06) + s.stirPhase * 0.12) * amp;
       ctx.lineTo(x, y);
     }
     ctx.strokeStyle = 'rgba(255,255,255,0.22)';
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 1.4;
     ctx.stroke();
   }
 
@@ -1999,10 +2016,10 @@ function drawLiquid(){
 
   if (s.stir > 2){
     const spin = s.stirPhase * 0.16 * (s.stir / 100);
-    const barW = 62, barH = 8;
+    const barW = 52, barH = 7;
     const squash = Math.abs(Math.cos(spin));
     ctx.save();
-    ctx.translate(CX, BOT - 9);
+    ctx.translate(CX, BOT - 8);
     ctx.beginPath();
     ctx.ellipse(0, 0, (barW / 2) * (0.35 + 0.65 * squash), barH / 2, 0, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(30,41,59,0.92)';
@@ -2017,7 +2034,7 @@ function drawLiquid(){
 function drawBeakerFront(){
   ctx.save();
 
-  const x = BX, y = BY, w = BW, h = BH, r = 24;
+  const x = BX, y = BY, w = BW, h = BH, r = 20;
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(x, y + h - r);
@@ -2026,7 +2043,7 @@ function drawBeakerFront(){
   ctx.quadraticCurveTo(x + w, y + h, x + w, y + h - r);
   ctx.lineTo(x + w, y);
   ctx.strokeStyle = 'rgba(170,220,245,0.7)';
-  ctx.lineWidth = 2.6;
+  ctx.lineWidth = 2.4;
   ctx.stroke();
 
   beakerInnerPath();
@@ -2034,47 +2051,49 @@ function drawBeakerFront(){
   ctx.lineWidth = 1;
   ctx.stroke();
 
-  /* Rim spout */
+  /* Rim */
   ctx.beginPath();
-  ctx.moveTo(x - 9, y);
-  ctx.lineTo(x + w + 9, y);
+  ctx.moveTo(x - 8, y);
+  ctx.lineTo(x + w + 8, y);
   ctx.strokeStyle = 'rgba(200,240,255,0.85)';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 3.5;
   ctx.lineCap = 'round';
   ctx.stroke();
 
+  /* Spout */
   ctx.beginPath();
-  ctx.moveTo(x + w + 4, y - 3);
-  ctx.quadraticCurveTo(x + w + 16, y - 2, x + w + 18, y + 8);
+  ctx.moveTo(x + w + 3, y - 2.5);
+  ctx.quadraticCurveTo(x + w + 13, y - 1.5, x + w + 15, y + 7);
   ctx.strokeStyle = 'rgba(200,240,255,0.7)';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 2.6;
   ctx.stroke();
 
-  const hl = ctx.createLinearGradient(x + 14, 0, x + 34, 0);
+  /* Glass highlights */
+  const hl = ctx.createLinearGradient(x + 12, 0, x + 30, 0);
   hl.addColorStop(0, 'rgba(255,255,255,0)');
-  hl.addColorStop(0.5, 'rgba(255,255,255,0.30)');
+  hl.addColorStop(0.5, 'rgba(255,255,255,0.32)');
   hl.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = hl;
-  ctx.fillRect(x + 14, y + 22, 20, h - 70);
+  ctx.fillRect(x + 12, y + 18, 18, h - 55);
 
-  const hl2 = ctx.createLinearGradient(x + 30, 0, x + 40, 0);
+  const hl2 = ctx.createLinearGradient(x + 26, 0, x + 36, 0);
   hl2.addColorStop(0, 'rgba(255,255,255,0)');
-  hl2.addColorStop(0.5, 'rgba(255,255,255,0.13)');
+  hl2.addColorStop(0.5, 'rgba(255,255,255,0.14)');
   hl2.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = hl2;
-  ctx.fillRect(x + 30, y + 40, 10, h - 120);
+  ctx.fillRect(x + 26, y + 34, 10, h - 100);
 
   if (state.shattered){
     ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-    ctx.lineWidth = 1.4;
+    ctx.lineWidth = 1.3;
     const cracks = [
-      [[CX, BOT-20],[CX-60, 300],[CX-30, 240]],
-      [[CX, BOT-20],[CX+70, 340],[CX+40, 250]],
-      [[CX-30, 240],[CX-95, 260]],
-      [[CX+40, 250],[CX+100, 300]],
-      [[CX-60, 300],[CX-110, 400]],
-      [[CX+70, 340],[CX+112, 430]],
-      [[CX-30,240],[CX+10,300],[CX+40,250]],
+      [[CX, BOT-15],[CX-55, 260],[CX-25, 210]],
+      [[CX, BOT-15],[CX+60, 280],[CX+35, 220]],
+      [[CX-25, 210],[CX-80, 220]],
+      [[CX+35, 220],[CX+88, 250]],
+      [[CX-55, 260],[CX-95, 320]],
+      [[CX+60, 280],[CX+98, 330]],
+      [[CX-25,210],[CX+8,255],[CX+35,220]],
     ];
     cracks.forEach(path => {
       ctx.beginPath();
@@ -2114,77 +2133,77 @@ function drawVapours(){
 
 function drawBurette(){
   const s = state;
-  const x = CX - 14, w = 28, top = BURETTE_TOP, bot = BURETTE_BOT;
+  const x = CX - 12, w = 24, top = BURETTE_TOP, bot = BURETTE_BOT;
 
   ctx.save();
-  roundRect(x, top, w, bot - top, 7);
-  ctx.fillStyle = 'rgba(170,215,240,0.07)';
+  roundRect(x, top, w, bot - top, 6);
+  ctx.fillStyle = 'rgba(170,215,240,0.08)';
   ctx.fill();
-  ctx.strokeStyle = 'rgba(180,225,250,0.60)';
-  ctx.lineWidth = 2.2;
+  ctx.strokeStyle = 'rgba(180,225,250,0.6)';
+  ctx.lineWidth = 2;
   ctx.stroke();
   ctx.restore();
 
   const chem = CHEMS.find(c => c.id === s.buretteChem);
   const lvl = s.buretteFrac;
-  const ly = top + (1 - lvl) * (bot - top - 8);
+  const ly = top + (1 - lvl) * (bot - top - 7);
   if (lvl > 0.01){
     let lc = [190, 235, 255];
     if (chem && chem.rgb) lc = chem.rgb;
     ctx.save();
-    roundRect(x + 3, ly, w - 6, bot - ly - 4, 5);
+    roundRect(x + 2.5, ly, w - 5, bot - ly - 3, 4);
     ctx.fillStyle = `rgba(${lc[0]},${lc[1]},${lc[2]},0.55)`;
     ctx.fill();
     ctx.restore();
 
     ctx.beginPath();
-    ctx.moveTo(x + 3, ly + 3);
-    ctx.quadraticCurveTo(CX, ly + 9, x + w - 3, ly + 3);
+    ctx.moveTo(x + 2.5, ly + 2.5);
+    ctx.quadraticCurveTo(CX, ly + 7.5, x + w - 2.5, ly + 2.5);
     ctx.strokeStyle = 'rgba(255,255,255,0.55)';
-    ctx.lineWidth = 1.4;
+    ctx.lineWidth = 1.2;
     ctx.stroke();
   }
 
-  ctx.strokeStyle = 'rgba(190,230,250,0.25)';
+  ctx.strokeStyle = 'rgba(190,230,250,0.28)';
   ctx.lineWidth = 1;
-  for (let i = 0; i <= 10; i++){
-    const gy = top + 8 + (i / 10) * (bot - top - 16);
-    const len = i % 5 === 0 ? 12 : 7;
+  for (let i = 0; i <= 8; i++){
+    const gy = top + 6 + (i / 8) * (bot - top - 12);
+    const len = i % 4 === 0 ? 9 : 5;
     ctx.beginPath();
-    ctx.moveTo(x + w - 3, gy);
-    ctx.lineTo(x + w - 3 - len, gy);
+    ctx.moveTo(x + w - 2.5, gy);
+    ctx.lineTo(x + w - 2.5 - len, gy);
     ctx.stroke();
   }
 
   ctx.fillStyle = '#334155';
-  roundRect(CX - 9, bot, 18, 12, 3); ctx.fill();
+  roundRect(CX - 8, bot, 16, 10, 3); ctx.fill();
   ctx.fillStyle = '#475569';
-  ctx.beginPath(); ctx.arc(CX, bot + 6, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(CX, bot + 5, 6, 0, Math.PI * 2); ctx.fill();
 
   ctx.beginPath();
-  ctx.moveTo(CX - 5, bot + 12);
-  ctx.lineTo(CX + 5, bot + 12);
-  ctx.lineTo(CX + 1.6, bot + 30);
-  ctx.lineTo(CX - 1.6, bot + 30);
+  ctx.moveTo(CX - 4, bot + 10);
+  ctx.lineTo(CX + 4, bot + 10);
+  ctx.lineTo(CX + 1.4, bot + 26);
+  ctx.lineTo(CX - 1.4, bot + 26);
   ctx.closePath();
   ctx.fillStyle = 'rgba(170,215,240,0.30)';
   ctx.fill();
   ctx.strokeStyle = 'rgba(180,225,250,0.65)';
-  ctx.lineWidth = 1.6;
+  ctx.lineWidth = 1.4;
   ctx.stroke();
 
   for (const d of s.drops){
     ctx.beginPath();
-    ctx.ellipse(d.x, d.y, 2.6, 3.6, 0, 0, Math.PI * 2);
+    ctx.ellipse(d.x, d.y, 2.2, 3.2, 0, 0, Math.PI * 2);
     const lc = chem && chem.rgb ? chem.rgb : [190,235,255];
     ctx.fillStyle = `rgba(${lc[0]},${lc[1]},${lc[2]},0.9)`;
     ctx.fill();
   }
 
-  ctx.font = 'bold 9px ui-monospace, monospace';
-  ctx.fillStyle = 'rgba(148,163,184,0.85)';
+  ctx.font = 'bold 8px ui-monospace, monospace';
+  ctx.fillStyle = 'rgba(148,163,184,0.9)';
   ctx.textAlign = 'center';
-  ctx.fillText(chem ? chem.f : '—', CX, top - 8);
+  ctx.fillText(chem ? chem.f : '—', CX, top - 6);
   ctx.textAlign = 'left';
 }
 
@@ -2197,7 +2216,7 @@ function drawOverlays(){
     const a = clamp((state.temp - 250) / 950, 0, 0.45);
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    const g = ctx.createRadialGradient(CX, 340, 60, CX, 340, 300);
+    const g = ctx.createRadialGradient(CX, 260, 50, CX, 260, 260);
     g.addColorStop(0, `rgba(255,110,40,${a * 0.5})`);
     g.addColorStop(1, 'rgba(255,60,0,0)');
     ctx.fillStyle = g;
@@ -2381,13 +2400,12 @@ function updateTutor(){
    HUD UPDATES + THERMODYNAMIC ANALYTICS
    ══════════════════════════════════════════════════════════════════════════ */
 let hudTimer = 0;
+let tutorTimer = 0;
 
 function fmtSci(v){
   if (v <= 0) return '0';
   return v.toExponential(2);
 }
-
-let tutorTimer = 0;
 
 function updateHUD(dt){
   hudTimer += dt;
@@ -2442,9 +2460,8 @@ function updateHUD(dt){
   const phSl = document.getElementById('phSliderLbl');
   if (phSl) phSl.textContent = s.pH.toFixed(2);
 
-  /* ═══ THERMODYNAMIC ANALYTICS ═══ */
+  /* THERMODYNAMIC ANALYTICS */
   const V_L = Math.max(0.0005, s.volume / 1000);
-
   const cWater = 4.184;
   const dT = s.temp - 25;
   const q = s.mass * cWater * dT;
@@ -2660,7 +2677,7 @@ function boot(){
   window.addEventListener('resize', resizeCanvas);
   setTimeout(resizeCanvas, 100);
 
-  log('VirtuaLab Pro v5.0 initialised. Strict 3-column viewport locked.', 'good');
+  log('VirtuaLab Pro v6.0 initialised. 32/48/20 grid locked.', 'good');
   log('Charged 250.0 mL distilled H₂O @ 25.0 °C', 'info');
   log('Tip: press [T] to open the AI Lab Tutor for reaction explanations.', 'info');
   log('Tip: try Na + H₂O — safety interlock will pause before the reaction.', 'info');
