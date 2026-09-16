@@ -24,14 +24,14 @@ tailwind.config = {
   .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:3px;}
   .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#334155;}
 
-  .horiz-tabs::-webkit-scrollbar{height:4px;}
+  .horiz-tabs::-webkit-scrollbar{height:3px;}
   .horiz-tabs::-webkit-scrollbar-track{background:transparent;}
   .horiz-tabs::-webkit-scrollbar-thumb{background:#1e293b;border-radius:2px;}
 
   .reagent-row{
     display:flex; align-items:center; gap:6px;
-    padding:4px 7px;
-    background:#0f1725; border:1px solid #1b2537; border-radius:6px; transition:.15s;
+    padding:2px 6px;
+    background:#0f1725; border:1px solid #1b2537; border-radius:5px; transition:.15s;
   }
   .reagent-row:hover{ background:#121b2b; border-color:#2b3d55; }
   .reagent-row input[type=number]::-webkit-outer-spin-button,
@@ -43,12 +43,12 @@ tailwind.config = {
     background:linear-gradient(90deg,#0891b2,#1e293b);outline:none;cursor:pointer;
   }
   input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;width:12px;height:12px;border-radius:50%;
+    -webkit-appearance:none;width:11px;height:11px;border-radius:50%;
     background:#22d3ee;cursor:pointer;box-shadow:0 0 8px rgba(34,211,238,.7);
     border:1px solid #0e7490;
   }
   input[type=range]::-moz-range-thumb{
-    width:12px;height:12px;border-radius:50%;background:#22d3ee;border:1px solid #0e7490;cursor:pointer;
+    width:11px;height:11px;border-radius:50%;background:#22d3ee;border:1px solid #0e7490;cursor:pointer;
   }
   input[type=range].flame{background:linear-gradient(90deg,#1e293b,#f59e0b,#ef4444);}
   input[type=range].flame::-webkit-slider-thumb{background:#fb923c;box-shadow:0 0 8px rgba(251,146,60,.8);}
@@ -58,7 +58,7 @@ tailwind.config = {
   input[type=range].drip::-webkit-slider-thumb{background:#34d399;box-shadow:0 0 8px rgba(52,211,153,.8);}
 
   .vl-add{
-    font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 7px;border-radius:4px;
+    font-size:8.5px;font-weight:800;letter-spacing:.05em;padding:1.5px 6px;border-radius:4px;
     background:linear-gradient(180deg,#0e7490,#155e75);color:#a5f3fc;border:1px solid #164e63;
     transition:.15s;cursor:pointer;line-height:1.4;
   }
@@ -66,14 +66,14 @@ tailwind.config = {
   .vl-add:active{transform:scale(.94);}
 
   .cat-tab{
-    font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:5px;cursor:pointer;
+    font-size:9px;font-weight:600;padding:1.5px 7px;border-radius:5px;cursor:pointer;
     background:#131c2b;color:#7c8ba1;border:1px solid #1e293b;transition:.15s;white-space:nowrap;flex-shrink:0;
   }
   .cat-tab:hover{color:#a5f3fc;border-color:#164e63;}
   .cat-tab.active{background:linear-gradient(180deg,#0e7490,#155e75);color:#ecfeff;border-color:#22d3ee;box-shadow:0 0 8px rgba(34,211,238,.35);}
 
   .dock-btn{
-    font-size:9.5px;font-weight:700;letter-spacing:.04em;padding:5px 9px;border-radius:6px;
+    font-size:9px;font-weight:700;letter-spacing:.04em;padding:4px 8px;border-radius:5px;
     border:1px solid #1e293b;background:#131c2b;color:#94a3b8;cursor:pointer;transition:.15s;
   }
   .dock-btn:hover{color:#67e8f9;border-color:#164e63;background:#16202f;}
@@ -82,7 +82,7 @@ tailwind.config = {
   .dock-btn.danger{ border-color:#7f1d1d; color:#fca5a5; }
   .dock-btn.danger:hover{ background:#7f1d1d; color:#fee2e2; border-color:#991b1b; }
 
-  .log-line{ font-size:9.5px; line-height:1.45; padding:1.5px 0; border-bottom:1px dashed #16202f; }
+  .log-line{ font-size:9px; line-height:1.4; padding:1px 0; border-bottom:1px dashed #16202f; }
   .glass-panel{
     background:linear-gradient(180deg,rgba(15,23,37,.9),rgba(9,14,24,.9));
     border:1px solid #1b2537;backdrop-filter:blur(6px);
@@ -96,268 +96,223 @@ tailwind.config = {
 
   .hazard-icon{ display:inline-block; filter:drop-shadow(0 0 12px rgba(255,80,40,.85)); }
 
-  /* Metric card */
   .metric-card{
-    background:#0f1725; border:1px solid #1b2537; border-radius:8px; padding:5px 8px;
-    display:flex; flex-direction:column; gap:1px;
+    background:#0f1725; border:1px solid #1b2537; border-radius:6px; padding:3px 6px;
+    display:flex; flex-direction:column; gap:0;
   }
-  .metric-lbl{ font-size:7.5px; font-weight:700; letter-spacing:.05em; color:#64748b; }
-  .metric-val{ font-size:14px; font-family:ui-monospace, monospace; line-height:1.1; tabular-nums:true; }
-  .metric-unit{ font-size:7px; color:#475569; font-family:ui-monospace, monospace; }
+  .metric-lbl{ font-size:7px; font-weight:700; letter-spacing:.05em; color:#64748b; }
+  .metric-val{ font-size:12.5px; font-family:ui-monospace, monospace; line-height:1.1; }
+  .metric-unit{ font-size:6.5px; color:#475569; font-family:ui-monospace, monospace; }
 
   .eq-item{
-    font-size:9.5px; font-family:ui-monospace, monospace;
-    background:#0f1725; border:1px solid #1b2537; border-radius:6px;
-    padding:5px 8px; line-height:1.35;
+    font-size:9px; font-family:ui-monospace, monospace;
+    background:#0f1725; border:1px solid #1b2537; border-radius:5px;
+    padding:3px 6px; line-height:1.3;
   }
   .eq-type{
-    font-size:7px; padding:1px 5px; border-radius:3px; font-weight:800; letter-spacing:.05em;
+    font-size:6.5px; padding:1px 4px; border-radius:3px; font-weight:800; letter-spacing:.05em;
     display:inline-block;
   }
 </style>
 </head>
 <body class="text-slate-200 font-sans">
 
-<!-- ═══════════════════════════════════════════════════════════
-     VERTICAL LAYOUT: 30% REAGENTS · 45% APPARATUS · 25% TELEMETRY
-     ═══════════════════════════════════════════════════════════ -->
-<div class="h-screen w-screen flex flex-col gap-2 p-2 overflow-hidden">
+<!-- ═══════════════════════════════════════════════════════════════
+     COMPACT VERTICAL DASHBOARD — tightly stacked, no dead space
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="h-screen w-screen flex flex-col gap-1.5 p-2 overflow-hidden">
 
-  <!-- ═════════════ TOP SECTION (30%) : REAGENT LIBRARY ═════════════ -->
-  <aside class="h-[210px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
-    <div class="px-3 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
+  <!-- ═════ 1. REAGENT & ELEMENT LIBRARY (compact) ═════ -->
+  <aside class="h-[160px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl flex flex-col overflow-hidden">
+    <div class="px-3 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
       <div class="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-500 to-blue-700 grid place-items-center shadow-md shadow-cyan-900/50">
         <i class="fa-solid fa-flask text-[10px] text-white"></i>
       </div>
-      <div class="text-[11.5px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT &amp; ELEMENT LIBRARY</div>
-      <div class="text-[8.5px] text-slate-500 font-mono tracking-wider leading-tight hidden sm:block">VIRTUALAB PRO · v3.1</div>
+      <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">REAGENT &amp; ELEMENT LIBRARY</div>
+      <div class="text-[8px] text-slate-500 font-mono tracking-wider leading-tight hidden md:block">VIRTUALAB PRO · v3.2</div>
       <div class="flex-1"></div>
-      <div class="text-[8.5px] font-mono text-slate-500" id="reagentCount">0 items</div>
-      <div class="hidden md:flex items-center gap-1.5 text-[8.5px] font-mono text-slate-500">
+      <div class="text-[8px] font-mono text-slate-500" id="reagentCount">0 items</div>
+      <div class="hidden md:flex items-center gap-1 text-[8px] font-mono text-slate-500">
         <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-        Alkali metals: hazardous
+        <span>Hazard-aware</span>
       </div>
     </div>
 
-    <!-- Horizontal-scroll category tabs -->
     <div id="catTabs" class="px-2 py-1 flex gap-1 border-b border-slate-800/80 shrink-0 overflow-x-auto horiz-tabs"></div>
 
-    <!-- Compact shelf -->
-    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1 pr-1 space-y-[3px]"></div>
+    <div id="shelf" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 py-1 pr-1 space-y-[2px]"></div>
   </aside>
 
-  <!-- ═════════════ MIDDLE SECTION (45%) : APPARATUS + DOCK ═════════════ -->
-  <main class="flex-1 min-h-0 flex flex-col gap-2">
+  <!-- ═════ 2. COMPACT APPARATUS STACK (HUD · CANVAS · pH · DOCK) ═════ -->
+  <div class="shrink-0 flex flex-col gap-1.5">
 
     <!-- TOP HUD -->
-    <div class="shrink-0 glass-panel rounded-xl h-[38px] flex items-center px-3 gap-3">
-      <div class="flex items-baseline gap-2">
-        <i class="fa-solid fa-temperature-half text-orange-400 text-[13px]"></i>
-        <span id="tempC" class="text-[20px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
-        <span class="text-[10px] text-slate-500">°C</span>
-      </div>
-      <div class="w-px h-6 bg-slate-800"></div>
+    <div class="shrink-0 glass-panel rounded-xl h-[32px] flex items-center px-3 gap-3">
       <div class="flex items-baseline gap-1.5">
-        <span id="tempK" class="text-[12.5px] font-mono text-slate-400 tabular-nums">298.15</span>
-        <span class="text-[9.5px] text-slate-600">K</span>
+        <i class="fa-solid fa-temperature-half text-orange-400 text-[11px]"></i>
+        <span id="tempC" class="text-[17px] font-bold font-mono text-orange-300 leading-none tabular-nums">25.0</span>
+        <span class="text-[9.5px] text-slate-500">°C</span>
       </div>
-      <div class="w-px h-6 bg-slate-800"></div>
-      <div id="thermalState" class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
+      <div class="w-px h-5 bg-slate-800"></div>
+      <div class="flex items-baseline gap-1">
+        <span id="tempK" class="text-[11px] font-mono text-slate-400 tabular-nums">298.15</span>
+        <span class="text-[8.5px] text-slate-600">K</span>
+      </div>
+      <div class="w-px h-5 bg-slate-800"></div>
+      <div id="thermalState" class="px-2 py-0.5 rounded-full text-[8.5px] font-bold tracking-wider border border-cyan-800 bg-cyan-950/40 text-cyan-300">
         AMBIENT
       </div>
       <div class="flex-1"></div>
-      <div class="hidden md:flex items-center gap-3 text-[9px] font-mono text-slate-500">
+      <div class="hidden md:flex items-center gap-2.5 text-[8.5px] font-mono text-slate-500">
         <div><i class="fa-solid fa-fire-flame-simple text-orange-500 mr-1"></i><span id="hudFlame">0%</span></div>
         <div><i class="fa-solid fa-arrows-spin text-violet-400 mr-1"></i><span id="hudStir">0 rpm</span></div>
         <div><i class="fa-solid fa-droplet text-emerald-400 mr-1"></i><span id="hudDrip">0.0 d/s</span></div>
       </div>
     </div>
 
-    <!-- CANVAS STAGE -->
-    <div class="flex-1 min-h-0 relative glass-panel rounded-xl overflow-hidden">
+    <!-- CANVAS STAGE — fixed 200px compact beaker view -->
+    <div class="h-[200px] shrink-0 relative glass-panel rounded-xl overflow-hidden">
       <canvas id="stage" class="absolute inset-0 w-full h-full block"></canvas>
 
-      <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
-        <i class="fa-solid fa-triangle-exclamation text-4xl text-red-400 hazard-blink"></i>
+      <div id="hazard" class="hidden absolute inset-0 z-30 bg-red-950/70 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-400 hazard-blink"></i>
         <div class="text-center">
-          <div class="text-lg font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
-          <div id="hazardMsg" class="text-[10.5px] text-red-300/90 mt-1 font-mono"></div>
+          <div class="text-base font-black tracking-widest text-red-200">CONTAINMENT BREACH</div>
+          <div id="hazardMsg" class="text-[9.5px] text-red-300/90 mt-0.5 font-mono"></div>
         </div>
-        <button onclick="emergencyFlush()" class="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[10px] tracking-wider shadow-lg shadow-red-900/50 transition">
-          <i class="fa-solid fa-broom mr-2"></i>EMERGENCY FLUSH &amp; RESET
+        <button onclick="emergencyFlush()" class="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[9.5px] tracking-wider shadow-lg shadow-red-900/50 transition">
+          <i class="fa-solid fa-broom mr-1.5"></i>EMERGENCY FLUSH
         </button>
       </div>
     </div>
 
-    <!-- pH SPECTRUM -->
-    <div class="shrink-0 glass-panel rounded-xl px-3 py-1">
+    <!-- pH SPECTRUM — 6px below burner -->
+    <div class="shrink-0 glass-panel rounded-xl px-3 py-0.5">
       <div class="flex items-center gap-3">
-        <div class="flex items-baseline gap-1.5 w-[95px]">
-          <span class="text-[9px] font-bold tracking-widest text-slate-500">pH</span>
-          <span id="phValue" class="text-[19px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
+        <div class="flex items-baseline gap-1 w-[80px]">
+          <span class="text-[8.5px] font-bold tracking-widest text-slate-500">pH</span>
+          <span id="phValue" class="text-[16px] font-bold font-mono text-emerald-300 leading-none tabular-nums">7.00</span>
         </div>
         <div class="flex-1 relative">
-          <div class="h-[10px] rounded-full border border-slate-700 overflow-hidden"
+          <div class="h-[8px] rounded-full border border-slate-700 overflow-hidden"
                style="background:linear-gradient(90deg,#dc2626 0%,#ea580c 14%,#facc15 28%,#84cc16 43%,#22c55e 50%,#14b8a6 60%,#3b82f6 72%,#6366f1 85%,#7e22ce 100%)">
           </div>
-          <div id="phMarker" class="absolute top-[-3px] w-[3px] h-[16px] bg-white rounded-full shadow-[0_0_10px_#fff] transition-all duration-150" style="left:50%"></div>
+          <div id="phMarker" class="absolute top-[-3px] w-[2.5px] h-[14px] bg-white rounded-full shadow-[0_0_8px_#fff] transition-all duration-150" style="left:50%"></div>
         </div>
-        <div id="phLabel" class="w-[80px] text-right text-[9.5px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
+        <div id="phLabel" class="w-[70px] text-right text-[8.5px] font-bold tracking-wider text-emerald-400">NEUTRAL</div>
       </div>
     </div>
 
     <!-- CONTROL DOCK -->
-    <div class="shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-3 py-2">
+    <div class="shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl px-2.5 py-1.5">
       <div class="grid grid-cols-12 gap-2 items-end">
         <div class="col-span-6 md:col-span-3">
           <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[8px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN</label>
-            <span id="flameLbl" class="text-[8px] font-mono text-orange-300">0 °C</span>
+            <label class="text-[7.5px] font-bold tracking-widest text-orange-400"><i class="fa-solid fa-fire mr-1"></i>BUNSEN</label>
+            <span id="flameLbl" class="text-[7.5px] font-mono text-orange-300">0 °C</span>
           </div>
           <input id="flameSlider" type="range" class="flame w-full" min="0" max="100" step="1" value="0">
         </div>
-
         <div class="col-span-6 md:col-span-3">
           <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[8px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
-            <span id="stirLbl" class="text-[8px] font-mono text-violet-300">0 rpm</span>
+            <label class="text-[7.5px] font-bold tracking-widest text-violet-400"><i class="fa-solid fa-arrows-spin mr-1"></i>STIRRER</label>
+            <span id="stirLbl" class="text-[7.5px] font-mono text-violet-300">0 rpm</span>
           </div>
           <input id="stirSlider" type="range" class="stir w-full" min="0" max="100" step="1" value="0">
         </div>
-
         <div class="col-span-6 md:col-span-3">
           <div class="flex justify-between items-center mb-0.5">
-            <label class="text-[8px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>VALVE</label>
-            <span id="dripLbl" class="text-[8px] font-mono text-emerald-300">0.0 d/s</span>
+            <label class="text-[7.5px] font-bold tracking-widest text-emerald-400"><i class="fa-solid fa-droplet mr-1"></i>VALVE</label>
+            <span id="dripLbl" class="text-[7.5px] font-mono text-emerald-300">0.0 d/s</span>
           </div>
           <input id="dripSlider" type="range" class="drip w-full" min="0" max="20" step="0.5" value="0">
         </div>
-
         <div class="col-span-6 md:col-span-3">
-          <label class="text-[8px] font-bold tracking-widest text-cyan-400 block mb-0.5"><i class="fa-solid fa-vial mr-1"></i>BURETTE</label>
-          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[9px] px-1.5 py-[2px] text-slate-200 outline-none focus:border-cyan-600"></select>
+          <label class="text-[7.5px] font-bold tracking-widest text-cyan-400 block mb-0.5"><i class="fa-solid fa-vial mr-1"></i>BURETTE</label>
+          <select id="buretteSel" class="w-full bg-[#131c2b] border border-slate-700 rounded-md text-[8.5px] px-1.5 py-[2px] text-slate-200 outline-none focus:border-cyan-600"></select>
         </div>
 
-        <div class="col-span-12 flex flex-wrap gap-1.5 items-center pt-1 border-t border-slate-800/60">
-          <div class="flex items-center gap-1.5 bg-[#0a111e] border border-slate-800 rounded-lg px-1.5 py-[2px]">
-            <i class="fa-solid fa-droplet text-blue-400 text-[9.5px]"></i>
+        <div class="col-span-12 flex flex-wrap gap-1 items-center pt-1 border-t border-slate-800/60">
+          <div class="flex items-center gap-1 bg-[#0a111e] border border-slate-800 rounded-md px-1.5 py-[1.5px]">
+            <i class="fa-solid fa-droplet text-blue-400 text-[9px]"></i>
             <input id="water-vol" type="number" min="0.1" max="500" step="1" value="50"
-                   class="w-[48px] bg-transparent border-0 text-[10px] font-mono text-blue-300 outline-none text-right">
-            <span class="text-[8.5px] text-slate-500 font-mono">mL H₂O</span>
-            <button id="btnWater" class="vl-add">+ ADD WATER</button>
+                   class="w-[42px] bg-transparent border-0 text-[9.5px] font-mono text-blue-300 outline-none text-right">
+            <span class="text-[8px] text-slate-500 font-mono">mL H₂O</span>
+            <button id="btnWater" class="vl-add">+ WATER</button>
           </div>
-
           <button id="btnClearVessel" class="dock-btn danger"><i class="fa-solid fa-trash-can mr-1"></i>CLEAR VESSEL</button>
           <button id="btnRefill" class="dock-btn go"><i class="fa-solid fa-arrows-rotate mr-1"></i>REFILL</button>
-          <button id="btnStirPulse" class="dock-btn"><i class="fa-solid fa-water mr-1"></i>STIR PULSE</button>
+          <button id="btnStirPulse" class="dock-btn"><i class="fa-solid fa-water mr-1"></i>STIR</button>
           <button id="btnFlush" class="dock-btn warn"><i class="fa-solid fa-broom mr-1"></i>FLUSH</button>
           <button id="btnSound" class="dock-btn"><i class="fa-solid fa-volume-high mr-1"></i><span id="soundLbl">ON</span></button>
           <div class="flex-1"></div>
-          <div class="text-[8px] font-mono text-slate-600"><span id="fps">60</span> fps · <span id="tickCount">0</span> t</div>
+          <div class="text-[7.5px] font-mono text-slate-600"><span id="fps">60</span> fps · <span id="tickCount">0</span> t</div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <!-- ═════════════ BOTTOM SECTION (25%) : TELEMETRY & ANALYTICS ═════════════ -->
-  <section class="h-[225px] shrink-0 bg-[#0b111c] border border-slate-800/80 rounded-xl overflow-hidden flex flex-col">
-
-    <div class="px-3 py-1.5 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
-      <i class="fa-solid fa-square-root-variable text-cyan-400 text-[11px]"></i>
-      <div class="text-[11px] font-bold tracking-wide text-slate-100 leading-tight">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
-      <div class="text-[8px] font-mono text-slate-500 hidden md:block tracking-wider">q = mcΔT · V<sub>STP</sub> = n×22.4 · ΔH<sub>rxn</sub> · M = n/V</div>
+  <!-- ═════ 3. THERMODYNAMIC & ANALYTICAL TELEMETRY (fills remaining) ═════ -->
+  <section class="flex-1 min-h-0 bg-[#0b111c] border border-slate-800/80 rounded-xl overflow-hidden flex flex-col">
+    <div class="px-3 py-1 border-b border-slate-800/80 shrink-0 flex items-center gap-2">
+      <i class="fa-solid fa-square-root-variable text-cyan-400 text-[10px]"></i>
+      <div class="text-[10.5px] font-bold tracking-wide text-slate-100 leading-tight">THERMODYNAMIC &amp; ANALYTICAL TELEMETRY</div>
+      <div class="text-[7.5px] font-mono text-slate-500 hidden md:block tracking-wider">q = mcΔT · V<sub>STP</sub> = n×22.4 · ΔH<sub>rxn</sub> · M = n/V</div>
       <div class="flex-1"></div>
-      <button onclick="clearLog()" class="text-[8.5px] text-slate-600 hover:text-slate-300 font-mono">clear log</button>
+      <button onclick="clearLog()" class="text-[8px] text-slate-600 hover:text-slate-300 font-mono">clear log</button>
     </div>
 
-    <div class="flex-1 min-h-0 grid grid-cols-12 gap-2 p-2">
+    <div class="flex-1 min-h-0 grid grid-cols-12 gap-1.5 p-1.5">
 
-      <!-- LEFT: Metrics + Thermo -->
-      <div class="col-span-12 lg:col-span-5 flex flex-col gap-1.5 min-h-0">
-
-        <!-- Quick metrics row -->
-        <div class="grid grid-cols-4 gap-1.5 shrink-0">
-          <div class="metric-card">
-            <div class="metric-lbl">MASS</div>
-            <div class="metric-val text-cyan-300" id="mMass">250.0</div>
-            <div class="metric-unit">g</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-lbl">VOLUME</div>
-            <div class="metric-val text-blue-300" id="mVol">250.0</div>
-            <div class="metric-unit">mL</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-lbl">MOLARITY</div>
-            <div class="metric-val text-violet-300" id="mMol">0.000</div>
-            <div class="metric-unit">mol·L⁻¹</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-lbl">ΔH<sub>rxn</sub></div>
-            <div class="metric-val text-rose-300" id="mDH">0.0</div>
-            <div class="metric-unit">kJ·mol⁻¹</div>
-          </div>
+      <!-- LEFT: Metrics + thermo + ions -->
+      <div class="col-span-12 lg:col-span-5 flex flex-col gap-1 min-h-0">
+        <div class="grid grid-cols-4 gap-1 shrink-0">
+          <div class="metric-card"><div class="metric-lbl">MASS</div><div class="metric-val text-cyan-300" id="mMass">250.0</div><div class="metric-unit">g</div></div>
+          <div class="metric-card"><div class="metric-lbl">VOL</div><div class="metric-val text-blue-300" id="mVol">250.0</div><div class="metric-unit">mL</div></div>
+          <div class="metric-card"><div class="metric-lbl">M = n/V</div><div class="metric-val text-violet-300" id="mMol">0.000</div><div class="metric-unit">mol·L⁻¹</div></div>
+          <div class="metric-card"><div class="metric-lbl">ΔH<sub>rxn</sub></div><div class="metric-val text-rose-300" id="mDH">0.0</div><div class="metric-unit">kJ·mol⁻¹</div></div>
         </div>
 
-        <!-- Thermo row (q, V_STP, Temp) -->
-        <div class="grid grid-cols-4 gap-1.5 shrink-0">
-          <div class="metric-card">
-            <div class="metric-lbl">HEAT q = mcΔT</div>
-            <div class="metric-val text-amber-300" id="mQ">0.0</div>
-            <div class="metric-unit">J</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-lbl">V<sub>STP</sub> GAS</div>
-            <div class="metric-val text-emerald-300" id="mVstp">0.00</div>
-            <div class="metric-unit">L @ 22.4 L/mol</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-lbl">Σ n<sub>gas</sub></div>
-            <div class="metric-val text-teal-300" id="mNgas">0.000</div>
-            <div class="metric-unit">mol</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-lbl">ΔT</div>
-            <div class="metric-val text-orange-300" id="mDT">0.0</div>
-            <div class="metric-unit">K vs 25°C</div>
-          </div>
+        <div class="grid grid-cols-4 gap-1 shrink-0">
+          <div class="metric-card"><div class="metric-lbl">q = mcΔT</div><div class="metric-val text-amber-300" id="mQ">0.0</div><div class="metric-unit">J</div></div>
+          <div class="metric-card"><div class="metric-lbl">V<sub>STP</sub></div><div class="metric-val text-emerald-300" id="mVstp">0.00</div><div class="metric-unit">L · 22.4/mol</div></div>
+          <div class="metric-card"><div class="metric-lbl">Σ n<sub>gas</sub></div><div class="metric-val text-teal-300" id="mNgas">0.000</div><div class="metric-unit">mol</div></div>
+          <div class="metric-card"><div class="metric-lbl">ΔT</div><div class="metric-val text-orange-300" id="mDT">0.0</div><div class="metric-unit">K vs 25 °C</div></div>
         </div>
 
-        <!-- Ion concentrations -->
-        <div class="flex-1 min-h-0 bg-[#0f1725] border border-slate-800 rounded-lg p-1.5 flex flex-col">
-          <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-1 shrink-0">
-            <i class="fa-solid fa-atom mr-1 text-cyan-500"></i>ACTIVE IONIC SPECIES  ·  M = n/V
+        <div class="flex-1 min-h-0 bg-[#0f1725] border border-slate-800 rounded-lg p-1 flex flex-col">
+          <div class="text-[7.5px] font-bold tracking-widest text-slate-500 mb-0.5 shrink-0">
+            <i class="fa-solid fa-atom mr-1 text-cyan-500"></i>ACTIVE IONIC SPECIES
           </div>
           <div id="speciesList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex flex-wrap gap-1 content-start pr-1">
-            <span class="text-[8.5px] text-slate-600 font-mono italic">no solutes in vessel</span>
+            <span class="text-[8px] text-slate-600 font-mono italic">no solutes in vessel</span>
           </div>
         </div>
 
-        <!-- Cumulative heat tracking bar -->
-        <div class="shrink-0 bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-1 flex items-center gap-2">
-          <i class="fa-solid fa-fire-flame-curved text-rose-400 text-[10px]"></i>
-          <div class="text-[8.5px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
+        <div class="shrink-0 bg-[#0f1725] border border-slate-800 rounded-lg px-2 py-0.5 flex items-center gap-1.5">
+          <i class="fa-solid fa-fire-flame-curved text-rose-400 text-[9px]"></i>
+          <div class="text-[7.5px] font-bold tracking-widest text-slate-500">Σ ENTHALPY</div>
           <div class="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden relative">
             <div id="dHBar" class="absolute inset-y-0 left-1/2 bg-gradient-to-r from-rose-500 to-orange-400 transition-all" style="width:0%"></div>
             <div class="absolute inset-y-0 left-1/2 w-px bg-slate-500"></div>
           </div>
-          <div class="text-[9.5px] font-mono text-rose-300 tabular-nums min-w-[68px] text-right" id="mDHCumul">0.00 kJ</div>
+          <div class="text-[9px] font-mono text-rose-300 tabular-nums min-w-[62px] text-right" id="mDHCumul">0.00 kJ</div>
         </div>
       </div>
 
       <!-- MIDDLE: Equations -->
       <div class="col-span-12 lg:col-span-4 flex flex-col min-h-0">
-        <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1 shrink-0">
+        <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-0.5 shrink-0">
           <i class="fa-solid fa-scale-balanced mr-1 text-amber-500"></i>BALANCED EQUATIONS &amp; REACTION TYPES
         </div>
         <div id="eqList" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 pr-1">
-          <div class="text-[9px] text-slate-600 font-mono italic">awaiting reaction…</div>
+          <div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>
         </div>
       </div>
 
-      <!-- RIGHT: Reaction log -->
+      <!-- RIGHT: Log -->
       <div class="col-span-12 lg:col-span-3 flex flex-col min-h-0">
-        <div class="text-[8.5px] font-bold tracking-widest text-slate-500 mb-1 shrink-0">
+        <div class="text-[8px] font-bold tracking-widest text-slate-500 mb-0.5 shrink-0">
           <i class="fa-solid fa-terminal mr-1 text-emerald-500"></i>REACTION LOG
         </div>
         <div id="log" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 font-mono"></div>
@@ -377,7 +332,6 @@ tailwind.config = {
       </div>
       <div id="hazardLevelBadge" class="px-2.5 py-1 rounded text-[9px] font-black tracking-wider bg-red-700 text-white border border-red-500">CRITICAL</div>
     </div>
-
     <div class="p-5 space-y-4">
       <div id="hazardIcons" class="flex justify-center gap-4 text-[44px] leading-none py-1"></div>
       <div class="text-center">
@@ -386,7 +340,7 @@ tailwind.config = {
       </div>
       <div id="hazardDetail" class="text-[10.5px] font-mono text-red-400/90 bg-red-950/60 border border-red-900/70 rounded-lg px-3 py-2 leading-relaxed"></div>
       <div class="bg-amber-950/40 border border-amber-800/50 rounded-lg px-3 py-2 text-[10.5px] text-amber-300/90 font-mono">
-        <i class="fa-solid fa-flask mr-1.5"></i>Pending operation: <span id="hazardPending" class="text-amber-100 font-bold"></span>
+        <i class="fa-solid fa-flask mr-1.5"></i>Pending: <span id="hazardPending" class="text-amber-100 font-bold"></span>
       </div>
       <div class="grid grid-cols-2 gap-3 pt-1">
         <button id="btnHazardAllow" class="px-4 py-3 rounded-lg bg-gradient-to-b from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold text-[11px] tracking-wider border border-red-500 shadow-lg shadow-red-900/50 transition active:scale-[.97]">
@@ -397,7 +351,7 @@ tailwind.config = {
         </button>
       </div>
       <div class="text-center text-[9px] font-mono text-red-500/60 tracking-wider">
-        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v3.1 · ESC = ABORT · ENTER = ALLOW
+        <i class="fa-solid fa-shield-halved mr-1"></i>VIRTUALAB SAFETY PROTOCOL v3.2 · ESC = ABORT · ENTER = ALLOW
       </div>
     </div>
   </div>
@@ -405,7 +359,7 @@ tailwind.config = {
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
-   VIRTUALAB PRO v3.1  ·  Core Kernel + Thermodynamic Analytics
+   VIRTUALAB PRO v3.2  ·  Core Kernel + Thermodynamic Analytics
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ───────────────────────── GEOMETRY CONSTANTS ───────────────────────── */
@@ -429,18 +383,13 @@ const CATS = [
   'Acids','Bases','Salts','Organics','Indicators'
 ];
 
-/* ───────────────────────── CHEMICAL DATABASE (v3.1) ───────────────────────── */
+/* ───────────────────────── CHEMICAL DATABASE ───────────────────────── */
 const CHEMS = [
-  /* ── ALKALI METALS ── */
   {id:'na',  n:'Sodium Metal',        f:'Na',       c:'Alkali', st:'s', mm:22.99, max:5, def:1,   rgb:[205,210,220], alkali:true, dhSol:-184},
   {id:'k',   n:'Potassium Metal',     f:'K',        c:'Alkali', st:'s', mm:39.10, max:5, def:1,   rgb:[205,210,220], alkali:true, dhSol:-196},
   {id:'li',  n:'Lithium Metal',       f:'Li',       c:'Alkali', st:'s', mm:6.94,  max:5, def:0.5, rgb:[200,205,215], alkali:true, dhSol:-190},
-
-  /* ── ALKALINE EARTH METALS ── */
   {id:'ca',  n:'Calcium Granules',    f:'Ca',       c:'Alkaline Earth', st:'s', mm:40.08, max:10, def:2, rgb:[190,190,185], dhSol:-230},
   {id:'mg',  n:'Magnesium Ribbon',    f:'Mg',       c:'Alkaline Earth', st:'s', mm:24.31, max:10, def:1, rgb:[200,200,205]},
-
-  /* ── TRANSITION METALS ── */
   {id:'zn',  n:'Zinc Granules',       f:'Zn',  c:'Transition', st:'s', mm:65.38, max:20, def:3, rgb:[170,175,185]},
   {id:'fe',  n:'Iron Filings',        f:'Fe',  c:'Transition', st:'s', mm:55.85, max:20, def:3, rgb:[90,90,95]},
   {id:'cu',  n:'Copper Turnings',     f:'Cu',  c:'Transition', st:'s', mm:63.55, max:20, def:3, rgb:[190,110,60]},
@@ -452,49 +401,33 @@ const CHEMS = [
   {id:'pbno3',n:'Lead(II) Nitrate',   f:'Pb(NO₃)₂',c:'Transition',st:'s',mm:331.2, max:20, def:2, rgb:[240,240,245], soluble:true, ions:{'Pb2+':1,'NO3-':2}},
   {id:'kmno4',n:'Potassium Permanganate',f:'KMnO₄',c:'Transition',st:'s',mm:158.03,max:10, def:1, rgb:[130,10,90], soluble:true, ions:{'K+':1,'MnO4-':1}},
   {id:'fecl3',n:'Iron(III) Chloride', f:'FeCl₃',c:'Transition', st:'s', mm:162.2, max:20, def:2, rgb:[200,140,60], soluble:true, ions:{'Fe3+':1,'Cl-':3}},
-
-  /* ── NON-METALS ── */
   {id:'s', n:'Sulfur Powder',       f:'S',  c:'Non-Metals', st:'s', mm:32.06, max:10, def:1, rgb:[230,220,60]},
   {id:'c', n:'Charcoal (Carbon)',   f:'C',  c:'Non-Metals', st:'s', mm:12.01, max:10, def:1, rgb:[35,35,40]},
   {id:'p', n:'Phosphorus (Red)',    f:'P',  c:'Non-Metals', st:'s', mm:30.97, max:10, def:1, rgb:[205,80,60]},
   {id:'i2',n:'Iodine Crystals',     f:'I₂', c:'Non-Metals', st:'s', mm:253.8, max:10, def:1, rgb:[90,40,120]},
-
-  /* ── BASIC OXIDES ── */
   {id:'na2o', n:'Sodium Oxide',      f:'Na₂O', c:'Basic Oxides', st:'s', mm:61.98, max:20, def:2, rgb:[245,240,235], basicOxide:true, ions:{'Na+':2,'OH-':2}},
   {id:'cao',  n:'Calcium Oxide (Lime)',f:'CaO',c:'Basic Oxides', st:'s', mm:56.08, max:20, def:5, rgb:[235,235,230], basicOxide:true},
   {id:'mgo',  n:'Magnesium Oxide',   f:'MgO',  c:'Basic Oxides', st:'s', mm:40.30, max:20, def:2, rgb:[245,245,245], basicOxide:true, ions:{'Mg2+':1,'OH-':2}},
-
-  /* ── ACIDIC OXIDES ── */
   {id:'so2',   n:'Sulfur Dioxide',       f:'SO₂',   c:'Acidic Oxides', st:'s', mm:64.07, max:20, def:2, rgb:[240,250,240], acidicOxide:true, toxic:true, ions:{'H+':2,'SO3^2-':1}},
   {id:'co2',   n:'Carbon Dioxide',       f:'CO₂',   c:'Acidic Oxides', st:'s', mm:44.01, max:20, def:2, rgb:[240,250,245], acidicOxide:true, ions:{'H+':1,'HCO3-':1}},
   {id:'p4o10', n:'Phosphorus Pentoxide', f:'P₄O₁₀', c:'Acidic Oxides', st:'s', mm:283.89,max:10, def:1, rgb:[245,245,240], acidicOxide:true, ions:{'H+':12,'PO4^3-':4}},
-
-  /* ── AMPHOTERIC OXIDES ── */
   {id:'al2o3', n:'Aluminium Oxide', f:'Al₂O₃', c:'Amphoteric Oxides', st:'s', mm:101.96, max:20, def:2, rgb:[240,240,245], amphoteric:true},
   {id:'zno',   n:'Zinc Oxide',      f:'ZnO',   c:'Amphoteric Oxides', st:'s', mm:81.38,  max:20, def:2, rgb:[245,245,240], amphoteric:true},
-
-  /* ── NEUTRAL OXIDES ── */
   {id:'co', n:'Carbon Monoxide', f:'CO',  c:'Neutral Oxides', st:'s', mm:28.01, max:20, def:2, rgb:[240,245,245], neutral:true, toxic:true},
   {id:'no', n:'Nitric Oxide',    f:'NO',  c:'Neutral Oxides', st:'s', mm:30.01, max:20, def:2, rgb:[240,245,245], neutral:true, toxic:true},
   {id:'n2o',n:'Nitrous Oxide',   f:'N₂O', c:'Neutral Oxides', st:'s', mm:44.01, max:20, def:2, rgb:[240,245,245], neutral:true},
-
-  /* ── ACIDS ── */
   {id:'hcl',    n:'Hydrochloric Acid', f:'HCl',     c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[235,245,255], ions:{'H+':1,'Cl-':1},    dhSol:-75},
   {id:'h2so4',  n:'Sulfuric Acid',     f:'H₂SO₄',   c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':2,'SO4^2-':1},dhSol:-88},
   {id:'hno3',   n:'Nitric Acid',       f:'HNO₃',    c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], ions:{'H+':1,'NO3-':1},  dhSol:-80},
   {id:'ch3cooh',n:'Acetic Acid',       f:'CH₃COOH', c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,250], weakAcid:true,          dhSol:-10},
   {id:'h2co3',  n:'Carbonic Acid',     f:'H₂CO₃',   c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true,          dhSol:-20},
   {id:'h3po4',  n:'Phosphoric Acid',   f:'H₃PO₄',   c:'Acids', st:'l', M:1.0, max:100, def:20, rgb:[240,245,255], weakAcid:true,          dhSol:-40},
-
-  /* ── BASES ── */
   {id:'naoh', n:'Sodium Hydroxide',    f:'NaOH',    c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'Na+':1,'OH-':1}, dhSol:-44},
   {id:'koh',  n:'Potassium Hydroxide', f:'KOH',     c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[240,250,255], ions:{'K+':1,'OH-':1},  dhSol:-57},
   {id:'nh3',  n:'Ammonia Solution',    f:'NH₃(aq)', c:'Bases', st:'l', M:1.0,  max:100, def:20, rgb:[235,245,250], weakBase:true,          dhSol:-30},
   {id:'caoh2',n:'Limewater',           f:'Ca(OH)₂', c:'Bases', st:'l', M:0.02, max:100, def:30, rgb:[240,250,250], ions:{'Ca2+':1,'OH-':2}},
   {id:'mgoh2',n:'Magnesium Hydroxide', f:'Mg(OH)₂', c:'Bases', st:'s', mm:58.32, max:20, def:3, rgb:[245,245,245], ions:{'Mg2+':1,'OH-':2}},
   {id:'baoh2',n:'Barium Hydroxide',    f:'Ba(OH)₂', c:'Bases', st:'l', M:0.1,  max:100, def:30, rgb:[240,250,255], ions:{'Ba2+':1,'OH-':2}},
-
-  /* ── SALTS ── */
   {id:'nacl',  n:'Sodium Chloride',   f:'NaCl',  c:'Salts', st:'s', mm:58.44,  max:50, def:5, rgb:[245,245,245], soluble:true, ions:{'Na+':1,'Cl-':1}},
   {id:'ki',    n:'Potassium Iodide',  f:'KI',    c:'Salts', st:'s', mm:166.0,  max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'K+':1,'I-':1}},
   {id:'bacl2', n:'Barium Chloride',   f:'BaCl₂', c:'Salts', st:'s', mm:208.23, max:20, def:3, rgb:[245,245,245], soluble:true, ions:{'Ba2+':1,'Cl-':2}},
@@ -502,16 +435,12 @@ const CHEMS = [
   {id:'caco3', n:'Calcium Carbonate', f:'CaCO₃', c:'Salts', st:'s', mm:100.09, max:30, def:5, rgb:[240,240,235]},
   {id:'kno3',  n:'Potassium Nitrate', f:'KNO₃',  c:'Salts', st:'s', mm:101.1,  max:30, def:5, rgb:[245,245,245], soluble:true, ions:{'K+':1,'NO3-':1}},
   {id:'h2o',   n:'Distilled Water',   f:'H₂O',   c:'Salts', st:'l', M:0.0,    max:500, def:50, rgb:[230,240,250]},
-
-  /* ── ORGANICS ── */
   {id:'ch4',    n:'Methane',        f:'CH₄',    c:'Organics', st:'l', mm:16.04, dens:0.4226, max:100, def:20, rgb:[245,250,255], fuel:true, ign:537, dhComb:890,  co2:1},
   {id:'etoh',   n:'Ethanol',        f:'C₂H₅OH', c:'Organics', st:'l', mm:46.07, dens:0.789, max:100, def:20, rgb:[245,250,255], fuel:true, ign:300, dhComb:1367, co2:2},
   {id:'meoh',   n:'Methanol',       f:'CH₃OH',  c:'Organics', st:'l', mm:32.04, dens:0.792, max:100, def:20, rgb:[245,250,255], fuel:true, ign:280, dhComb:726,  co2:1},
   {id:'acetone',n:'Acetone',        f:'C₃H₆O',  c:'Organics', st:'l', mm:58.08, dens:0.784, max:100, def:20, rgb:[245,250,255], fuel:true, ign:290, dhComb:1790, co2:3},
   {id:'glycerin',n:'Glycerin',      f:'C₃H₈O₃', c:'Organics', st:'l', mm:92.09, dens:1.261, max:100, def:20, rgb:[248,250,255]},
   {id:'hexane', n:'Hexane',         f:'C₆H₁₄',  c:'Organics', st:'l', mm:86.18, dens:0.659, max:100, def:20, rgb:[245,248,255], fuel:true, ign:225, dhComb:4163, co2:6},
-
-  /* ── INDICATORS ── */
   {id:'ui',   n:'Universal Indicator', f:'UI', c:'Indicators', st:'l', ind:'ui',  max:10, def:1, rgb:[180,200,120]},
   {id:'phph', n:'Phenolphthalein', f:'C₂₀H₁₄O₄', c:'Indicators', st:'l', ind:'phph', max:10, def:1, rgb:[250,240,250]},
   {id:'btb',  n:'Bromothymol Blue',f:'BTB', c:'Indicators', st:'l', ind:'btb',  max:10, def:1, rgb:[220,200,90]},
@@ -706,8 +635,6 @@ const state = {
   fluidColor: [200, 225, 240],
   bubbles: [], steam: [], smoke: [], precipParticles: [], drops: [], ripples: [],
   flash: 0, shake: 0, gasRate: 0, steamRate: 0, stirPhase: 0, tick: 0,
-
-  /* ── Thermodynamic telemetry trackers ── */
   gasMoles: { H2:0, CO2:0, O2:0, SO2:0 },
   lastDeltaH_kJmol: 0,
   lastReactionType: '—',
@@ -874,7 +801,6 @@ function log(msg, type){
 }
 function clearLog(){ document.getElementById('log').innerHTML = ''; }
 
-/* ── Equation with reaction-type chip ── */
 function eqAdd(str, type){
   const key = str + '|' + (type||'');
   if (state.eq.has(key)) return;
@@ -898,13 +824,13 @@ function eqAdd(str, type){
 
   const d = document.createElement('div');
   d.className = 'eq-item text-amber-200/90 fade-in';
-  d.innerHTML = chip ? `<div class="mb-1">${chip}</div><div>${str}</div>` : `<div>${str}</div>`;
+  d.innerHTML = chip ? `<div class="mb-0.5">${chip}</div><div>${str}</div>` : `<div>${str}</div>`;
   el.insertBefore(d, el.firstChild);
   while (el.children.length > 30) el.removeChild(el.lastChild);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LEFT PANEL BUILD — ultra-compact horizontal rows
+   LEFT PANEL BUILD
    ══════════════════════════════════════════════════════════════════════════ */
 function buildTabs(){
   const wrap = document.getElementById('catTabs');
@@ -930,14 +856,14 @@ function buildShelf(){
     const row = document.createElement('div');
     row.className = 'reagent-row';
     row.innerHTML = `
-      <div class="flex-1 min-w-0 flex items-baseline gap-2">
-        <div class="text-[10.5px] font-semibold text-slate-100 truncate leading-tight">${c.n}</div>
-        <div class="text-[8.5px] text-slate-500 font-mono truncate leading-tight">${c.f}</div>
+      <div class="flex-1 min-w-0 flex items-baseline gap-1.5">
+        <div class="text-[10px] font-semibold text-slate-100 truncate leading-tight">${c.n}</div>
+        <div class="text-[8px] text-slate-500 font-mono truncate leading-tight">${c.f}</div>
       </div>
       <input type="number" inputmode="decimal" min="0.1" max="${c.max}" step="0.1"
              value="${QTY[c.id]}" data-qty="${c.id}"
-             class="w-[50px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1.5 py-[1.5px] text-[10px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
-      <span class="text-[8.5px] text-slate-500 w-[16px] shrink-0 font-mono">${unit}</span>
+             class="w-[46px] shrink-0 bg-[#0a111e] border border-slate-700 rounded px-1 py-[1px] text-[9.5px] font-mono text-cyan-300 outline-none focus:border-cyan-500 text-right">
+      <span class="text-[8px] text-slate-500 w-[15px] shrink-0 font-mono">${unit}</span>
       <button class="vl-add shrink-0" data-add="${c.id}">+ ADD</button>`;
     shelf.appendChild(row);
   });
@@ -1087,7 +1013,7 @@ function updateThermo(dt){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   REACTION KERNEL — UNCHANGED, but gas moles + ΔH tracked for analytics
+   REACTION KERNEL (UNCHANGED)
    ══════════════════════════════════════════════════════════════════════════ */
 function react(dt){
   const s = state;
@@ -1639,7 +1565,7 @@ function updateBurette(dt){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HAZARD EVENTS (POST-REACTION) — UNCHANGED
+   HAZARD EVENTS (UNCHANGED)
    ══════════════════════════════════════════════════════════════════════════ */
 function triggerShatter(reason){
   if (state.shattered) return;
@@ -1697,7 +1623,7 @@ function flushAll(){
   document.getElementById('flameSlider').value = 0;
   document.getElementById('stirSlider').value = 0;
   document.getElementById('dripSlider').value = 0;
-  document.getElementById('eqList').innerHTML = '<div class="text-[9px] text-slate-600 font-mono italic">awaiting reaction…</div>';
+  document.getElementById('eqList').innerHTML = '<div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>';
 
   LabAudio.setBoil(0); LabAudio.setFizz(0); LabAudio.setHiss(0);
   log('⚗️ System purged. 250 mL distilled H₂O charged, 25 °C.', 'good');
@@ -1719,13 +1645,13 @@ function clearVessel(){
   s.lastReactionEq = '—';
   s.eq.clear();
   s.fluidColor = [220, 232, 245];
-  document.getElementById('eqList').innerHTML = '<div class="text-[9px] text-slate-600 font-mono italic">awaiting reaction…</div>';
+  document.getElementById('eqList').innerHTML = '<div class="text-[8.5px] text-slate-600 font-mono italic">awaiting reaction…</div>';
   log('🗑️ VESSEL CLEARED — 0 mL, pH reset to 7.00, ions purged.', 'good');
   LabAudio.click();
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   RENDERING — CANVAS (UNCHANGED)
+   RENDERING — CANVAS (UNCHANGED, but scale-aware for compact 200px height)
    ══════════════════════════════════════════════════════════════════════════ */
 function resizeCanvas(){
   const rect = canvas.getBoundingClientRect();
@@ -1733,10 +1659,15 @@ function resizeCanvas(){
   canvas.width = Math.max(1, rect.width * dpr);
   canvas.height = Math.max(1, rect.height * dpr);
 
-  const s = Math.min(rect.width / W, rect.height / H);
-  const ox = ((rect.width - W * s) / 2) * dpr;
-  const extraY = Math.max(0, rect.height - H * s);
-  const oy = (extraY * 0.18) * dpr;
+  /* Focus the view on the beaker region so the apparatus stays legible
+     even in a compact 200px wrapper: crop the coordinate space to the
+     horizontal span of the beaker + burette + burner. */
+  const VX0 = 165, VY0 = 0, VX1 = 595, VY1 = 660;
+  const VW = VX1 - VX0, VH = VY1 - VY0;
+
+  const s = Math.min(rect.width / VW, rect.height / VH);
+  const ox = ((rect.width - VW * s) / 2 - VX0 * s) * dpr;
+  const oy = ((rect.height - VH * s) / 2 - VY0 * s) * dpr;
 
   ctx.setTransform(dpr * s, 0, 0, dpr * s, ox, oy);
 }
@@ -2229,14 +2160,12 @@ function render(){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HUD UPDATES  +  THERMODYNAMIC ANALYTICS
+   HUD UPDATES + THERMODYNAMIC ANALYTICS
    ══════════════════════════════════════════════════════════════════════════ */
 let hudTimer = 0;
 
-/** Format a small number in scientific notation for ion concentrations */
 function fmtSci(v){
   if (v <= 0) return '0';
-  if (v >= 0.01) return v.toExponential(2);
   return v.toExponential(2);
 }
 
@@ -2247,7 +2176,6 @@ function updateHUD(dt){
 
   const s = state;
 
-  /* Top HUD */
   document.getElementById('tempC').textContent = s.temp.toFixed(1);
   document.getElementById('tempK').textContent = (s.temp + 273.15).toFixed(2);
 
@@ -2264,13 +2192,12 @@ function updateHUD(dt){
 
   const ts = document.getElementById('thermalState');
   ts.textContent = stateName;
-  ts.className = `px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider border ${stateCls}`;
+  ts.className = `px-2 py-0.5 rounded-full text-[8.5px] font-bold tracking-wider border ${stateCls}`;
 
   document.getElementById('hudFlame').textContent = s.flame.toFixed(0) + '%';
   document.getElementById('hudStir').textContent = (s.stir * 12).toFixed(0) + ' rpm';
   document.getElementById('hudDrip').textContent = s.drip.toFixed(1) + ' d/s';
 
-  /* pH */
   document.getElementById('phValue').textContent = s.pH.toFixed(2);
   document.getElementById('phMarker').style.left = `calc(${(s.pH / 14) * 100}% - 1.5px)`;
 
@@ -2283,27 +2210,23 @@ function updateHUD(dt){
   else if (s.pH <= 11) { phTxt = 'BASIC';      phCol = 'text-blue-400'; }
   else                 { phTxt = 'STRONG BASE';phCol = 'text-violet-400'; }
   const pl = document.getElementById('phLabel');
-  pl.textContent = phTxt; pl.className = `w-[80px] text-right text-[9.5px] font-bold tracking-wider ${phCol}`;
+  pl.textContent = phTxt; pl.className = `w-[70px] text-right text-[8.5px] font-bold tracking-wider ${phCol}`;
 
   /* ═══════════ THERMODYNAMIC ANALYTICS ═══════════ */
   const V_L = Math.max(0.0005, s.volume / 1000);
 
-  /* q = m·c·ΔT  (Joules) */
-  const cWater = 4.184; // J/(g·K)
+  const cWater = 4.184;
   const dT = s.temp - 25;
   const q = s.mass * cWater * dT;
 
-  /* V_STP = n·22.4  (L) */
   const nGas = (s.gasMoles.H2 + s.gasMoles.CO2 + s.gasMoles.O2 + s.gasMoles.SO2);
   const V_STP = nGas * 22.4;
 
-  /* Molarity = total solute moles / V(L) */
   const totalMoles = Object.values(s.ions).reduce((a,b)=>a+b,0)
                    + Object.values(s.solids).reduce((a,b)=>a+b,0)
                    + Object.values(s.precip).reduce((a,b)=>a+b,0);
   const M = totalMoles / V_L;
 
-  /* Update metric cards */
   document.getElementById('mMass').textContent = s.mass.toFixed(1);
   document.getElementById('mVol').textContent = s.volume.toFixed(1);
   document.getElementById('mMol').textContent = M.toFixed(3);
@@ -2313,7 +2236,6 @@ function updateHUD(dt){
   document.getElementById('mNgas').textContent = nGas.toFixed(4);
   document.getElementById('mDT').textContent = dT.toFixed(1);
 
-  /* Cumulative ΔH bar */
   const dHBar = document.getElementById('dHBar');
   const dHPct = clamp(Math.abs(s.dH) / 400 * 50, 0, 50);
   if (s.dH < 0){
@@ -2329,20 +2251,18 @@ function updateHUD(dt){
   }
   document.getElementById('mDHCumul').textContent = (s.dH >= 0 ? '+' : '') + s.dH.toFixed(2) + ' kJ';
 
-  /* Ion species list */
   const sp = document.getElementById('speciesList');
   const entries = Object.entries(s.ions).filter(([k,v]) => v > 1e-9)
     .sort((a,b) => b[1] - a[1]).slice(0, 16);
   if (entries.length === 0){
-    sp.innerHTML = '<span class="text-[8.5px] text-slate-600 font-mono italic">no solutes in vessel</span>';
+    sp.innerHTML = '<span class="text-[8px] text-slate-600 font-mono italic">no solutes in vessel</span>';
   } else {
     sp.innerHTML = entries.map(([k,v]) => {
       const conc = v / V_L;
-      return `<span class="text-[8.5px] font-mono px-1.5 py-0.5 rounded bg-[#131c2b] border border-slate-800 text-cyan-300">[${k}] = <span class="text-slate-400">${fmtSci(conc)}</span> M</span>`;
+      return `<span class="text-[8px] font-mono px-1.5 py-0.5 rounded bg-[#131c2b] border border-slate-800 text-cyan-300">[${k}] = <span class="text-slate-400">${fmtSci(conc)}</span> M</span>`;
     }).join('');
   }
 
-  /* FPS */
   document.getElementById('fps').textContent = Math.round(1 / Math.max(dt, 1e-4));
   document.getElementById('tickCount').textContent = s.tick;
 }
@@ -2500,9 +2420,9 @@ function boot(){
   window.addEventListener('resize', resizeCanvas);
   setTimeout(resizeCanvas, 100);
 
-  log('VirtuaLab Pro v3.1 initialised. Thermodynamic analytics online.', 'good');
+  log('VirtuaLab Pro v3.2 initialised. Compact viewport ready.', 'good');
   log('Charged 250.0 mL distilled H₂O @ 25.0 °C', 'info');
-  log('Tip: try CuSO₄ + NaOH → Cu(OH)₂↓ (precipitation, ΔH = +30 kJ/mol)', 'info');
+  log('Tip: CuSO₄ + NaOH → Cu(OH)₂↓ (precipitation, ΔH = +30 kJ/mol)', 'info');
 
   requestAnimationFrame(loop);
 }
